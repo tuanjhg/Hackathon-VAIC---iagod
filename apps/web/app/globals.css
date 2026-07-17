@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { color: #172033; background: #f8fafc; }
+.container { width: min(1180px, calc(100% - 32px)); margin-inline: auto; }
+.input { width: 100%; height: 42px; border: 1px solid #cbd5e1; border-radius: 0.75rem; background: white; padding: 0 0.75rem; outline: none; }
+.input:focus { border-color: #1683e6; box-shadow: 0 0 0 3px rgba(22,131,230,.12); }
+.filter-label { display: grid; gap: .5rem; font-size: .875rem; font-weight: 600; }
+.state-box { min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; border: 1px dashed #cbd5e1; border-radius: 1rem; background: white; color: #64748b; text-align: center; padding: 2rem; }
+
