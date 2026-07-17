@@ -2,12 +2,175 @@
 @tailwind components;
 @tailwind utilities;
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { color: #172033; background: #f8fafc; }
-.container { width: min(1180px, calc(100% - 32px)); margin-inline: auto; }
-.input { width: 100%; height: 42px; border: 1px solid #cbd5e1; border-radius: 0.75rem; background: white; padding: 0 0.75rem; outline: none; }
-.input:focus { border-color: #1683e6; box-shadow: 0 0 0 3px rgba(22,131,230,.12); }
-.filter-label { display: grid; gap: .5rem; font-size: .875rem; font-weight: 600; }
-.state-box { min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; border: 1px dashed #cbd5e1; border-radius: 1rem; background: white; color: #64748b; text-align: center; padding: 2rem; }
+@layer base {
+  :root {
+    /* semantic tokens — RGB channels so Tailwind alpha modifiers work (bg-primary/10) */
+    --background: 248 250 252;
+    --foreground: 15 23 42;
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
+    --muted: 241 245 249;
+    --muted-foreground: 100 116 139;
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --ring: 37 99 235;
+    --primary: 37 99 235;
+    --primary-foreground: 255 255 255;
+    --secondary: 241 245 249;
+    --secondary-foreground: 15 23 42;
+    --accent: 6 182 212;
+    --accent-foreground: 255 255 255;
+    --success: 5 150 105;
+    --success-foreground: 255 255 255;
+    --destructive: 220 38 38;
+    --destructive-foreground: 255 255 255;
+    --radius: 0.875rem;
+    --shadow-card: 0 10px 30px rgba(9, 70, 120, 0.08);
+    /* page background: aurora glow colors + Đông Sơn drum motif */
+    --glow-1: 37 99 235;
+    --glow-2: 6 182 212;
+    --dot: 2 6 23;
+    --dot-alpha: 0.04;
+    --pattern-alpha: 0.07;
+  }
 
+  .dark {
+    --background: 11 18 32;
+    --foreground: 226 232 240;
+    --card: 17 26 46;
+    --card-foreground: 226 232 240;
+    --popover: 17 26 46;
+    --popover-foreground: 226 232 240;
+    --muted: 26 39 64;
+    --muted-foreground: 148 163 184;
+    --border: 30 42 68;
+    --input: 30 42 68;
+    --ring: 59 130 246;
+    --primary: 59 130 246;
+    --primary-foreground: 255 255 255;
+    --secondary: 26 39 64;
+    --secondary-foreground: 226 232 240;
+    --accent: 34 211 238;
+    --accent-foreground: 11 18 32;
+    --success: 52 211 153;
+    --success-foreground: 11 18 32;
+    --destructive: 248 113 113;
+    --destructive-foreground: 11 18 32;
+    --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.35);
+    --glow-1: 59 130 246;
+    --glow-2: 34 211 238;
+    --dot: 148 163 184;
+    --dot-alpha: 0.05;
+    --pattern-alpha: 0.10;
+  }
+
+  * {
+    border-color: rgb(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    position: relative;
+    color: rgb(var(--foreground));
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip; /* allow full-bleed sections without horizontal scroll */
+    background-color: rgb(var(--background));
+    /* layered: aurora glows + soft vertical wash + a faint polka-dot grid,
+       so the field is never flat. Dot layer is last (top-most). */
+    background-image:
+      radial-gradient(46rem 26rem at 50% -14%, rgb(var(--glow-1) / 0.10), transparent 62%),
+      radial-gradient(38rem 24rem at 100% 4%, rgb(var(--glow-2) / 0.07), transparent 60%),
+      radial-gradient(42rem 26rem at 0% 30%, rgb(var(--glow-1) / 0.05), transparent 62%),
+      linear-gradient(180deg, rgb(var(--glow-2) / 0.04), transparent 26%),
+      radial-gradient(rgb(var(--dot) / var(--dot-alpha)) 1.1px, transparent 1.2px);
+    background-size: auto, auto, auto, auto, 22px 22px;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+    background-attachment: fixed;
+  }
+
+  /* One large Đông Sơn bronze-drum medallion, dead-centre behind everything.
+     The SVG acts as a luminance mask so the ink colour follows the theme
+     (--dot); a very slow spin keeps it subtly alive. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: rgb(var(--dot));
+    opacity: var(--pattern-alpha);
+    -webkit-mask-image: url("/patterns/trong-dong.svg");
+    mask-image: url("/patterns/trong-dong.svg");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: 78vmin;
+    mask-size: 78vmin;
+    animation: drum-spin 160s linear infinite;
+  }
+
+  @keyframes drum-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container {
+    width: min(1180px, calc(100% - 32px));
+    margin-inline: auto;
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      width: min(1180px, calc(100% - 64px));
+    }
+  }
+
+  /* Radix Select popover entrance */
+  .select-popover[data-state="open"] {
+    animation: select-pop 140ms cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: var(--radix-select-content-transform-origin);
+  }
+  @keyframes select-pop {
+    from {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* soft blue focus ring helper for native controls */
+  .focus-ring {
+    outline: none;
+  }
+  .focus-ring:focus-visible {
+    box-shadow: 0 0 0 3px rgb(var(--ring) / 0.35);
+    border-color: rgb(var(--ring));
+  }
+}
