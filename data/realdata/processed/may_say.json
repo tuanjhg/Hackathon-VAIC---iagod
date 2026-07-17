@@ -1,0 +1,4012 @@
+[
+  {
+    "sku": "4844743000039",
+    "model_code": "180190",
+    "productidweb": "99999",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Lumias",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "800W",
+      "Số người sử dụng": "Từ 1 - 2 người (Dưới 4 kg)",
+      "Tiện ích": "Khử trùng bằng tia cực tím | Kiểm soát nhiệt độ với 2 luồng khí lạnh và ấm | Thiết kế đường dẫn luồng khí trục | Loại bỏ mùi hôi bằng hơi nước | Sấy nhanh 30 phút | Công nghệ sấy PTC không đốt cháy | Hệ thống lọc kép",
+      "Cao": "48",
+      "Ngang": "40",
+      "Sâu": "56",
+      "Khối lượng máy": "14",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Nút bấm",
+      "Khối lượng tải chính": "4",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Hãng không công bố",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "60°C",
+      "Dài ống thoát khí": "13"
+    },
+    "specs": {
+      "display_name": "Lumias Máy sấy quần áo (mã 180190)"
+    }
+  },
+  {
+    "sku": "4844743000040",
+    "model_code": "180191",
+    "productidweb": "341056",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Lumias",
+    "original_price": 5990000,
+    "sale_price": 5990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "800W",
+      "Số người sử dụng": "Từ 1 - 2 người (Dưới 4 kg)",
+      "Tiện ích": "Hẹn giờ sấy | Khử trùng bằng tia cực tím | Công nghệ sấy PTC không đốt cháy",
+      "Cao": "48",
+      "Ngang": "40",
+      "Sâu": "56",
+      "Khối lượng máy": "14",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Nút bấm",
+      "Khối lượng tải chính": "4",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Hãng không công bố",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "60°C",
+      "Dài ống thoát khí": "13"
+    },
+    "specs": {
+      "display_name": "Lumias Máy sấy quần áo (mã 180191)"
+    }
+  },
+  {
+    "sku": "1753659000027",
+    "model_code": "180695",
+    "productidweb": "362155",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Hisense",
+    "original_price": 12990000,
+    "sale_price": 7990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "1 đổi 1 trong vòng 180 ngày (Lỗi do NSX) (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "650W",
+      "Chất liệu thân vỏ": "Kim loại phủ sơn (PCM)",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Vòng đệm cửa kháng khuẩn | Hẹn giờ hoàn thành | Chống dị ứng | Tạm dừng thêm quần áo | Sấy chống nhăn | Điều chỉnh mức độ | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "55",
+      "Khối lượng máy": "46",
+      "Dòng sản phẩm": "2026",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Công nghệ": "Steam Refresh sấy hơi nước làm mới quần áo | Công nghệ Allergy Care diệt khuẩn | Sấy kép Dual Hygiene Steam | Sấy đa chiều xoắn ốc",
+      "Chất liệu ruột": "Thép mạ nhôm Silic",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "65°C",
+      "Chất liệu cửa": "Kính chịu lực",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Hisense Máy sấy quần áo (mã 180695)"
+    }
+  },
+  {
+    "sku": "1751099000201",
+    "model_code": "180693",
+    "productidweb": "362081",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Casper",
+    "original_price": 7990000,
+    "sale_price": 6990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2000W",
+      "Chất liệu thân vỏ": "Kim loại phủ sơn (PCM)",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Chống nhăn | Tự khởi động lại khi có điện | Hẹn giờ sấy | Đèn báo vệ sinh bộ lọc | Bộ lọc xơ vải | Đèn chiếu sáng lồng sấy | Cảm biến nhiệt, độ ẩm | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "55",
+      "Khối lượng máy": "29",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Tiếng Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Không có",
+      "Chất liệu ruột": "Thép mạ kẽm",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "55°C",
+      "Dài ống thoát khí": "160",
+      "Chất liệu cửa": "Nhựa",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Casper Máy sấy quần áo (mã 180693)"
+    }
+  },
+  {
+    "sku": "1751099000202",
+    "model_code": "180676",
+    "productidweb": "362015",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Casper",
+    "original_price": 12980000,
+    "sale_price": 9990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "700W",
+      "Chất liệu thân vỏ": "Kim loại phủ sơn (PCM)",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Chống nhăn | Tự khởi động lại khi có điện | Hẹn giờ sấy | Đèn báo vệ sinh bộ lọc | Âm báo khi kết thúc chu trình sấy | Bộ lọc xơ vải | Sấy nhanh 30 phút | Điều chỉnh mức độ | Cảm biến nhiệt, độ ẩm | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "65",
+      "Khối lượng máy": "45",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Tiếng Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Không có",
+      "Chất liệu ruột": "Thép mạ kẽm",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "55°C",
+      "Chất liệu cửa": "Nhựa",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Casper Máy sấy quần áo (mã 180676)"
+    }
+  },
+  {
+    "sku": "1753659000026",
+    "model_code": "180593",
+    "productidweb": "360546",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Aqua",
+    "original_price": 18990000,
+    "sale_price": 14990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "650W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Từ 5 - 7 người (9.5 - 10 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Điều chỉnh nhiệt độ | Hẹn giờ sấy | Một chạm sấy AI | Sấy chống nhăn | Đèn báo vệ sinh bộ lọc | Bộ lọc xơ vải 4 lớp | Âm báo khi kết thúc chu trình sấy | Kết nối Wi-Fi và điều khiển qua ứng dụng Haismart | Chọn mức độ gió | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "58",
+      "Khối lượng máy": "47",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt màn hình cảm ứng nhiều màu sắc",
+      "Khối lượng tải chính": "10 Kg",
+      "Công nghệ": "Sấy đảo chiều | Cảm biến sấy đa chiều 3D",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "131",
+      "Nhiệt độ tối đa": "72°C",
+      "Chất liệu cửa": "Kính + Nhựa",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Aqua Máy sấy quần áo (mã 180593)"
+    }
+  },
+  {
+    "sku": "1753659000025",
+    "model_code": "180301",
+    "productidweb": "344391",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Bosch",
+    "original_price": 34900000,
+    "sale_price": 34900000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Ba Lan",
+      "Điện năng tiêu thụ": "600W",
+      "Chất liệu thân vỏ": "Thép không gỉ",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Hẹn giờ hoàn thành | Sấy nửa tải | Kết nối Wifi và điều khiển qua ứng ứng dụng Home Connect | Thiết kế chống rung lắc Anti Vibration | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "61",
+      "Khối lượng máy": "56",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Tiếng Anh, phím điều khiển cảm ứng, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Auto Dry tự động điều chỉnh nhiệt độ sấy phù hợp | Self Cleaning Condenser tự động làm sạch bộ trao đổi nhiệt",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "EcoSilence Drive",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "70°C",
+      "Chất liệu cửa": "Thủy tinh, viền chrome",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Bosch Máy sấy quần áo (mã 180301)"
+    }
+  },
+  {
+    "sku": "1753659000020",
+    "model_code": "180047",
+    "productidweb": "337752",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Toshiba",
+    "original_price": 17960000,
+    "sale_price": 17960000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "750W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Từ 5 - 7 người (9.5 - 10 kg)",
+      "Công nghệ tiết kiệm điện": "Origin Inverter",
+      "Tiện ích": "Lưu chương trình yêu thích | Hẹn giờ hoàn thành | Sấy chống nhăn | Âm báo khi kết thúc chu trình sấy | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Điều chỉnh thời gian | Điều khiển từ xa qua ứng dụng TSmartLife | Chế độ khử khuẩn | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "65",
+      "Khối lượng máy": "51",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, cảm ứng có màn hình hiển thị",
+      "Khối lượng tải chính": "10 Kg",
+      "Công nghệ": "Sấy đảo chiều | SenseDry giữ bền màu, bảo vệ sợi vải",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "160",
+      "Nhiệt độ tối đa": "Từ 55 - 60°C",
+      "Chất liệu cửa": "Kính cường lực 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Toshiba Máy sấy quần áo (mã 180047)"
+    }
+  },
+  {
+    "sku": "1753659000018",
+    "model_code": "180000",
+    "productidweb": "335687",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Samsung",
+    "original_price": 24290000,
+    "sale_price": 16990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "780W - 800W",
+      "Chất liệu thân vỏ": "Thép không gỉ",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Digital Inverter",
+      "Tiện ích": "Bảng điều khiển thông minh AI Control | Cửa đảo chiều | Hẹn giờ sấy | Kết nối điện thoại qua app SmartThings | Giá sấy | Đề xuất chế độ sấy phù hợp với chế độ giặt Auto Cycle Link | Bộ lọc xơ vải 2 trong 1 | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "60",
+      "Sâu": "60",
+      "Khối lượng máy": "54",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Công nghệ sấy thông minh Optimal Dry | Công nghệ sấy diệt khuẩn Hygiene Care | Công nghệ Wrinkle Prevent chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "195",
+      "Nhiệt độ tối đa": "60°C",
+      "Chất liệu cửa": "Kính chịu lực",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Samsung Máy sấy quần áo (mã 180000)"
+    }
+  },
+  {
+    "sku": "1753659000019",
+    "model_code": "179999",
+    "productidweb": "335684",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Samsung",
+    "original_price": 21990000,
+    "sale_price": 13890000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "550W - 600W",
+      "Chất liệu thân vỏ": "Thép không gỉ",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Digital Inverter",
+      "Tiện ích": "Cửa đảo chiều | Hẹn giờ sấy | Kết nối điện thoại qua app SmartThings | Giá sấy | Đề xuất chế độ sấy phù hợp với chế độ giặt Auto Cycle Link | Bộ lọc xơ vải 2 trong 1 | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "60",
+      "Sâu": "60",
+      "Khối lượng máy": "54",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Công nghệ sấy thông minh Optimal Dry | Công nghệ sấy diệt khuẩn Hygiene Care | Công nghệ Wrinkle Prevent chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "195",
+      "Nhiệt độ tối đa": "60°C",
+      "Chất liệu cửa": "Kính chịu lực",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Samsung Máy sấy quần áo (mã 179999)"
+    }
+  },
+  {
+    "sku": "1753659000017",
+    "model_code": "179998",
+    "productidweb": "335679",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Samsung",
+    "original_price": 27790000,
+    "sale_price": 19690000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "1300W",
+      "Chất liệu thân vỏ": "Thép không gỉ",
+      "Số người sử dụng": "Từ 5 - 7 người (9.5 - 10 kg)",
+      "Công nghệ tiết kiệm điện": "Digital Inverter",
+      "Tiện ích": "Chống nhăn | Bảng điều khiển thông minh AI Control | Hẹn giờ sấy | Kết nối điện thoại qua app SmartThings | Giá sấy | Đề xuất chế độ sấy phù hợp với chế độ giặt Auto Cycle Link | Bộ lọc xơ vải 2 trong 1 | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "60",
+      "Sâu": "60",
+      "Khối lượng máy": "57",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "10 Kg",
+      "Công nghệ": "Công nghệ sấy thông minh AI Dry | Công nghệ sấy diệt khuẩn Hygiene Care | Công nghệ Wrinkle Prevent chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "195",
+      "Nhiệt độ tối đa": "60°C",
+      "Dài ống thoát khí": "Không",
+      "Chất liệu cửa": "Kính chịu lực 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Samsung Máy sấy quần áo (mã 179998)"
+    }
+  },
+  {
+    "sku": "1751099000089",
+    "model_code": "179928",
+    "productidweb": "332836",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Panasonic",
+    "original_price": 38690000,
+    "sale_price": 31190000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "970 W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Trên 7 người (Trên 10 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Chẩn đoán lỗi | Hẹn giờ sấy | Giá sấy | Sấy nâng niu + | Sấy ít nhăn | Sấy chống nhăn | Đèn báo vệ sinh bộ lọc | Sấy Eco | Hệ thống lọc ba lớp | Hệ thống tạo hương thơm | Lắp đặt linh hoạt với bộ xếp chồng | Điều chỉnh chế độ | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "66",
+      "Khối lượng máy": "59 kg",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Tiếng Việt, phím điều khiển cảm ứng, có màn hình hiển thị",
+      "Khối lượng tải chính": "10.5 Kg",
+      "Công nghệ": "Cảm biến nhiệt độ lồng sấy | Sấy Nanoe™ X diệt khuẩn | Cảm biến khối lượng quần áo | Cảm biến nhiệt độ quần áo",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "69°C",
+      "Chất liệu cửa": "Kính cường lực",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Panasonic Máy sấy quần áo (mã 179928)"
+    }
+  },
+  {
+    "sku": "1753659000005",
+    "model_code": "179865",
+    "productidweb": "328610",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Hitachi",
+    "original_price": 24590000,
+    "sale_price": 16090000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "800W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Từ 5 - 7 người (9.5 - 10 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Cửa đảo chiều | Đèn báo bình chứa đầy nước | Hẹn giờ hoàn thành | Tự động nạp lại bồn chứa hơi | Vệ sinh bộ ngưng tụ | Sấy chống nhăn | Bộ lọc xơ vải | Kết nối với ứng dụng HomeWhiz App | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "60",
+      "Khối lượng máy": "44",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "10 Kg",
+      "Công nghệ": "Sấy đảo chiều | Công nghệ Steam & Wear làm mới quần áo",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "60°C",
+      "Chất liệu cửa": "Kính cường lực",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Hitachi Máy sấy quần áo (mã 179865)"
+    }
+  },
+  {
+    "sku": "3053659000079",
+    "model_code": "179694",
+    "productidweb": "320628",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Bosch",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Ba Lan",
+      "Điện năng tiêu thụ": "2800W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chuông báo lấy quần áo khi kết thúc | EcoSilence - Hoạt động êm ái, hạn chế tiếng ồn | Sấy diệt khuẩn Hygiene | AutoDry - Tự động nhận biết khi đồ khô | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "61",
+      "Khối lượng máy": "42",
+      "Dòng sản phẩm": "2022",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Bảng điều khiển": "Tiếng Anh, điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Bosch Máy sấy quần áo (mã 179694)"
+    }
+  },
+  {
+    "sku": "3053659000063",
+    "model_code": "179385",
+    "productidweb": "299887",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Bosch",
+    "original_price": 23900000,
+    "sale_price": 18490000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Ba Lan",
+      "Điện năng tiêu thụ": "700W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Không có",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "59",
+      "Khối lượng máy": "50",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Tiếng Anh, điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "EcoSilence",
+      "Nhiệt độ tối đa": "60°C"
+    },
+    "specs": {
+      "display_name": "Bosch Máy sấy quần áo (mã 179385)"
+    }
+  },
+  {
+    "sku": "3053659000062",
+    "model_code": "179384",
+    "productidweb": "299886",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Bosch",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Ba Lan",
+      "Điện năng tiêu thụ": "700W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Tự động vệ sinh bộ lọc",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "59",
+      "Khối lượng máy": "50",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "EcoSilence",
+      "Nhiệt độ tối đa": "60°C"
+    },
+    "specs": {
+      "display_name": "Bosch Máy sấy quần áo (mã 179384)"
+    }
+  },
+  {
+    "sku": "3053659000060",
+    "model_code": "179333",
+    "productidweb": "293964",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Aqua",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "550W",
+      "Số người sử dụng": "Trên 7 người (Trên 10 kg)",
+      "Tiện ích": "Sấy diệt khuẩn 99.99% | Sấy thông minh AI | Tùy chỉnh thời gian sấy I-Dry | Chăm sóc và sấy khô quần áo I-Refresh | Bộ lọc xơ vải 3 lớp",
+      "Cao": "84",
+      "Ngang": "67",
+      "Sâu": "59",
+      "Khối lượng máy": "50",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "10 Kg",
+      "Chất liệu ruột": "Kim loại",
+      "Động cơ": "Truyền động trực tiếp",
+      "Dài ống xả nước": "130",
+      "Nhiệt độ tối đa": "65°C"
+    },
+    "specs": {
+      "display_name": "Aqua Máy sấy quần áo (mã 179333)"
+    }
+  },
+  {
+    "sku": "3053659000056",
+    "model_code": "179180",
+    "productidweb": "284032",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": 19630000,
+    "sale_price": 19630000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Ba Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Lưu chương trình yêu thích | Điều chỉnh nhiệt độ | Hẹn giờ sấy | Sấy chống nhăn | Điều chỉnh mức độ | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "63",
+      "Khối lượng máy": "37",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Công nghệ": "SensiCare chăm sóc quần áo tránh bị hư tổn | ColourCare bảo vệ màu sắc quần áo | ReverseTumbling sấy đảo chiều chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Hãng không công bố",
+      "Nhiệt độ tối đa": "Hãng không công bố",
+      "Chất liệu cửa": "Nhựa 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 179180)"
+    }
+  },
+  {
+    "sku": "3053659000031",
+    "model_code": "178803",
+    "productidweb": "231704",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Châu Âu",
+      "Điện năng tiêu thụ": "900W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chương trình sấy nhanh | Hệ thống lọc ecoflow | Đèn LightCraft | Chứng chỉ Woolmark dành để sấy riêng cho đồ len | Sấy siêu im lặng Extra Silent",
+      "Cao": "85",
+      "Ngang": "60",
+      "Sâu": "60",
+      "Khối lượng máy": "62 Kg",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 178803)"
+    }
+  },
+  {
+    "sku": "1753659000024",
+    "model_code": "180217",
+    "productidweb": "341815",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Toshiba",
+    "original_price": 14890000,
+    "sale_price": 13090000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "750W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Origin Inverter",
+      "Tiện ích": "Chống nhăn | Hẹn giờ hoàn thành | Âm báo khi kết thúc chu trình sấy | Chương trình làm mới quần áo | Đèn chiếu sáng lồng sấy | Điều khiển từ xa qua ứng dụng TSmartLife | Chế độ khử khuẩn",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "58",
+      "Khối lượng máy": "45",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Công nghệ": "Sấy đảo chiều | SenseDry giữ bền màu, bảo vệ sợi vải | UV Sensitize khử khuẩn với đèn tia cực tím",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "160",
+      "Nhiệt độ tối đa": "Từ 55 - 60°C",
+      "Chất liệu cửa": "Kính + Nhựa",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Toshiba Máy sấy quần áo (mã 180217)"
+    }
+  },
+  {
+    "sku": "1753659000021",
+    "model_code": "180118",
+    "productidweb": "339510",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Toshiba",
+    "original_price": 25520000,
+    "sale_price": 14590000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "1600W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Dual Inverter",
+      "Tiện ích": "Hẹn giờ sấy | Sấy chống nhăn | Âm báo khi kết thúc chu trình sấy | Sấy yên tĩnh | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Điều chỉnh thời gian | Điều khiển từ xa qua ứng dụng TSmartLife | Chế độ khử khuẩn | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "58",
+      "Khối lượng máy": "49",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, cảm ứng có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Công nghệ": "Sấy đảo chiều | Steam Care chăm sóc quần áo với hơi nước | Công nghệ LuxeCare (chăm sóc cao cấp dành cho đồ khô) | SenseDry giữ bền màu, bảo vệ sợi vải",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "160",
+      "Nhiệt độ tối đa": "Từ 55 - 60°C",
+      "Chất liệu cửa": "Kính cường lực 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Toshiba Máy sấy quần áo (mã 180118)"
+    }
+  },
+  {
+    "sku": "1753659000022",
+    "model_code": "180048",
+    "productidweb": "337754",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Toshiba",
+    "original_price": 21880000,
+    "sale_price": 15990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "1100W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Từ 5 - 7 người (9.5 - 10 kg)",
+      "Công nghệ tiết kiệm điện": "Dual Inverter",
+      "Tiện ích": "Điều chỉnh nhiệt độ | Hẹn giờ sấy | Âm báo khi kết thúc chu trình sấy | Sấy yên tĩnh | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Điều chỉnh thời gian | Điều khiển từ xa qua ứng dụng TSmartLife | Chế độ khử khuẩn | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "66",
+      "Khối lượng máy": "52",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "10 Kg",
+      "Công nghệ": "Sấy đảo chiều | Steam Care chăm sóc quần áo với hơi nước | Công nghệ LuxeCare (chăm sóc cao cấp dành cho đồ khô) | Hygiene Care - dùng đèn tia cực tím khử khuẩn | SenseDry giữ bền màu, bảo vệ sợi vải",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "160",
+      "Nhiệt độ tối đa": "Từ 55 - 60°C",
+      "Dài ống thoát khí": "Không",
+      "Chất liệu cửa": "Kính cường lực 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Toshiba Máy sấy quần áo (mã 180048)"
+    }
+  },
+  {
+    "sku": "1753659000015",
+    "model_code": "179889",
+    "productidweb": "329631",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Tự khởi động lại khi có điện | Điều chỉnh nhiệt độ | Hẹn giờ sấy | Chuông báo lấy quần áo khi kết thúc | Tạm dừng thêm quần áo | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "60",
+      "Sâu": "61",
+      "Khối lượng máy": "28",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Công nghệ sấy diệt khuẩn Hygiene Care | ColourCare bảo vệ màu sắc quần áo | Cảm biến thông minh Smart Sensor | ReverseTumbling sấy đảo chiều chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 70 - 80°C",
+      "Dài ống thoát khí": "195",
+      "Chất liệu cửa": "Nhựa 1 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 179889)"
+    }
+  },
+  {
+    "sku": "1753659000013",
+    "model_code": "179888",
+    "productidweb": "329629",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": 11790000,
+    "sale_price": 10790000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Tự khởi động lại khi có điện | Điều chỉnh nhiệt độ | Hẹn giờ sấy | Chuông báo lấy quần áo khi kết thúc | Chế độ Refresh loại bỏ mùi ẩm mốc | Tạm dừng thêm quần áo | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "60",
+      "Sâu": "61",
+      "Khối lượng máy": "28",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Công nghệ sấy diệt khuẩn Hygiene Care | ColourCare bảo vệ màu sắc quần áo | Cảm biến thông minh Smart Sensor | ReverseTumbling sấy đảo chiều chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 70 - 80°C",
+      "Dài ống thoát khí": "195",
+      "Chất liệu cửa": "Nhựa 1 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 179888)"
+    }
+  },
+  {
+    "sku": "1753659000010",
+    "model_code": "179887",
+    "productidweb": "329626",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": 26490000,
+    "sale_price": 24490000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "1600W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Tự khởi động lại khi có điện | Chuông báo lấy quần áo khi kết thúc | Hẹn giờ hoàn thành | Chứng chỉ Woolmark dành để sấy riêng cho đồ len | Tùy chọn chương trình (cá nhân hóa) thông minh SmartSelect | Kết nối từ xa Remote Start | Màn hình hiển thị ColorTFT sắc nét | Đồng bộ SyncDry | Điều khiển qua ứng dụng Electrolux | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Điều chỉnh thời gian",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "65",
+      "Khối lượng máy": "51",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Cảm biến độ ẩm 3DSense điều chỉnh thời gian sấy | Công nghệ sấy diệt khuẩn Hygiene Care | DelicateCare bảo vệ đồ len không bị biến dạng | SensiCare chăm sóc quần áo tránh bị hư tổn | ColourCare bảo vệ màu sắc quần áo | ReverseTumbling sấy đảo chiều chống nhăn | Steam Care chăm sóc quần áo với hơi nước",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 55 - 60°C",
+      "Chất liệu cửa": "Nhựa 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 179887)"
+    }
+  },
+  {
+    "sku": "1753659000002",
+    "model_code": "179827",
+    "productidweb": "326753",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Aqua",
+    "original_price": 9090000,
+    "sale_price": 7090000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "1770W",
+      "Chất liệu thân vỏ": "Thép không gỉ",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Lưu chương trình yêu thích | Điều chỉnh nhiệt độ | Hẹn giờ sấy | Lồng sấy hình gối | Tạm dừng thêm quần áo | Sấy chống nhăn | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "83",
+      "Ngang": "60",
+      "Sâu": "56",
+      "Khối lượng máy": "30",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Sấy đảo chiều",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "BLDC",
+      "Nhiệt độ tối đa": "60°C",
+      "Chất liệu cửa": "Nhựa",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Aqua Máy sấy quần áo (mã 179827)"
+    }
+  },
+  {
+    "sku": "3053659000078",
+    "model_code": "179630",
+    "productidweb": "315999",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Bosch",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Ba Lan",
+      "Điện năng tiêu thụ": "600W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chuông báo lấy quần áo khi kết thúc | Sensitive Drying | Đèn chiếu sáng lồng sấy | AutoDry - Tự động nhận biết khi đồ khô | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "61",
+      "Khối lượng máy": "47",
+      "Dòng sản phẩm": "2023",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Tiếng Anh, điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "EcoSilence Drive",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Bosch Máy sấy quần áo (mã 179630)"
+    }
+  },
+  {
+    "sku": "3053659000077",
+    "model_code": "179629",
+    "productidweb": "315994",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Bosch",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Ba Lan",
+      "Điện năng tiêu thụ": "800W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chuông báo lấy quần áo khi kết thúc | Hệ thống Self Cleaning - Tự động làm sạch bộ trao đổi nhiệt | Sensitive Drying | Đèn chiếu sáng lồng sấy | AutoDry - Tự động nhận biết khi đồ khô | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "61",
+      "Khối lượng máy": "56",
+      "Dòng sản phẩm": "2023",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Tiếng Anh, điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "EcoSilence Drive",
+      "Dài ống xả nước": "202",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Bosch Máy sấy quần áo (mã 179629)"
+    }
+  },
+  {
+    "sku": "3053659000076",
+    "model_code": "179584",
+    "productidweb": "310253",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Toshiba",
+    "original_price": 6960000,
+    "sale_price": 5690000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2000W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Từ 2 - 3 người (Dưới 8 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Hẹn giờ hoàn thành | Sấy chống nhăn | Điều chỉnh mức độ | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "55",
+      "Khối lượng máy": "33",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "7 Kg",
+      "Công nghệ": "SenseDry giữ bền màu, bảo vệ sợi vải",
+      "Chất liệu ruột": "Hợp kim",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 70 - 80°C",
+      "Dài ống thoát khí": "153",
+      "Chất liệu cửa": "Nhựa 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Toshiba Máy sấy quần áo (mã 179584)"
+    }
+  },
+  {
+    "sku": "3053659000075",
+    "model_code": "179583",
+    "productidweb": "310251",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Toshiba",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2700W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Hẹn giờ hoàn thành | Sấy chống nhăn | Âm báo khi kết thúc chu trình sấy | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Điều chỉnh thời gian | Ghi nhớ chương trình sấy | Chế độ khử khuẩn | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "61",
+      "Khối lượng máy": "42",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Công nghệ": "SenseDry giữ bền màu, bảo vệ sợi vải",
+      "Chất liệu ruột": "Hợp kim",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 70 - 80°C",
+      "Chất liệu cửa": "Kính + Nhựa",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Toshiba Máy sấy quần áo (mã 179583)"
+    }
+  },
+  {
+    "sku": "3053659000074",
+    "model_code": "179582",
+    "productidweb": "310250",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Toshiba",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "1050W",
+      "Chất liệu thân vỏ": "Thép",
+      "Số người sử dụng": "Từ 5 - 7 người (9.5 - 10 kg)",
+      "Công nghệ tiết kiệm điện": "Origin Inverter",
+      "Tiện ích": "Hẹn giờ hoàn thành | Sấy chống nhăn | Âm báo khi kết thúc chu trình sấy | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Điều chỉnh thời gian | Điều khiển từ xa qua ứng dụng TSmartLife | Ghi nhớ chương trình sấy | Chế độ khử khuẩn | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "63",
+      "Khối lượng máy": "49",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "10 Kg",
+      "Công nghệ": "Sấy đảo chiều | SenseDry giữ bền màu, bảo vệ sợi vải | UV Sensitize khử khuẩn với đèn tia cực tím",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 50 - 60°C",
+      "Chất liệu cửa": "Kính cường lực 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Toshiba Máy sấy quần áo (mã 179582)"
+    }
+  },
+  {
+    "sku": "3053659000072",
+    "model_code": "179570",
+    "productidweb": "309486",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Samsung",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "Hãng không công bố",
+      "Số người sử dụng": "Trên 7 người (Trên 10 kg)",
+      "Tiện ích": "Bảng điều khiển thông minh AI Control | Hẹn giờ sấy | Kết nối điện thoại qua app SmartThings | Silent Dry vận hành êm ái, giảm ồn, chống rung đến 30% | Công nghệ sấy bơm nhiệt Hybrid Heatpump | Cài đặt ngôn ngữ hiển thị Tiếng Anh hoặc Tiếng Việt | Tự động mở cửa | Chức năng Smart Check | Sấy khô siêu tốc QuickDrive 35 phút | Khóa trẻ em",
+      "Cao": "97",
+      "Ngang": "67",
+      "Sâu": "83",
+      "Khối lượng máy": "77",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "17 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "Hãng không công bố"
+    },
+    "specs": {
+      "display_name": "Samsung Máy sấy quần áo (mã 179570)"
+    }
+  },
+  {
+    "sku": "3053659000071",
+    "model_code": "159876",
+    "productidweb": "307974",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "LG",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Hàn Quốc",
+      "Điện năng tiêu thụ": "1000W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Trên 7 người (Trên 10 kg)",
+      "Công nghệ tiết kiệm điện": "Dual Inverter | Eco Hybrid",
+      "Tiện ích": "Tự khởi động lại khi có điện | Hẹn giờ sấy | LG ThinQ giúp điều khiển từ xa qua Wi-Fi | Giá sấy | Vệ sinh bộ ngưng tụ | Sấy chống nhăn | Âm báo khi kết thúc chu trình sấy | Chăm sóc lồng sấy | Chẩn đoán lỗi Smart Diagnosis | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "66",
+      "Khối lượng máy": "57",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "10.5 Kg",
+      "Công nghệ": "Không có",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "216",
+      "Nhiệt độ tối đa": "60°C",
+      "Chất liệu cửa": "Kính cường lực",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "LG Máy sấy quần áo (mã 159876)"
+    }
+  },
+  {
+    "sku": "3053659000066",
+    "model_code": "179459",
+    "productidweb": "303301",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Whirlpool",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Mỹ",
+      "Điện năng tiêu thụ": "4725W",
+      "Số người sử dụng": "Trên 7 người (Trên 10 kg)",
+      "Tiện ích": "Chống nhăn",
+      "Cao": "103",
+      "Ngang": "73",
+      "Sâu": "73",
+      "Khối lượng máy": "54",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Tiếng Anh, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "15 Kg",
+      "Chất liệu ruột": "Sứ Porcelain",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "70°C"
+    },
+    "specs": {
+      "display_name": "Whirlpool Máy sấy quần áo (mã 179459)"
+    }
+  },
+  {
+    "sku": "3053659000065",
+    "model_code": "179418",
+    "productidweb": "302561",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Aqua",
+    "original_price": 7190000,
+    "sale_price": 5790000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "1700W",
+      "Chất liệu thân vỏ": "Thép không gỉ",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Điều chỉnh nhiệt độ | Hẹn giờ sấy | Sấy chống nhăn | Âm báo khi kết thúc chu trình sấy | Vệ sinh lọc | Điều chỉnh mức độ | Khóa trẻ em",
+      "Cao": "83",
+      "Ngang": "60",
+      "Sâu": "55",
+      "Khối lượng máy": "30",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Công nghệ": "Cảm biến thông minh Smart Sensor | Sấy đảo chiều",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "BLDC",
+      "Nhiệt độ tối đa": "80°C",
+      "Dài ống thoát khí": "209",
+      "Chất liệu cửa": "Nhựa",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Aqua Máy sấy quần áo (mã 179418)"
+    }
+  },
+  {
+    "sku": "3051099001557",
+    "model_code": "179400",
+    "productidweb": "302179",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Galanz",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2500W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chống nhăn | Hẹn giờ sấy | Đèn chiếu sáng lồng sấy | Cảm biến độ ẩm Sensor Dryer | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "61",
+      "Khối lượng máy": "40",
+      "Dòng sản phẩm": "2022",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "70°C"
+    },
+    "specs": {
+      "display_name": "Galanz Máy sấy quần áo (mã 179400)"
+    }
+  },
+  {
+    "sku": "3053659000064",
+    "model_code": "179399",
+    "productidweb": "302178",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Galanz",
+    "original_price": 4990000,
+    "sale_price": 4990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2350W",
+      "Số người sử dụng": "Từ 2 - 3 người (Dưới 8 kg)",
+      "Tiện ích": "Chống nhăn | Hẹn giờ sấy | Đèn chiếu sáng lồng sấy | Cảm biến độ ẩm Sensor Dryer | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "54",
+      "Khối lượng máy": "33",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "7 Kg",
+      "Chất liệu ruột": "Thép mạ kẽm",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "57°C",
+      "Dài ống thoát khí": "186"
+    },
+    "specs": {
+      "display_name": "Galanz Máy sấy quần áo (mã 179399)"
+    }
+  },
+  {
+    "sku": "3053659000061",
+    "model_code": "179375",
+    "productidweb": "299787",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Casper",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2700W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Điều chỉnh mức độ | Cảm biến nhiệt, độ ẩm",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "62",
+      "Khối lượng máy": "41",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép mạ kẽm",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "70°C"
+    },
+    "specs": {
+      "display_name": "Casper Máy sấy quần áo (mã 179375)"
+    }
+  },
+  {
+    "sku": "3053659000059",
+    "model_code": "179183",
+    "productidweb": "284038",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Ba Lan",
+      "Điện năng tiêu thụ": "700W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Lưu chương trình yêu thích | Hẹn giờ sấy | Chuông báo lấy quần áo khi kết thúc | Chứng chỉ Woolmark dành để sấy riêng cho đồ len | Hygienic Care diệt khuẩn quần áo | Chế độ Refresh loại bỏ mùi ẩm mốc | Sấy siêu im lặng Extra Silent | Kết nối từ xa Remote Start | Tăng cường chống nhăn Extra Anticrease | Điều khiển qua ứng dụng Electrolux | Đèn chiếu sáng lồng sấy | Cảm biến khối lượng Smart Sensor | Hiển thị bằng màn hình đèn LED | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "65",
+      "Khối lượng máy": "49",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Hãng không công bố",
+      "Dài ống xả nước": "255",
+      "Nhiệt độ tối đa": "Hãng không công bố"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 179183)"
+    }
+  },
+  {
+    "sku": "3053659000058",
+    "model_code": "179182",
+    "productidweb": "284037",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": 26500000,
+    "sale_price": 26500000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Ba Lan/Thái Lan",
+      "Điện năng tiêu thụ": "900W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Lưu chương trình yêu thích | Hẹn giờ sấy | Chuông báo lấy quần áo khi kết thúc | Chứng chỉ Woolmark dành để sấy riêng cho đồ len | Giá sấy | Chế độ Refresh loại bỏ mùi ẩm mốc | Sấy siêu im lặng Extra Silent | Xoay đảo chiều Reverse Plus | Tăng cường chống nhăn Extra Anticrease | Điều khiển qua ứng dụng Electrolux | Điều chỉnh mức độ | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "65",
+      "Khối lượng máy": "48",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Công nghệ": "Cảm biến độ ẩm 3DSense điều chỉnh thời gian sấy | Công nghệ sấy diệt khuẩn Hygiene Care | DelicateCare bảo vệ đồ len không bị biến dạng | SensiCare chăm sóc quần áo tránh bị hư tổn | ColourCare bảo vệ màu sắc quần áo | ReverseTumbling sấy đảo chiều chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "255",
+      "Nhiệt độ tối đa": "Hãng không công bố",
+      "Chất liệu cửa": "Nhựa 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 179182)"
+    }
+  },
+  {
+    "sku": "3053659000057",
+    "model_code": "179181",
+    "productidweb": "284036",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": 22990000,
+    "sale_price": 22990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Ba Lan/Thái Lan",
+      "Điện năng tiêu thụ": "800W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Lưu chương trình yêu thích | Hẹn giờ sấy | Chế độ Refresh loại bỏ mùi ẩm mốc | Xoay đảo chiều Reverse Plus | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "66",
+      "Khối lượng máy": "47",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Công nghệ": "SensiCare chăm sóc quần áo tránh bị hư tổn | ColourCare bảo vệ màu sắc quần áo | ReverseTumbling sấy đảo chiều chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Hãng không công bố",
+      "Nhiệt độ tối đa": "Hãng không công bố",
+      "Chất liệu cửa": "Nhựa 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 179181)"
+    }
+  },
+  {
+    "sku": "3053659000054",
+    "model_code": "179118",
+    "productidweb": "275583",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Whirlpool",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Ba Lan",
+      "Điện năng tiêu thụ": "2700W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Hẹn giờ sấy | Chương trình sấy nhanh | Công nghệ cảm biến thông minh 6th SENSE | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "63",
+      "Khối lượng máy": "37",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Bảng điều khiển": "Tiếng Anh, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "66",
+      "Nhiệt độ tối đa": "70°C",
+      "Dài ống thoát khí": "Không"
+    },
+    "specs": {
+      "display_name": "Whirlpool Máy sấy quần áo (mã 179118)"
+    }
+  },
+  {
+    "sku": "3053659000055",
+    "model_code": "179117",
+    "productidweb": "275582",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Whirlpool",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2350W",
+      "Số người sử dụng": "Từ 2 - 3 người (Dưới 8 kg)",
+      "Tiện ích": "Hẹn giờ sấy | Chương trình sấy nhanh | Công nghệ cảm biến thông minh 6th SENSE | Đèn chiếu sáng lồng sấy",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "55",
+      "Khối lượng máy": "33",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Tiếng Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "7 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "60°C",
+      "Dài ống thoát khí": "168"
+    },
+    "specs": {
+      "display_name": "Whirlpool Máy sấy quần áo (mã 179117)"
+    }
+  },
+  {
+    "sku": "3053659000053",
+    "model_code": "179074",
+    "productidweb": "273320",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Casper",
+    "original_price": 6390000,
+    "sale_price": 3990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2000W",
+      "Chất liệu thân vỏ": "Thép sơn chống gỉ",
+      "Số người sử dụng": "Từ 2 - 3 người (Dưới 8 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Hẹn giờ sấy | Chế độ Refresh loại bỏ mùi ẩm mốc | Sấy chống nhăn | Âm báo khi kết thúc chu trình sấy | Điều chỉnh mức độ | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "56",
+      "Khối lượng máy": "33",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "7.2 Kg",
+      "Công nghệ": "Sấy đảo chiều",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "70°C",
+      "Dài ống thoát khí": "150",
+      "Chất liệu cửa": "Nhựa",
+      "Cảm biến": "Không"
+    },
+    "specs": {
+      "display_name": "Casper Máy sấy quần áo (mã 179074)"
+    }
+  },
+  {
+    "sku": "3053659000051",
+    "model_code": "179064",
+    "productidweb": "272145",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Hẹn giờ sấy | Chuông báo lấy quần áo khi kết thúc | Chương trình sấy nhanh | Chương trình sấy nhẹ | Giá sấy | Hygienic Care diệt khuẩn quần áo | Chế độ Refresh loại bỏ mùi ẩm mốc | Tạm dừng thêm quần áo | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Hiển thị bằng màn hình đèn LED | Úp ngược đặt trên máy giặt tiết kiệm diện tích | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "62",
+      "Khối lượng máy": "32",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8.5 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "70°C",
+      "Dài ống thoát khí": "195"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 179064)"
+    }
+  },
+  {
+    "sku": "3053659000043",
+    "model_code": "179022",
+    "productidweb": "260094",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Alaska",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2000W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Giá sấy | Úp ngược đặt trên máy giặt tiết kiệm diện tích",
+      "Cao": "83",
+      "Ngang": "59",
+      "Sâu": "59",
+      "Khối lượng máy": "34",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Tiếng Anh, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "75°C",
+      "Dài ống thoát khí": "136"
+    },
+    "specs": {
+      "display_name": "Alaska Máy sấy quần áo (mã 179022)"
+    }
+  },
+  {
+    "sku": "3053659000042",
+    "model_code": "178959",
+    "productidweb": "248801",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Aqua",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "600W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chống nhăn | Kệ sấy đa năng | Bộ lọc xơ vải 3 lớp",
+      "Cao": "84.6 cm",
+      "Ngang": "66.7 cm",
+      "Sâu": "59.5 cm",
+      "Khối lượng máy": "50 kg",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Kim loại sơn tĩnh điện",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "56°C"
+    },
+    "specs": {
+      "display_name": "Aqua Máy sấy quần áo (mã 178959)"
+    }
+  },
+  {
+    "sku": "3053659000041",
+    "model_code": "178912",
+    "productidweb": "242833",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Samsung",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "800W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Đồng hồ hiển thị mực nước | Sấy nhiệt Air Wash khử mùi, diệt khuẩn | Chẩn đoán lỗi với công nghệ SmartControl | Bộ lọc xơ vải 2 trong 1 | Cửa Reversible Door đảo chiều | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "85 cm",
+      "Ngang": "60 cm",
+      "Sâu": "63",
+      "Khối lượng máy": "49 kg",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "60°C",
+      "Dài ống thoát khí": "Không"
+    },
+    "specs": {
+      "display_name": "Samsung Máy sấy quần áo (mã 178912)"
+    }
+  },
+  {
+    "sku": "3053659000034",
+    "model_code": "178898",
+    "productidweb": "240388",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Whirlpool",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Mỹ",
+      "Điện năng tiêu thụ": "4725W",
+      "Số người sử dụng": "Trên 7 người (Trên 10 kg)",
+      "Tiện ích": "Chống nhăn",
+      "Cao": "108",
+      "Ngang": "74",
+      "Sâu": "73",
+      "Khối lượng máy": "58 kg",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Khối lượng tải chính": "15 Kg",
+      "Chất liệu ruột": "Kim loại sơn tĩnh điện",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "70°C"
+    },
+    "specs": {
+      "display_name": "Whirlpool Máy sấy quần áo (mã 178898)"
+    }
+  },
+  {
+    "sku": "3053659000033",
+    "model_code": "178897",
+    "productidweb": "240385",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Whirlpool",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Mỹ",
+      "Điện năng tiêu thụ": "4725W",
+      "Số người sử dụng": "Trên 7 người (Trên 10 kg)",
+      "Tiện ích": "Chống nhăn",
+      "Cao": "108",
+      "Ngang": "74",
+      "Sâu": "73",
+      "Khối lượng máy": "58 kg",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Khối lượng tải chính": "15 Kg",
+      "Chất liệu ruột": "Kim loại sơn tĩnh điện",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "70°C"
+    },
+    "specs": {
+      "display_name": "Whirlpool Máy sấy quần áo (mã 178897)"
+    }
+  },
+  {
+    "sku": "3053659000037",
+    "model_code": "178884",
+    "productidweb": "237238",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chức năng hoãn giờ khởi động đến 24h | Simply Fi thông minh qua wifi và bluetooth | Hệ thống kiểm soát độ ẩm | Hiển thị bằng màn hình đèn LED",
+      "Cao": "84",
+      "Ngang": "60",
+      "Sâu": "57",
+      "Khối lượng máy": "35 Kg",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Bảng điều khiển": "Tiếng Anh, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép mạ kẽm",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "70°C"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 178884)"
+    }
+  },
+  {
+    "sku": "3053659000032",
+    "model_code": "178808",
+    "productidweb": "232142",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Aqua",
+    "original_price": 6390000,
+    "sale_price": 4990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "1700W",
+      "Chất liệu thân vỏ": "Thép không gỉ",
+      "Số người sử dụng": "Từ 2 - 3 người (Dưới 8 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Điều chỉnh nhiệt độ | Hẹn giờ sấy | Sấy chống nhăn | Âm báo khi kết thúc chu trình sấy | Vệ sinh lọc | Điều chỉnh mức độ | Khóa trẻ em",
+      "Cao": "82 cm",
+      "Ngang": "60 cm",
+      "Sâu": "55.5 cm",
+      "Khối lượng máy": "30 kg",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "7 Kg",
+      "Công nghệ": "Cảm biến thông minh Smart Sensor | Sấy đảo chiều",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "80°C",
+      "Dài ống thoát khí": "205",
+      "Chất liệu cửa": "Kính",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Aqua Máy sấy quần áo (mã 178808)"
+    }
+  },
+  {
+    "sku": "3053659000026",
+    "model_code": "178804",
+    "productidweb": "231705",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Châu Âu",
+      "Điện năng tiêu thụ": "900W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chương trình sấy nhanh | Hệ thống lọc ecoflow | Đèn LightCraft | Chứng chỉ Woolmark dành để sấy riêng cho đồ len | Sấy siêu im lặng Extra Silent | Điều khiển qua ứng dụng Electrolux | Cảm biến khối lượng Smart Sensor",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "64",
+      "Khối lượng máy": "62 Kg",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 178804)"
+    }
+  },
+  {
+    "sku": "3053659000025",
+    "model_code": "178781",
+    "productidweb": "230073",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Số người sử dụng": "Từ 5 - 7 người (9.5 - 10 kg)",
+      "Tiện ích": "Đèn báo làm sạch bộ lọc | Hẹn giờ sấy | Điều khiển máy bằng điện thoại có hỗ trợ NFC | Hộp chứa nước ngưng tụ tiện lợi Easy Case | Khóa trẻ em",
+      "Cao": "83",
+      "Ngang": "59",
+      "Sâu": "60",
+      "Khối lượng máy": "36.5 kg",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Bảng điều khiển": "Tiếng Anh, điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "10 Kg",
+      "Chất liệu ruột": "Thép mạ kẽm",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 178781)"
+    }
+  },
+  {
+    "sku": "3053659000024",
+    "model_code": "178768",
+    "productidweb": "227256",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Beko",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2500 W - 2700 W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Hẹn giờ hoàn thành | Cảm biến OptiSense tối ưu hóa quá trình sấy | Khóa trẻ em",
+      "Cao": "84.6 cm",
+      "Ngang": "59.7 cm",
+      "Sâu": "56 cm",
+      "Khối lượng máy": "35 kg",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Beko Máy sấy quần áo (mã 178768)"
+    }
+  },
+  {
+    "sku": "3053659000023",
+    "model_code": "178767",
+    "productidweb": "227250",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Beko",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2000 W - 2400 W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Hẹn giờ hoàn thành | Cảm biến OptiSense tối ưu hóa quá trình sấy | Khóa trẻ em",
+      "Cao": "85.6 cm",
+      "Ngang": "59.5 cm",
+      "Sâu": "56.7 cm",
+      "Khối lượng máy": "31.5 kg",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "75°C",
+      "Dài ống thoát khí": "102"
+    },
+    "specs": {
+      "display_name": "Beko Máy sấy quần áo (mã 178767)"
+    }
+  },
+  {
+    "sku": "3053659000017",
+    "model_code": "178593",
+    "productidweb": "206228",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Samsung",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "900W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chống nhăn | Đồng hồ hiển thị mực nước | Có bộ lọc lưới hai lớp kết hợp | Tích hợp thêm kệ sấy | Chuông báo lấy quần áo khi kết thúc",
+      "Khối lượng máy": "50 kg",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Hãng không công bố"
+    },
+    "specs": {
+      "display_name": "Samsung Máy sấy quần áo (mã 178593)"
+    }
+  },
+  {
+    "sku": "3053659000011",
+    "model_code": "178549",
+    "productidweb": "201722",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Hẹn giờ sấy | Điều khiển máy bằng điện thoại có hỗ trợ NFC | Hộp chứa nước ngưng tụ tiện lợi Easy Case",
+      "Khối lượng máy": "34 Kg",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 178549)"
+    }
+  },
+  {
+    "sku": "3053659000004",
+    "model_code": "178468",
+    "productidweb": "182872",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chế độ sấy siêu thẳng Super Easy tiết kiệm thời gian ủi quần áo | Hẹn giờ sấy | Điều khiển máy bằng điện thoại có hỗ trợ NFC | Chương trình sấy nhanh",
+      "Cao": "83",
+      "Ngang": "60",
+      "Sâu": "60",
+      "Khối lượng máy": "30 Kg",
+      "Dòng sản phẩm": "2017",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép mạ kẽm",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "75°C",
+      "Dài ống thoát khí": "220"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 178468)"
+    }
+  },
+  {
+    "sku": "3053659000069",
+    "model_code": "179487",
+    "productidweb": "304187",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Beko",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "900W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chống nhăn | Hẹn giờ sấy | Chống dị ứng | Chế độ sấy nhiệt độ thấp | Đèn chiếu sáng lồng sấy | Công nghệ sấy hơi nước SteamCure | Cảm biến OptiSense tối ưu hóa quá trình sấy | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "61",
+      "Khối lượng máy": "44",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "208",
+      "Nhiệt độ tối đa": "55°C"
+    },
+    "specs": {
+      "display_name": "Beko Máy sấy quần áo (mã 179487)"
+    }
+  },
+  {
+    "sku": "3051099000316",
+    "model_code": "178390",
+    "productidweb": "149741",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Tiện ích": "Hẹn giờ sấy | Hộp chứa nước ngưng tụ tiện lợi Easy Case",
+      "Khối lượng máy": "35 kg",
+      "Dòng sản phẩm": "2017",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Khối lượng tải chính": "10 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 178390)"
+    }
+  },
+  {
+    "sku": "3051099000318",
+    "model_code": "178389",
+    "productidweb": "149729",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Tiện ích": "Hẹn giờ sấy | Hộp chứa nước ngưng tụ tiện lợi Easy Case",
+      "Khối lượng máy": "35 kg",
+      "Dòng sản phẩm": "2017",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 178389)"
+    }
+  },
+  {
+    "sku": "3051099000317",
+    "model_code": "178388",
+    "productidweb": "149727",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Tiện ích": "Hẹn giờ sấy | Hộp chứa nước ngưng tụ tiện lợi Easy Case",
+      "Khối lượng máy": "35 kg",
+      "Dòng sản phẩm": "2017",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 178388)"
+    }
+  },
+  {
+    "sku": "3051099000285",
+    "model_code": "178373",
+    "productidweb": "141843",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Tiện ích": "Hẹn giờ sấy | Sấy dễ ủi",
+      "Khối lượng máy": "Hãng không công bố",
+      "Dòng sản phẩm": "2017",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 178373)"
+    }
+  },
+  {
+    "sku": "3051099000284",
+    "model_code": "178372",
+    "productidweb": "141841",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Tiện ích": "Sấy dễ ủi | Hộp chứa nước ngưng tụ tiện lợi Easy Case",
+      "Khối lượng máy": "Hãng không công bố",
+      "Dòng sản phẩm": "2017",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 178372)"
+    }
+  },
+  {
+    "sku": "3053659000068",
+    "model_code": "179488",
+    "productidweb": "304188",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Beko",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2500 W - 2700 W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Hẹn giờ sấy | Chống dị ứng | Chế độ sấy nhiệt độ thấp | Lọc bụi vải | Cảm biến OptiSense tối ưu hóa quá trình sấy | Đèn chiếu sáng bên trong lồng sấy | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "60",
+      "Khối lượng máy": "38",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "209",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Beko Máy sấy quần áo (mã 179488)"
+    }
+  },
+  {
+    "sku": "3053659000067",
+    "model_code": "179489",
+    "productidweb": "304190",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Beko",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "800W",
+      "Số người sử dụng": "Từ 5 - 7 người (9.5 - 10 kg)",
+      "Tiện ích": "Chống nhăn | Hẹn giờ sấy | Chống dị ứng | Chế độ sấy nhiệt độ thấp | Điều khiển từ xa với kết nối HomeWhiz | Công nghệ sấy hơi nước giảm nhăn IronFinish | Cảm biến OptiSense tối ưu hóa quá trình sấy | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "60",
+      "Khối lượng máy": "45",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "10 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "55°C"
+    },
+    "specs": {
+      "display_name": "Beko Máy sấy quần áo (mã 179489)"
+    }
+  },
+  {
+    "sku": "3051099000698",
+    "model_code": "178117",
+    "productidweb": "73723",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "1000W",
+      "Dòng sản phẩm": "2014",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Khối lượng tải chính": "7 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Hãng không công bố"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 178117)"
+    }
+  },
+  {
+    "sku": "1801211433200",
+    "model_code": "143958",
+    "productidweb": "73725",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "1000W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Khối lượng máy": "35 kg",
+      "Dòng sản phẩm": "2014",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Khối lượng tải chính": "7 Kg",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Đang cập nhật"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 143958)"
+    }
+  },
+  {
+    "sku": "3051099000216",
+    "model_code": "143955",
+    "productidweb": "112378",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Mexico",
+      "Điện năng tiêu thụ": "4550W",
+      "Khối lượng máy": "75 kg",
+      "Dòng sản phẩm": "2016",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Khối lượng tải chính": "11 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Hãng không công bố"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 143955)"
+    }
+  },
+  {
+    "sku": "3051099000154",
+    "model_code": "143954",
+    "productidweb": "103100",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Beko",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2200W",
+      "Tiện ích": "Đèn báo làm sạch bộ lọc | Sấy khử mùi quần áo",
+      "Khối lượng máy": "33 Kg",
+      "Dòng sản phẩm": "2014",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Khối lượng tải chính": "7 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Beko Máy sấy quần áo (mã 143954)"
+    }
+  },
+  {
+    "sku": "1753659000023",
+    "model_code": "180202",
+    "productidweb": "341086",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Haier",
+    "original_price": 20790000,
+    "sale_price": 16190000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Tặng 1 lần vệ sinh máy giặt (Xem chi tiết tại đây)",
+      "Tặng thêm 2 năm bảo hành chính hãng (Xem chi tiết tại đây)",
+      "1 đổi 1 trong vòng 90 ngày (Lỗi NSX) (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "650W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Trên 7 người (Trên 10 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Chống nhăn | Điều chỉnh nhiệt độ | Hẹn giờ sấy | Một chạm sấy AI | Vòng đệm cửa kháng khuẩn ABT | Âm báo khi kết thúc chu trình sấy | Kết nối Wi-Fi và điều khiển qua ứng dụng Haismart | Bộ lọc xơ vải | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "68",
+      "Khối lượng máy": "54",
+      "Dòng sản phẩm": "2025",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt màn hình cảm ứng nhiều màu sắc",
+      "Khối lượng tải chính": "14 Kg",
+      "Công nghệ": "Cảm biến sấy Ultra",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "131",
+      "Nhiệt độ tối đa": "75°C",
+      "Chất liệu cửa": "Kính cường lực",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Haier Máy sấy quần áo (mã 180202)"
+    }
+  },
+  {
+    "sku": "1753659000001",
+    "model_code": "179808",
+    "productidweb": "325349",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Panasonic",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "750W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Từ 5 - 7 người (9.5 - 10 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Chẩn đoán lỗi | Hẹn giờ sấy | Giá sấy | Sấy ít nhăn | Lắp đặt linh hoạt với bộ xếp chồng | Đèn báo vệ sinh hộp chứa nước, bộ lọc | Điều chỉnh mức độ | Điều chỉnh thời gian | Khóa an toàn",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "65",
+      "Khối lượng máy": "50",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Tiếng Việt, phím điều khiển cảm ứng, có màn hình hiển thị",
+      "Khối lượng tải chính": "9.5 Kg",
+      "Công nghệ": "Không có",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "220",
+      "Nhiệt độ tối đa": "72°C",
+      "Chất liệu cửa": "Nhựa PC nguyên khối",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Panasonic Máy sấy quần áo (mã 179808)"
+    }
+  },
+  {
+    "sku": "3053659000073",
+    "model_code": "179572",
+    "productidweb": "309558",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Samsung",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "1300W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Bảng điều khiển thông minh AI Control | Hẹn giờ sấy | Kết nối điện thoại qua app SmartThings | Silent Dry vận hành êm ái, giảm ồn, chống rung đến 30% | Công nghệ sấy bơm nhiệt Hybrid Heatpump | Cài đặt ngôn ngữ hiển thị Tiếng Anh hoặc Tiếng Việt | Chức năng Smart Check | Sấy khô siêu tốc QuickDrive 35 phút | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "60",
+      "Sâu": "66",
+      "Khối lượng máy": "53",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "Hãng không công bố"
+    },
+    "specs": {
+      "display_name": "Samsung Máy sấy quần áo (mã 179572)"
+    }
+  },
+  {
+    "sku": "3053659000052",
+    "model_code": "179063",
+    "productidweb": "272142",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Hẹn giờ sấy | Vapour Refresh - làm mới và giảm nhăn | Chương trình sấy nhanh | Chương trình sấy nhẹ | Giá sấy | Hygienic Care diệt khuẩn quần áo | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Hiển thị bằng màn hình đèn LED | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "62",
+      "Khối lượng máy": "32",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8.5 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "70°C"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 179063)"
+    }
+  },
+  {
+    "sku": "3053659000050",
+    "model_code": "179062",
+    "productidweb": "272141",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Hẹn giờ sấy | Vapour Refresh - làm mới và giảm nhăn | Chương trình sấy nhanh | Chương trình sấy nhẹ | Giá sấy | Hygienic Care diệt khuẩn quần áo | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Hiển thị bằng màn hình đèn LED | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "62",
+      "Khối lượng máy": "32",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8.5 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "70°C"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 179062)"
+    }
+  },
+  {
+    "sku": "3053659000036",
+    "model_code": "178867",
+    "productidweb": "236239",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Samsung",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "800W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Đồng hồ hiển thị mực nước | Có bộ lọc lưới hai lớp kết hợp | Sấy nhanh 35' | Chức năng Smart Check",
+      "Cao": "85 cm",
+      "Ngang": "60 cm",
+      "Sâu": "60 cm",
+      "Khối lượng máy": "49 kg",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "60°C",
+      "Dài ống thoát khí": "Không"
+    },
+    "specs": {
+      "display_name": "Samsung Máy sấy quần áo (mã 178867)"
+    }
+  },
+  {
+    "sku": "3053659000028",
+    "model_code": "178802",
+    "productidweb": "231326",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "LG",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Hàn Quốc",
+      "Điện năng tiêu thụ": "1000W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "LG ThinQ giúp điều khiển từ xa qua Wi-Fi | Chống dị ứng | AI DD - Cảm biến tự động xác định chất liệu sợi vải | Tự động vệ sinh bộ lọc | Chế độ sấy nhiệt độ thấp",
+      "Cao": "85",
+      "Ngang": "60",
+      "Sâu": "69",
+      "Khối lượng máy": "57",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Tiếng Anh, điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "60°C"
+    },
+    "specs": {
+      "display_name": "LG Máy sấy quần áo (mã 178802)"
+    }
+  },
+  {
+    "sku": "3053659000027",
+    "model_code": "178801",
+    "productidweb": "231133",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "LG",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Hàn Quốc",
+      "Điện năng tiêu thụ": "1000W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "LG ThinQ giúp điều khiển từ xa qua Wi-Fi | Chống dị ứng | AI DD - Cảm biến tự động xác định chất liệu sợi vải | Tự động vệ sinh bộ lọc | Chế độ sấy nhiệt độ thấp",
+      "Cao": "85 cm",
+      "Ngang": "60 cm",
+      "Sâu": "69 cm",
+      "Khối lượng máy": "70 kg",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Tiếng Anh, điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "100°C"
+    },
+    "specs": {
+      "display_name": "LG Máy sấy quần áo (mã 178801)"
+    }
+  },
+  {
+    "sku": "3051099000256",
+    "model_code": "143957",
+    "productidweb": "168011",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Khối lượng máy": "40 kg",
+      "Dòng sản phẩm": "2017",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Khối lượng tải chính": "6.5 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Đang cập nhật"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 143957)"
+    }
+  },
+  {
+    "sku": "3053659000002",
+    "model_code": "143956",
+    "productidweb": "164701",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Khối lượng máy": "35 kg",
+      "Dòng sản phẩm": "2017",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Đang cập nhật"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 143956)"
+    }
+  },
+  {
+    "sku": "1753659000003",
+    "model_code": "182279",
+    "productidweb": "328305",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "LG",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Hàn Quốc",
+      "Điện năng tiêu thụ": "1000W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Trên 7 người (Trên 10 kg)",
+      "Công nghệ tiết kiệm điện": "Dual Inverter | Eco Hybrid",
+      "Tiện ích": "Tự khởi động lại khi có điện | Hẹn giờ sấy | LG ThinQ giúp điều khiển từ xa qua Wi-Fi | Giá sấy | Vệ sinh bộ ngưng tụ | Sấy chống nhăn | Âm báo khi kết thúc chu trình sấy | Chăm sóc lồng sấy | Chẩn đoán lỗi Smart Diagnosis | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "60",
+      "Sâu": "66",
+      "Khối lượng máy": "56",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "10.5 Kg",
+      "Công nghệ": "Không có",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "60°C",
+      "Chất liệu cửa": "Kính cường lực",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "LG Máy sấy quần áo (mã 182279)"
+    }
+  },
+  {
+    "sku": "1753659000004",
+    "model_code": "182279",
+    "productidweb": "328307",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "LG",
+    "original_price": 28390000,
+    "sale_price": 14990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Hàn Quốc",
+      "Điện năng tiêu thụ": "1000W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Trên 7 người (Trên 10 kg)",
+      "Công nghệ tiết kiệm điện": "Dual Inverter | Eco Hybrid",
+      "Tiện ích": "Tự khởi động lại khi có điện | Hẹn giờ sấy | LG ThinQ giúp điều khiển từ xa qua Wi-Fi | Giá sấy | Vệ sinh bộ ngưng tụ | Sấy chống nhăn | Âm báo khi kết thúc chu trình sấy | Chăm sóc lồng sấy | Chẩn đoán lỗi Smart Diagnosis | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "60",
+      "Sâu": "66",
+      "Khối lượng máy": "56",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "10.5 Kg",
+      "Công nghệ": "Không có",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "210",
+      "Nhiệt độ tối đa": "60°C",
+      "Chất liệu cửa": "Kính cường lực",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "LG Máy sấy quần áo (mã 182279)"
+    }
+  },
+  {
+    "sku": "3053659000070",
+    "model_code": "182279",
+    "productidweb": "307973",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "LG",
+    "original_price": 29890000,
+    "sale_price": 16790000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Hàn Quốc",
+      "Điện năng tiêu thụ": "1000W",
+      "Chất liệu thân vỏ": "Kim loại sơn tĩnh điện",
+      "Số người sử dụng": "Trên 7 người (Trên 10 kg)",
+      "Công nghệ tiết kiệm điện": "Dual Inverter | Eco Hybrid",
+      "Tiện ích": "Tự khởi động lại khi có điện | Hẹn giờ sấy | LG ThinQ giúp điều khiển từ xa qua Wi-Fi | Giá sấy | Vệ sinh bộ ngưng tụ | Sấy chống nhăn | Âm báo khi kết thúc chu trình sấy | Chăm sóc lồng sấy | Chẩn đoán lỗi Smart Diagnosis | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "65",
+      "Khối lượng máy": "56",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "10.5 Kg",
+      "Công nghệ": "Không có",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "216",
+      "Nhiệt độ tối đa": "60°C",
+      "Chất liệu cửa": "Kính cường lực",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "LG Máy sấy quần áo (mã 182279)"
+    }
+  },
+  {
+    "sku": "3053659000049",
+    "model_code": "182255",
+    "productidweb": "272144",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Hẹn giờ sấy | Chương trình sấy nhanh | Chương trình sấy nhẹ | Giá sấy | Hygienic Care diệt khuẩn quần áo | Chế độ Refresh loại bỏ mùi ẩm mốc | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Hiển thị bằng màn hình đèn LED | Úp ngược đặt trên máy giặt tiết kiệm diện tích | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "60",
+      "Khối lượng máy": "32",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8.5 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "70°C",
+      "Dài ống thoát khí": "195"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182255)"
+    }
+  },
+  {
+    "sku": "3053659000048",
+    "model_code": "182255",
+    "productidweb": "272143",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Số người sử dụng": "Từ 2 - 3 người (Dưới 8 kg)",
+      "Tiện ích": "Hẹn giờ sấy | Chương trình sấy nhanh | Chương trình sấy nhẹ | Giá sấy | Hygienic Care diệt khuẩn quần áo | Chế độ Refresh loại bỏ mùi ẩm mốc | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Hiển thị bằng màn hình đèn LED | Úp ngược đặt trên máy giặt tiết kiệm diện tích | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "59",
+      "Sâu": "60",
+      "Khối lượng máy": "32",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "7.5 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "70°C",
+      "Dài ống thoát khí": "195"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182255)"
+    }
+  },
+  {
+    "sku": "3053659000047",
+    "model_code": "182254",
+    "productidweb": "269201",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Beko",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2400W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chống nhăn | Đèn báo làm sạch bộ lọc | Hẹn giờ sấy | Cảm biến OptiSense tối ưu hóa quá trình sấy | Hiển thị bằng màn hình đèn LED | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "58",
+      "Khối lượng máy": "30",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Beko Máy sấy quần áo (mã 182254)"
+    }
+  },
+  {
+    "sku": "3053659000046",
+    "model_code": "182254",
+    "productidweb": "269200",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Beko",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2400W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chống nhăn | Đèn báo làm sạch bộ lọc | Hẹn giờ sấy | Cảm biến OptiSense tối ưu hóa quá trình sấy | Hiển thị bằng màn hình đèn LED | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "57",
+      "Khối lượng máy": "30",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Beko Máy sấy quần áo (mã 182254)"
+    }
+  },
+  {
+    "sku": "3053659000044",
+    "model_code": "182253",
+    "productidweb": "264347",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Galanz",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2350W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chống nhăn | Hẹn giờ sấy | Lọc bụi vải | Cài đặt lại nhiệt độ | Khóa trẻ em",
+      "Cao": "83",
+      "Ngang": "59",
+      "Sâu": "55",
+      "Khối lượng máy": "30",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép mạ kẽm",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "57°C",
+      "Dài ống thoát khí": "177"
+    },
+    "specs": {
+      "display_name": "Galanz Máy sấy quần áo (mã 182253)"
+    }
+  },
+  {
+    "sku": "3053659000045",
+    "model_code": "182253",
+    "productidweb": "264348",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Galanz",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2350W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chống nhăn | Hẹn giờ sấy | Lọc bụi vải | Cài đặt lại nhiệt độ | Cảm biến độ ẩm Sensor Dryer | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "55",
+      "Khối lượng máy": "30",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Tiếng Anh, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép mạ kẽm",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "57°C"
+    },
+    "specs": {
+      "display_name": "Galanz Máy sấy quần áo (mã 182253)"
+    }
+  },
+  {
+    "sku": "3053659000040",
+    "model_code": "182234",
+    "productidweb": "242831",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Samsung",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "800W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Đồng hồ hiển thị mực nước | Sấy nhiệt Air Wash khử mùi, diệt khuẩn | Sấy nhanh 35' | Kết nối điện thoại qua app SmartThings | Sấy nhanh 81' | Bảng điều khiển thông minh AI | Bộ lọc xơ vải 2 trong 1 | Cửa Reversible Door đảo chiều",
+      "Cao": "85 cm",
+      "Ngang": "60 cm",
+      "Sâu": "60 cm",
+      "Khối lượng máy": "49 Kg",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Tiếng Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "60°C",
+      "Dài ống thoát khí": "Không"
+    },
+    "specs": {
+      "display_name": "Samsung Máy sấy quần áo (mã 182234)"
+    }
+  },
+  {
+    "sku": "3053659000035",
+    "model_code": "182234",
+    "productidweb": "236238",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Samsung",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "800W",
+      "Chất liệu thân vỏ": "Thép không gỉ",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Digital Inverter",
+      "Tiện ích": "Bảng điều khiển thông minh AI Control | Cửa đảo chiều | Hẹn giờ sấy | Kết nối điện thoại qua app SmartThings | Giá sấy | Sấy chống nhăn | Bộ lọc xơ vải 2 trong 1 | Điều chỉnh chế độ | Đèn chiếu sáng lồng sấy | Khóa trẻ em",
+      "Cao": "85 cm",
+      "Ngang": "60 cm",
+      "Sâu": "63.5 cm",
+      "Khối lượng máy": "50 Kg",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Tiếng Việt, phím điều khiển cảm ứng, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Công nghệ sấy thông minh Optimal Dry | Công nghệ sấy diệt khuẩn Hygiene Care | Sấy nhiệt AirWash khử mùi, diệt khuẩn | Công nghệ Wrinkle Prevent chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "200",
+      "Nhiệt độ tối đa": "60°C",
+      "Chất liệu cửa": "Kính chịu lực + Nhựa cao cấp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Samsung Máy sấy quần áo (mã 182234)"
+    }
+  },
+  {
+    "sku": "3053659000039",
+    "model_code": "182240",
+    "productidweb": "241930",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Galanz",
+    "original_price": 6774545,
+    "sale_price": 6774545,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2350W",
+      "Số người sử dụng": "Từ 2 - 3 người (Dưới 8 kg)",
+      "Tiện ích": "Chống nhăn | Hẹn giờ sấy | Cảm biến độ ẩm Sensor Dryer | Khóa trẻ em",
+      "Cao": "83",
+      "Ngang": "59",
+      "Sâu": "54",
+      "Khối lượng máy": "30 kg",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "7 Kg",
+      "Chất liệu ruột": "Thép mạ kẽm",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "72°C",
+      "Dài ống thoát khí": "170"
+    },
+    "specs": {
+      "display_name": "Galanz Máy sấy quần áo (mã 182240)"
+    }
+  },
+  {
+    "sku": "3053659000038",
+    "model_code": "182240",
+    "productidweb": "241929",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Galanz",
+    "original_price": 6500000,
+    "sale_price": 6500000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Điện năng tiêu thụ": "2350W",
+      "Số người sử dụng": "Từ 2 - 3 người (Dưới 8 kg)",
+      "Tiện ích": "Chống nhăn | Hẹn giờ sấy | Cảm biến độ ẩm Sensor Dryer | Khóa trẻ em",
+      "Cao": "83",
+      "Ngang": "59",
+      "Sâu": "54",
+      "Khối lượng máy": "30 kg",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "7 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Dài ống xả nước": "Không",
+      "Nhiệt độ tối đa": "72°C",
+      "Dài ống thoát khí": "170"
+    },
+    "specs": {
+      "display_name": "Galanz Máy sấy quần áo (mã 182240)"
+    }
+  },
+  {
+    "sku": "3053659000029",
+    "model_code": "182228",
+    "productidweb": "231701",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Châu Âu",
+      "Điện năng tiêu thụ": "2250W",
+      "Số người sử dụng": "Từ 2 - 3 người (Dưới 8 kg)",
+      "Tiện ích": "Chống nhăn | Chương trình sấy nhẹ | Chứng chỉ Woolmark dành để sấy riêng cho đồ len | Sấy siêu im lặng Extra Silent | Cảm biến khối lượng Smart Sensor",
+      "Cao": "85 cm",
+      "Ngang": "60 cm",
+      "Sâu": "54 cm",
+      "Khối lượng máy": "37 kg",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Khối lượng tải chính": "7 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182228)"
+    }
+  },
+  {
+    "sku": "3053659000030",
+    "model_code": "182228",
+    "productidweb": "231702",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Châu Âu",
+      "Điện năng tiêu thụ": "2250W",
+      "Số người sử dụng": "Từ 2 - 3 người (Dưới 8 kg)",
+      "Tiện ích": "Chống nhăn | Chương trình sấy nhẹ | Chứng chỉ Woolmark dành để sấy riêng cho đồ len | Sấy siêu im lặng Extra Silent",
+      "Cao": "85",
+      "Ngang": "60",
+      "Sâu": "60",
+      "Khối lượng máy": "40 kg",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182228)"
+    }
+  },
+  {
+    "sku": "3053659000013",
+    "model_code": "182184",
+    "productidweb": "201584",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Tiện ích": "Đèn báo làm sạch bộ lọc | Hẹn giờ sấy | Điều khiển máy bằng điện thoại có hỗ trợ NFC | Hộp chứa nước ngưng tụ tiện lợi Easy Case",
+      "Khối lượng máy": "34.5 kg",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Khối lượng tải chính": "10 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 182184)"
+    }
+  },
+  {
+    "sku": "3053659000012",
+    "model_code": "182184",
+    "productidweb": "201576",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Tiện ích": "Đèn báo làm sạch bộ lọc | Hẹn giờ sấy | Điều khiển máy bằng điện thoại có hỗ trợ NFC | Hộp chứa nước ngưng tụ tiện lợi Easy Case",
+      "Khối lượng máy": "34 Kg",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 182184)"
+    }
+  },
+  {
+    "sku": "3053659000009",
+    "model_code": "182184",
+    "productidweb": "192104",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Candy",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thổ Nhĩ Kỳ",
+      "Điện năng tiêu thụ": "2300W",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Tiện ích": "Chế độ sấy siêu thẳng Super Easy tiết kiệm thời gian ủi quần áo | Hẹn giờ sấy | Điều khiển máy bằng điện thoại có hỗ trợ NFC | Hộp chứa nước ngưng tụ tiện lợi Easy Case",
+      "Cao": "84",
+      "Ngang": "60",
+      "Sâu": "60",
+      "Khối lượng máy": "33 Kg",
+      "Loại sản phẩm": "Sấy ngưng tụ",
+      "Bảng điều khiển": "Tiếng Anh, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Chất liệu ruột": "Thép mạ kẽm",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Candy Máy sấy quần áo (mã 182184)"
+    }
+  },
+  {
+    "sku": "3053659000006",
+    "model_code": "182180",
+    "productidweb": "182987",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Tiện ích": "Hẹn giờ sấy | Sấy đảo chiều chống nhăn | Cảm biến khối lượng Smart Sensor | Úp ngược đặt trên máy giặt tiết kiệm diện tích",
+      "Khối lượng máy": "33 Kg",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182180)"
+    }
+  },
+  {
+    "sku": "3053659000007",
+    "model_code": "182180",
+    "productidweb": "182984",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Tiện ích": "Hẹn giờ sấy | Sấy đảo chiều chống nhăn | Cảm biến khối lượng Smart Sensor | Úp ngược đặt trên máy giặt tiết kiệm diện tích",
+      "Khối lượng máy": "33 Kg",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Khối lượng tải chính": "8 Kg",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "75°C"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182180)"
+    }
+  },
+  {
+    "sku": "1753659000011",
+    "model_code": "182309",
+    "productidweb": "329627",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": 9890000,
+    "sale_price": 9490000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Tự khởi động lại khi có điện | Điều chỉnh nhiệt độ | Hẹn giờ sấy | Chuông báo lấy quần áo khi kết thúc | Chế độ Refresh loại bỏ mùi ẩm mốc | Tạm dừng thêm quần áo | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "60",
+      "Sâu": "60",
+      "Khối lượng máy": "28",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Công nghệ": "Công nghệ sấy diệt khuẩn Hygiene Care | ColourCare bảo vệ màu sắc quần áo | Cảm biến thông minh Smart Sensor | ReverseTumbling sấy đảo chiều chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 70 - 80°C",
+      "Dài ống thoát khí": "195",
+      "Chất liệu cửa": "Nhựa 1 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182309)"
+    }
+  },
+  {
+    "sku": "1753659000012",
+    "model_code": "182309",
+    "productidweb": "329628",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": 10790000,
+    "sale_price": 10490000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "2250W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Tự khởi động lại khi có điện | Điều chỉnh nhiệt độ | Hẹn giờ sấy | Chuông báo lấy quần áo khi kết thúc | Chế độ Refresh loại bỏ mùi ẩm mốc | Tạm dừng thêm quần áo | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "84",
+      "Ngang": "60",
+      "Sâu": "61",
+      "Khối lượng máy": "28",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy thông hơi",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Công nghệ sấy diệt khuẩn Hygiene Care | ColourCare bảo vệ màu sắc quần áo | Cảm biến thông minh Smart Sensor | ReverseTumbling sấy đảo chiều chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 70 - 80°C",
+      "Dài ống thoát khí": "195",
+      "Chất liệu cửa": "Nhựa 1 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182309)"
+    }
+  },
+  {
+    "sku": "1753659000008",
+    "model_code": "182308",
+    "productidweb": "329624",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": 22590000,
+    "sale_price": 20290000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "700W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Tự khởi động lại khi có điện | Chuông báo lấy quần áo khi kết thúc | Hẹn giờ hoàn thành | Chứng chỉ Woolmark dành để sấy riêng cho đồ len | Chế độ Refresh loại bỏ mùi ẩm mốc | Sấy siêu im lặng Extra Silent | Tạm dừng thêm quần áo | Xoay đảo chiều Reverse Plus | Kết nối từ xa Remote Start | Tăng cường chống nhăn Extra Anticrease | Đồng bộ SyncDry | Điều khiển qua ứng dụng Electrolux | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "66",
+      "Khối lượng máy": "50",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Cảm biến độ ẩm 3DSense điều chỉnh thời gian sấy | Công nghệ sấy diệt khuẩn Hygiene Care | DelicateCare bảo vệ đồ len không bị biến dạng | SensiCare chăm sóc quần áo tránh bị hư tổn | ColourCare bảo vệ màu sắc quần áo | ReverseTumbling sấy đảo chiều chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 55 - 60°C",
+      "Chất liệu cửa": "Nhựa 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182308)"
+    }
+  },
+  {
+    "sku": "1753659000009",
+    "model_code": "182308",
+    "productidweb": "329625",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": 23590000,
+    "sale_price": 21990000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "700W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Inverter",
+      "Tiện ích": "Tự khởi động lại khi có điện | Chuông báo lấy quần áo khi kết thúc | Hẹn giờ hoàn thành | Chứng chỉ Woolmark dành để sấy riêng cho đồ len | Chế độ Refresh loại bỏ mùi ẩm mốc | Sấy siêu im lặng Extra Silent | Tạm dừng thêm quần áo | Xoay đảo chiều Reverse Plus | Kết nối từ xa Remote Start | Tăng cường chống nhăn Extra Anticrease | Đồng bộ SyncDry | Điều khiển qua ứng dụng Electrolux | Điều chỉnh mức độ | Đèn chiếu sáng lồng sấy | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "66",
+      "Khối lượng máy": "50",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "9 Kg",
+      "Công nghệ": "Cảm biến độ ẩm 3DSense điều chỉnh thời gian sấy | Công nghệ sấy diệt khuẩn Hygiene Care | DelicateCare bảo vệ đồ len không bị biến dạng | SensiCare chăm sóc quần áo tránh bị hư tổn | ColourCare bảo vệ màu sắc quần áo | ReverseTumbling sấy đảo chiều chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 55 - 60°C",
+      "Chất liệu cửa": "Nhựa 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182308)"
+    }
+  },
+  {
+    "sku": "1753659000007",
+    "model_code": "182307",
+    "productidweb": "329623",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": 19690000,
+    "sale_price": 17490000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "800W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Lưu chương trình yêu thích | Tự khởi động lại khi có điện | Chuông báo lấy quần áo khi kết thúc | Hẹn giờ hoàn thành | Chế độ Refresh loại bỏ mùi ẩm mốc | Tạm dừng thêm quần áo | Xoay đảo chiều Reverse Plus | Tùy chọn chương trình (cá nhân hóa) thông minh SmartSelect | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "64",
+      "Khối lượng máy": "49",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Công nghệ": "Công nghệ sấy diệt khuẩn Hygiene Care | SensiCare chăm sóc quần áo tránh bị hư tổn | ColourCare bảo vệ màu sắc quần áo | ReverseTumbling sấy đảo chiều chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 55 - 60°C",
+      "Chất liệu cửa": "Nhựa 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182307)"
+    }
+  },
+  {
+    "sku": "1753659000006",
+    "model_code": "182307",
+    "productidweb": "329622",
+    "category_key": "may_say",
+    "category_label": "Máy sấy quần áo",
+    "brand": "Electrolux",
+    "original_price": 18690000,
+    "sale_price": 16490000,
+    "has_price_data": true,
+    "promotions": [
+      "Cơ hội trúng tủ chăm sóc quần áo trị giá 58 triệu đồng. (Xem chi tiết tại đây)",
+      "Phiếu mua hàng giảm 10% tối đa 300,000đ mua đèn năng lượng mặt trời",
+      "Miễn phí công lắp đặt",
+      "Phiếu mua hàng mua Pin tiểu (đơn hàng từ 80.000đ trở lên) trị giá 20.000đ"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Thái Lan",
+      "Điện năng tiêu thụ": "800W",
+      "Chất liệu thân vỏ": "Thép sơn tĩnh điện",
+      "Số người sử dụng": "Từ 3 - 5 người (8 - 9 kg)",
+      "Công nghệ tiết kiệm điện": "Không có",
+      "Tiện ích": "Lưu chương trình yêu thích | Tự khởi động lại khi có điện | Chuông báo lấy quần áo khi kết thúc | Hẹn giờ hoàn thành | Chế độ Refresh loại bỏ mùi ẩm mốc | Tạm dừng thêm quần áo | Xoay đảo chiều Reverse Plus | Tùy chọn chương trình (cá nhân hóa) thông minh SmartSelect | Tăng cường chống nhăn Extra Anticrease | Điều chỉnh mức độ | Điều chỉnh thời gian | Khóa trẻ em",
+      "Cao": "85",
+      "Ngang": "59",
+      "Sâu": "65",
+      "Khối lượng máy": "49",
+      "Dòng sản phẩm": "2024",
+      "Loại sản phẩm": "Sấy bơm nhiệt",
+      "Bảng điều khiển": "Song ngữ Anh - Việt, phím điều khiển cảm ứng, nút nhấn, núm xoay, có màn hình hiển thị",
+      "Khối lượng tải chính": "8 Kg",
+      "Công nghệ": "Công nghệ sấy diệt khuẩn Hygiene Care | SensiCare chăm sóc quần áo tránh bị hư tổn | ColourCare bảo vệ màu sắc quần áo | ReverseTumbling sấy đảo chiều chống nhăn",
+      "Chất liệu ruột": "Thép không gỉ",
+      "Động cơ": "Truyền động gián tiếp (Dây curoa)",
+      "Nhiệt độ tối đa": "Từ 55 - 60°C",
+      "Chất liệu cửa": "Nhựa 2 lớp",
+      "Cảm biến": "Có"
+    },
+    "specs": {
+      "display_name": "Electrolux Máy sấy quần áo (mã 182307)"
+    }
+  }
+]

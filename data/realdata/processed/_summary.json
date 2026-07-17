@@ -1,0 +1,114 @@
+[
+  {
+    "category": "Tủ lạnh",
+    "key": "tu_lanh",
+    "n_products": 1692,
+    "n_priced": 252,
+    "pct_priced": 14.9,
+    "parser": "structured"
+  },
+  {
+    "category": "Máy lạnh",
+    "key": "may_lanh",
+    "n_products": 1039,
+    "n_priced": 269,
+    "pct_priced": 25.9,
+    "parser": "structured"
+  },
+  {
+    "category": "Máy giặt",
+    "key": "may_giat",
+    "n_products": 1337,
+    "n_priced": 204,
+    "pct_priced": 15.3,
+    "parser": "specs_raw only"
+  },
+  {
+    "category": "Máy sấy quần áo",
+    "key": "may_say",
+    "n_products": 107,
+    "n_priced": 38,
+    "pct_priced": 35.5,
+    "parser": "specs_raw only"
+  },
+  {
+    "category": "Máy rửa chén",
+    "key": "may_rua_chen",
+    "n_products": 134,
+    "n_priced": 59,
+    "pct_priced": 44.0,
+    "parser": "specs_raw only"
+  },
+  {
+    "category": "Tủ mát, tủ đông",
+    "key": "tu_mat_dong",
+    "n_products": 222,
+    "n_priced": 132,
+    "pct_priced": 59.5,
+    "parser": "specs_raw only"
+  },
+  {
+    "category": "Máy nước nóng",
+    "key": "may_nuoc_nong",
+    "n_products": 319,
+    "n_priced": 148,
+    "pct_priced": 46.4,
+    "parser": "specs_raw only"
+  },
+  {
+    "category": "Micro karaoke",
+    "key": "micro_karaoke",
+    "n_products": 37,
+    "n_priced": 5,
+    "pct_priced": 13.5,
+    "parser": "specs_raw only"
+  },
+  {
+    "category": "Micro thu âm điện thoại",
+    "key": "micro_thu_am",
+    "n_products": 33,
+    "n_priced": 24,
+    "pct_priced": 72.7,
+    "parser": "specs_raw only"
+  },
+  {
+    "category": "Đồng hồ thông minh",
+    "key": "dong_ho_tm",
+    "n_products": 1336,
+    "n_priced": 582,
+    "pct_priced": 43.6,
+    "parser": "specs_raw only"
+  },
+  {
+    "category": "Máy tính để bàn",
+    "key": "pc_de_ban",
+    "n_products": 405,
+    "n_priced": 77,
+    "pct_priced": 19.0,
+    "parser": "specs_raw only"
+  },
+  {
+    "category": "Màn hình máy tính",
+    "key": "man_hinh",
+    "n_products": 469,
+    "n_priced": 68,
+    "pct_priced": 14.5,
+    "parser": "specs_raw only"
+  },
+  {
+    "category": "Máy in",
+    "key": "may_in",
+    "n_products": 147,
+    "n_priced": 57,
+    "pct_priced": 38.8,
+    "parser": "specs_raw only"
+  },
+  {
+    "category": "Máy tính bảng",
+    "key": "may_tinh_bang",
+    "n_products": 1469,
+    "n_priced": 307,
+    "pct_priced": 20.9,
+    "parser": "specs_raw only"
+  }
+]

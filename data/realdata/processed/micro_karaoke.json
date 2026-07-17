@@ -1,0 +1,815 @@
+[
+  {
+    "sku": "0164779000279",
+    "model_code": "180558",
+    "productidweb": null,
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Alpha Works",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "640 - 690 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "Dưới 0.5%",
+      "Năm sản xuất": "2025"
+    },
+    "specs": {
+      "display_name": "Alpha Works Micro karaoke (mã 180558)"
+    }
+  },
+  {
+    "sku": "0164779000235",
+    "model_code": "180140",
+    "productidweb": null,
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Sony",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "50 Hz - 15000 Hz",
+      "Băng tần": "2.4 GHz",
+      "Độ méo tiếng": "Không",
+      "Năm sản xuất": "2025"
+    },
+    "specs": {
+      "display_name": "Sony Micro karaoke (mã 180140)"
+    }
+  },
+  {
+    "sku": "0164779000195",
+    "model_code": "180022",
+    "productidweb": null,
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Alpha Works",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "640 - 690 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "Dưới 0.5%",
+      "Năm sản xuất": "2023"
+    },
+    "specs": {
+      "display_name": "Alpha Works Micro karaoke (mã 180022)"
+    }
+  },
+  {
+    "sku": "3040875000301",
+    "model_code": "179170",
+    "productidweb": "283445",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Jbl",
+    "original_price": 9720000,
+    "sale_price": 9720000,
+    "has_price_data": true,
+    "promotions": [
+      "Miễn phí công lắp đặt"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "640 MHz – 690 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "Hãng không công bố",
+      "Năm sản xuất": "2019"
+    },
+    "specs": {
+      "display_name": "Jbl Micro karaoke (mã 179170)"
+    }
+  },
+  {
+    "sku": "3040891000029",
+    "model_code": "179616",
+    "productidweb": "313217",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Pasion",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "40 HZ~15 kHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "Hãng không công bố",
+      "Năm sản xuất": "2023"
+    },
+    "specs": {
+      "display_name": "Pasion Micro karaoke (mã 179616)"
+    }
+  },
+  {
+    "sku": "3040875000208",
+    "model_code": "179169",
+    "productidweb": "283444",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Jbl",
+    "original_price": 8443636,
+    "sale_price": 8443636,
+    "has_price_data": true,
+    "promotions": [
+      "Miễn phí công lắp đặt"
+    ],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "640 MHz – 690 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "Hãng không công bố",
+      "Năm sản xuất": "2020"
+    },
+    "specs": {
+      "display_name": "Jbl Micro karaoke (mã 179169)"
+    }
+  },
+  {
+    "sku": "3040891000027",
+    "model_code": "179004",
+    "productidweb": "256277",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Boston",
+    "original_price": 3436364,
+    "sale_price": 3436364,
+    "has_price_data": true,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "40Hz~20kHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "<0.5%, tại 1 kHz",
+      "Năm sản xuất": "2021"
+    },
+    "specs": {
+      "display_name": "Boston Micro karaoke (mã 179004)"
+    }
+  },
+  {
+    "sku": "3040891000026",
+    "model_code": "179003",
+    "productidweb": "256212",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Boston",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "Bộ phát tín hiệu: 768.5 MHz ~ 793.5 MHz - Bộ thu tín hiệu: 40Hz - 20 kHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "<0.5%, tại 1 kHz",
+      "Năm sản xuất": "2021"
+    },
+    "specs": {
+      "display_name": "Boston Micro karaoke (mã 179003)"
+    }
+  },
+  {
+    "sku": "3040891000028",
+    "model_code": "178997",
+    "productidweb": "255530",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Paramax",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "Bộ phát tín hiệu: 630 MHz ~ 689.7 MHz - Bộ thu tín hiệu: 40Hz - 18 kHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "Dưới 0.5%",
+      "Năm sản xuất": "2021"
+    },
+    "specs": {
+      "display_name": "Paramax Micro karaoke (mã 178997)"
+    }
+  },
+  {
+    "sku": "3040891000024",
+    "model_code": "178695",
+    "productidweb": "219127",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Birici",
+    "original_price": 1561091,
+    "sale_price": 1561091,
+    "has_price_data": true,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "640 - 665 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.5%",
+      "Năm sản xuất": "2019"
+    },
+    "specs": {
+      "display_name": "Birici Micro karaoke (mã 178695)"
+    }
+  },
+  {
+    "sku": "3040891000023",
+    "model_code": "178575",
+    "productidweb": "202999",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Zenbos",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "Tần số A 675.3 - 687 MHZ, tần số B 675.3 - 681 MHZ",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.5%",
+      "Năm sản xuất": "2021"
+    },
+    "specs": {
+      "display_name": "Zenbos Micro karaoke (mã 178575)"
+    }
+  },
+  {
+    "sku": "3040891000022",
+    "model_code": "178574",
+    "productidweb": "202998",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Zenbos",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "675.3 Hz - 681 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.5%",
+      "Năm sản xuất": "2019"
+    },
+    "specs": {
+      "display_name": "Zenbos Micro karaoke (mã 178574)"
+    }
+  },
+  {
+    "sku": "3040891000020",
+    "model_code": "178573",
+    "productidweb": "202988",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Zenbos",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "Tần số A 675.3 - 687 MHZ, tần số B 675.3 - 681 MHZ",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.5%",
+      "Năm sản xuất": "2021"
+    },
+    "specs": {
+      "display_name": "Zenbos Micro karaoke (mã 178573)"
+    }
+  },
+  {
+    "sku": "3040891000021",
+    "model_code": "178572",
+    "productidweb": "202986",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Zenbos",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "675.3 Hz - 681 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.5%",
+      "Năm sản xuất": "2019"
+    },
+    "specs": {
+      "display_name": "Zenbos Micro karaoke (mã 178572)"
+    }
+  },
+  {
+    "sku": "3040891000018",
+    "model_code": "178527",
+    "productidweb": "198927",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Zenbos",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "710 MHz - 865 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.5%",
+      "Năm sản xuất": "2018"
+    },
+    "specs": {
+      "display_name": "Zenbos Micro karaoke (mã 178527)"
+    }
+  },
+  {
+    "sku": "3040891000015",
+    "model_code": "178526",
+    "productidweb": "198924",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Ce-Ance",
+    "original_price": 3878182,
+    "sale_price": 3878182,
+    "has_price_data": true,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "710 MHz - 760 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.5%",
+      "Năm sản xuất": "2018"
+    },
+    "specs": {
+      "display_name": "Ce-Ance Micro karaoke (mã 178526)"
+    }
+  },
+  {
+    "sku": "3040891000025",
+    "model_code": "178799",
+    "productidweb": "230810",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Boston",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Có dây",
+      "Tần số hoạt động": "70 Hz - 20kHz",
+      "Băng tần": "Không có",
+      "Độ méo tiếng": "Hãng không công bố",
+      "Năm sản xuất": "2020"
+    },
+    "specs": {
+      "display_name": "Boston Micro karaoke (mã 178799)"
+    }
+  },
+  {
+    "sku": "3040891000019",
+    "model_code": "178528",
+    "productidweb": "198928",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Zenbos",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Có dây",
+      "Tần số hoạt động": "70 - 15 kHz",
+      "Băng tần": "Không",
+      "Độ méo tiếng": "0.5%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Zenbos Micro karaoke (mã 178528)"
+    }
+  },
+  {
+    "sku": "1714279000200",
+    "model_code": "147143",
+    "productidweb": "66792",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Boston",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {},
+    "specs": {
+      "display_name": "Boston Micro karaoke (mã 147143)"
+    }
+  },
+  {
+    "sku": "1714122002100",
+    "model_code": "147139",
+    "productidweb": "66788",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Western",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "743.8 - 762.8 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Western Micro karaoke (mã 147139)"
+    }
+  },
+  {
+    "sku": "1714122002000",
+    "model_code": "147142",
+    "productidweb": "66791",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Gunners",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "830.6 - 855.2 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Gunners Micro karaoke (mã 147142)"
+    }
+  },
+  {
+    "sku": "1714122001900",
+    "model_code": "147157",
+    "productidweb": "66814",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Gunners",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {},
+    "specs": {
+      "display_name": "Gunners Micro karaoke (mã 147157)"
+    }
+  },
+  {
+    "sku": "1714122001800",
+    "model_code": "147152",
+    "productidweb": "66809",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Gunners",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Có dây",
+      "Tần số hoạt động": "50 - 100 MHz",
+      "Băng tần": "Không",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Gunners Micro karaoke (mã 147152)"
+    }
+  },
+  {
+    "sku": "1714122001600",
+    "model_code": "147155",
+    "productidweb": "66812",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Zenbos",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "700 Hz - 900 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Zenbos Micro karaoke (mã 147155)"
+    }
+  },
+  {
+    "sku": "1714122001500",
+    "model_code": "147151",
+    "productidweb": "66804",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Zenbos",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "700 Hz – 900 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Zenbos Micro karaoke (mã 147151)"
+    }
+  },
+  {
+    "sku": "1714122001400",
+    "model_code": "147154",
+    "productidweb": "66811",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Zenbos",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Có dây",
+      "Tần số hoạt động": "70 - 15 kHz",
+      "Băng tần": "Không",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Zenbos Micro karaoke (mã 147154)"
+    }
+  },
+  {
+    "sku": "1714122001300",
+    "model_code": "147156",
+    "productidweb": "66813",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Zenbos",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Có dây",
+      "Tần số hoạt động": "70 - 15 kHz",
+      "Băng tần": "Không",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Zenbos Micro karaoke (mã 147156)"
+    }
+  },
+  {
+    "sku": "1714122001200",
+    "model_code": "147153",
+    "productidweb": "66810",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Lane",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Có dây",
+      "Tần số hoạt động": "50 - 160 MHz",
+      "Băng tần": "Không",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Lane Micro karaoke (mã 147153)"
+    }
+  },
+  {
+    "sku": "1714122001100",
+    "model_code": "147140",
+    "productidweb": "66789",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Lane",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Trung Quốc",
+      "Loại sản phẩm": "Có dây",
+      "Tần số hoạt động": "50 - 160 MHz",
+      "Băng tần": "Không",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Lane Micro karaoke (mã 147140)"
+    }
+  },
+  {
+    "sku": "1714122001000",
+    "model_code": "147141",
+    "productidweb": "66790",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Western",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {},
+    "specs": {
+      "display_name": "Western Micro karaoke (mã 147141)"
+    }
+  },
+  {
+    "sku": "1714122000700",
+    "model_code": "147144",
+    "productidweb": "66793",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Gunners",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "743.8 - 762.8 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Gunners Micro karaoke (mã 147144)"
+    }
+  },
+  {
+    "sku": "1714122000600",
+    "model_code": "147145",
+    "productidweb": "66794",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Gunners",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "828.9 - 856.9 MHz.",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Gunners Micro karaoke (mã 147145)"
+    }
+  },
+  {
+    "sku": "1714122000500",
+    "model_code": "147146",
+    "productidweb": "66795",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Gunners",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Không dây",
+      "Tần số hoạt động": "830.6 - 855.2 MHz",
+      "Băng tần": "UHF",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Gunners Micro karaoke (mã 147146)"
+    }
+  },
+  {
+    "sku": "1714122000400",
+    "model_code": "147147",
+    "productidweb": "66796",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Gunners",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {},
+    "specs": {
+      "display_name": "Gunners Micro karaoke (mã 147147)"
+    }
+  },
+  {
+    "sku": "1714122000300",
+    "model_code": "147148",
+    "productidweb": "66797",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Gunners",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {},
+    "specs": {
+      "display_name": "Gunners Micro karaoke (mã 147148)"
+    }
+  },
+  {
+    "sku": "1714122000200",
+    "model_code": "147149",
+    "productidweb": "66798",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Gunners",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {},
+    "specs": {
+      "display_name": "Gunners Micro karaoke (mã 147149)"
+    }
+  },
+  {
+    "sku": "1714122000100",
+    "model_code": "147150",
+    "productidweb": "66799",
+    "category_key": "micro_karaoke",
+    "category_label": "Micro karaoke",
+    "brand": "Gunners",
+    "original_price": null,
+    "sale_price": null,
+    "has_price_data": false,
+    "promotions": [],
+    "specs_raw": {
+      "Sản xuất tại": "Việt Nam",
+      "Loại sản phẩm": "Có dây",
+      "Tần số hoạt động": "25 - 100 MHz",
+      "Băng tần": "Không",
+      "Độ méo tiếng": "0.005%",
+      "Năm sản xuất": "2013"
+    },
+    "specs": {
+      "display_name": "Gunners Micro karaoke (mã 147150)"
+    }
+  }
+]
