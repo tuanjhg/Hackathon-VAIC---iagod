@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CheckCircle2, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ProductImage } from "@/components/ProductImage";
 import { formatPrice } from "@/lib/utils";
 import type { Recommendation } from "@/types";
 
@@ -18,8 +19,25 @@ export function RecommendationCard({ item }: { item: Recommendation }) {
       </div>
 
       <div className="p-3">
-        <p className="font-heading text-sm font-bold leading-5 text-foreground">{item.product.name}</p>
-        <p className="mt-1 font-extrabold text-destructive">{formatPrice(item.product.sale_price)}</p>
+        <div className="flex gap-3">
+          <Link
+            href={`/products/${item.product.slug}`}
+            className="group relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-border"
+          >
+            <ProductImage
+              src={item.product.image_url}
+              alt={item.product.name}
+              sizes="64px"
+              className="aspect-square h-full"
+            />
+          </Link>
+          <div className="min-w-0">
+            <p className="line-clamp-2 font-heading text-sm font-bold leading-5 text-foreground">
+              {item.product.name}
+            </p>
+            <p className="mt-1 font-extrabold text-destructive">{formatPrice(item.product.sale_price)}</p>
+          </div>
+        </div>
         <p className="mt-2 text-xs leading-5 text-muted-foreground">{item.reason}</p>
 
         <div className="mt-2.5 grid gap-1.5">

@@ -1,7 +1,9 @@
 "use client";
-import { SlidersHorizontal, X } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import type { ProductFilters } from "@/types";
 
 const BRANDS = ["Daikin", "Panasonic", "LG", "Samsung", "Casper"];
@@ -13,6 +15,7 @@ export function ProductFilter({
   filters: ProductFilters;
   onChange: (filters: ProductFilters) => void;
 }) {
+  const [open, setOpen] = useState(false);
   const update = (key: keyof ProductFilters, value: string | number | boolean | undefined) =>
     onChange({ ...filters, [key]: value, page: 1 });
 
@@ -28,10 +31,23 @@ export function ProductFilter({
   return (
     <aside className="h-fit rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-20">
       <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2 font-heading text-lg font-bold">
+        <button
+          type="button"
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className="flex items-center gap-2 font-heading text-lg font-bold lg:pointer-events-none"
+        >
           <SlidersHorizontal className="h-4 w-4 text-primary" />
           Bộ lọc
-        </h2>
+          {activeCount > 0 && (
+            <span className="grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground lg:hidden">
+              {activeCount}
+            </span>
+          )}
+          <ChevronDown
+            className={cn("h-4 w-4 text-muted-foreground transition-transform lg:hidden", open && "rotate-180")}
+          />
+        </button>
         {activeCount > 0 && (
           <button
             onClick={() => onChange({ sort: filters.sort, page_size: filters.page_size, page: 1 })}
@@ -43,7 +59,7 @@ export function ProductFilter({
         )}
       </div>
 
-      <div className="mt-5 grid gap-5">
+      <div className={cn("mt-5 gap-5 lg:grid", open ? "grid" : "hidden")}>
         <Field label="Từ khóa">
           <Input
             value={filters.search ?? ""}

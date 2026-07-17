@@ -33,13 +33,13 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="container flex h-16 items-center gap-4">
-        <Link href="/" className="flex shrink-0 items-center gap-2 font-heading text-xl font-extrabold tracking-tight">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white">
+      <div className="container flex h-16 items-center gap-2 sm:gap-4">
+        <Link href="/" className="flex min-w-0 items-center gap-2 font-heading text-lg font-extrabold tracking-tight sm:text-xl">
+          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white">
             <Snowflake className="h-5 w-5" />
           </span>
-          <span className="text-foreground">
-            NeedWise<span className="text-accent"> Copilot</span>
+          <span className="truncate text-foreground">
+            NeedWise<span className="hidden text-accent sm:inline"> Copilot</span>
           </span>
         </Link>
 
@@ -61,7 +61,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="ml-auto flex items-center gap-1.5 lg:ml-2">
+        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-1.5 lg:ml-2">
           <IconLink href="/compare" label="So sánh" count={mounted ? compareCount : 0} active={pathname === "/compare"}>
             <GitCompareArrows className="h-5 w-5" />
           </IconLink>
