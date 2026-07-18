@@ -1,0 +1,61 @@
+category_key: tu_lanh
+category_label: "Tủ lạnh"
+source_notes: >
+  Slot v0 viết tay từ brief H2 (docs/research/dmx-local-context-h2.md) +
+  facets thực tế trong data/realdata/processed/tu_lanh.json. Required/optional
+  split tham khảo bảng "Slot schema theo ngành hàng" của
+  docs/research/dmx-ai-workflow-v1.md §2.
+data_quality: >
+  96.6% sản phẩm có specs cấu trúc, 14.9% có giá (n=1692, tập lớn nhất trong
+  14 ngành).
+
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: so_nguoi_dung
+    label: "Số người trong nhà"
+    type: text
+    catalog_field: null
+    sample_question: "Gia đình mình khoảng mấy người ạ, để em tính dung tích phù hợp?"
+
+optional_slots:
+  - name: kieu_ngan_da
+    label: "Kiểu dáng"
+    type: enum
+    values: [ngan_da_tren, ngan_da_duoi, side_by_side, multi_door, khac]
+    catalog_field: specs.style
+    priority_rank: 1
+    sample_question: "Anh/chị thích tủ ngăn đá trên, ngăn đá dưới hay side-by-side ạ?"
+    rationale: "Ảnh hưởng thói quen sử dụng và không gian đặt tủ."
+  - name: inverter
+    label: "Ưu tiên inverter (tiết kiệm điện)"
+    type: boolean
+    catalog_field: specs.inverter
+    priority_rank: 2
+    sample_question: "Anh/chị có ưu tiên công nghệ inverter tiết kiệm điện không ạ?"
+  - name: cho_dat
+    label: "Kích thước chỗ đặt"
+    type: text
+    catalog_field: null
+    priority_rank: 3
+    sample_question: "Chỗ đặt tủ nhà mình rộng khoảng bao nhiêu ạ (để tránh chọn tủ quá khổ)?"
+
+derivation_rules:
+  - name: dung_tich_can
+    description: >
+      lít_cần ≈ 40–50 × số_người_dùng + 100. Dùng để lọc/rank theo
+      specs.capacity_total_l. Nguồn: docs/pipelines.md §6.4.
+
+catalog_field_map:
+  capacity_total_l: specs.capacity_total_l
+  capacity_freezer_l: specs.capacity_freezer_l
+  capacity_fridge_l: specs.capacity_fridge_l
+  recommended_people_min: specs.recommended_people_min
+  recommended_people_max: specs.recommended_people_max
+  inverter: specs.inverter
+  doors: specs.doors
+  style: specs.style
+  made_in: specs.made_in

@@ -14,6 +14,7 @@ migrate:
 
 seed:
 	docker compose run --rm api python -m src.seed.seed_products
+	docker compose run --rm api python -m src.seed.seed_realdata
 
 test:
 	docker compose run --rm api pytest
