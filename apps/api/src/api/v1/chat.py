@@ -14,7 +14,7 @@ unchanged, so the legacy FE keeps working during the transition.
 import json
 from collections.abc import Iterator
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, Response, status
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
@@ -22,7 +22,7 @@ from src.core.config import settings
 from src.core.database import get_db
 from src.repositories.product_repository import ProductRepository
 from src.schemas.chat import ChatMessageRequest, ChatResponse, DemoScenario
-from src.services.advisor_chat_service import AdvisorChatService
+from src.services.advisor_chat_service import AdvisorChatService, delete_advisor_session
 from src.services.mock_chat_service import MockChatService
 from src.services.product_service import ProductService
 from src.verifier import sentence_spans
@@ -65,3 +65,10 @@ def demo_scenarios() -> list[DemoScenario]:
         DemoScenario(title="Phòng ngủ 18m²", message="Tư vấn máy lạnh cho phòng 18m2"),
         DemoScenario(title="Phòng khách 30m²", message="Tư vấn máy lạnh cho phòng 30m2"),
     ]
+
+
+@router.delete("/sessions/{session_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_session(session_id: str) -> Response:
+    """Forget the in-memory Need Profile associated with this chat session."""
+    delete_advisor_session(session_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

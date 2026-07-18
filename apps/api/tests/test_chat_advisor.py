@@ -184,6 +184,7 @@ def test_recommend_turn_builds_cards_from_candidate_json(db: Session) -> None:
     )
 
     assert response.response_type == "recommendations"
+    assert response.intent == "tu_van"
     assert response.message.startswith("[1] có độ ồn 29dB.")
     assert [c.sku for c in response.cards] == ["ml_a", "ml_b", "ml_c"]
 
@@ -191,6 +192,7 @@ def test_recommend_turn_builds_cards_from_candidate_json(db: Session) -> None:
     assert top.match_score == 100
     assert top.price == 15_990_000  # from the facts tool, not the catalog
     assert top.image_url == "https://img.example/ml_a.jpg"
+    assert top.product_slug == "ml-a"
     assert top.label == "Phù hợp nhất với nhu cầu"
     assert not top.reason.startswith("[1]")  # marker stripped for display
     assert top.trade_off  # Tầng 4: never empty
@@ -220,7 +222,9 @@ def test_ask_turn_offers_labelled_quick_replies_and_persists_session(db: Session
         _service(db, router, store).reply(_request("tư vấn máy lạnh", session_id="s-ask"))
     )
 
-    assert response.response_type == "follow_up"
+    assert response.response_type == "clarification"
+    assert response.intent == "tu_van"
+    assert "vì" in response.message
     assert "Phòng ngủ" in response.quick_replies  # enum token mapped for display
     saved = store.get("s-ask")
     assert saved is not None and saved.clarify_rounds == 1
@@ -247,11 +251,12 @@ def test_conversation_carries_profile_across_turns(db: Session) -> None:
     assert saved.clarify_rounds == 1  # first turn's ask round survived
 
 
-def test_llm_failure_degrades_to_polite_follow_up(db: Session) -> None:
+def test_llm_failure_degrades_to_explicit_error(db: Session) -> None:
     response = asyncio.run(
         _service(db, RaisingRouter()).reply(_request("tư vấn máy lạnh", _ready_profile()))
     )
-    assert response.response_type == "follow_up"
+    assert response.response_type == "error"
+    assert response.intent == "system_error"
     assert "thử lại" in response.message
     assert db.scalars(select(AuditLog)).first() is None  # failed turn, no audit row
 
@@ -298,3 +303,11 @@ def test_plain_json_mode_unchanged_without_accept_header(
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("application/json")
     assert response.json()["response_type"] == "follow_up"
+
+
+def test_delete_session_endpoint_is_idempotent(client: TestClient) -> None:
+    first = client.delete("/api/v1/chat/sessions/session-to-forget")
+    second = client.delete("/api/v1/chat/sessions/session-to-forget")
+
+    assert first.status_code == 204
+    assert second.status_code == 204

@@ -78,6 +78,7 @@ def _make_retriever(db: Session) -> Any:
         candidates = [
             {
                 "sku": p.sku,
+                "product_slug": p.slug,
                 "name": p.name,
                 "specs": p.specs_json or {},
                 "image_url": p.image_url,
@@ -96,6 +97,7 @@ async def replay_conversation(
     router: Any,
     facts_tool: Any | None = None,
     policy_search: Any | None = None,
+    max_turns: int | None = None,
 ) -> ReplayedConversation:
     """Feed the conversation's user turns through the pipeline, one by one."""
     profile = NeedProfile()
@@ -103,7 +105,12 @@ async def replay_conversation(
     tool = facts_tool or PricePromoStockTool()
     turns: list[ReplayTurn] = []
 
-    for user_text in conversation.user_turns:
+    user_turns = (
+        conversation.user_turns[:max_turns]
+        if max_turns is not None
+        else conversation.user_turns
+    )
+    for user_text in user_turns:
         try:
             result = await run_turn(
                 user_text,

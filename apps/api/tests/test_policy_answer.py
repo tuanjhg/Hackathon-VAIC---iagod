@@ -58,6 +58,8 @@ def test_grounded_answer_uses_excerpts_and_returns_sources() -> None:
     assert [s.title for s in answer.sources] == ["chinh_sach_tra_gop", "chinh_sach_giao_hang"]
     # The LLM was actually given the excerpt content to ground on.
     assert router.last_messages is not None
+    assert "xưng 'em'" in router.last_messages[0]["content"]
+    assert "'anh/chị'" in router.last_messages[0]["content"]
     assert "3.000.000" in router.last_messages[-1]["content"]
 
 

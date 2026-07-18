@@ -6,6 +6,18 @@ from src.pipeline.need_profile import NeedProfile
 from src.pipeline.s8_respond import SourceEntry, VerifierFlag
 from src.schemas.product import ProductRead
 
+ChatResponseType = Literal[
+    "follow_up",
+    "clarification",
+    "recommendations",
+    "policy",
+    "no_results",
+    "handoff",
+    "out_of_scope",
+    "unsupported",
+    "error",
+]
+
 
 class ChatContext(BaseModel):
     """Conversation context echoed between turns.
@@ -47,6 +59,7 @@ class AdvisorCard(BaseModel):
     """
 
     sku: str
+    product_slug: str | None = None
     name: str
     label: str
     match_score: int
@@ -68,7 +81,8 @@ class AdvisorAntiPick(BaseModel):
 
 
 class ChatResponse(BaseModel):
-    response_type: Literal["follow_up", "recommendations"]
+    response_type: ChatResponseType
+    intent: str | None = None
     message: str
     quick_replies: list[str] = Field(default_factory=list)
     recommendations: list[Recommendation] = Field(default_factory=list)

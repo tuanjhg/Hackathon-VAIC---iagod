@@ -21,6 +21,7 @@ export function ChatWidget() {
     resetChat,
   } = useChatStore();
   const [input, setInput] = useState("");
+  const [hasConsented, setHasConsented] = useState(false);
   const bottom = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export function ChatWidget() {
 
   const send = async (text: string) => {
     const value = text.trim();
-    if (!value || isLoading) return;
+    if (!value || isLoading || !hasConsented) return;
     addMessage({ role: "user", content: value });
     setInput("");
     setLoading(true);
@@ -55,6 +56,11 @@ export function ChatWidget() {
             quickReplies: response.quick_replies,
             recommendations: response.recommendations,
             cards: response.cards,
+            responseType: response.response_type,
+            intent: response.intent,
+            antiPick: response.anti_pick,
+            sourcePanel: response.source_panel,
+            verifierFlags: response.verifier_flags,
           });
         },
       });
@@ -68,11 +74,17 @@ export function ChatWidget() {
           quickReplies: response.quick_replies,
           recommendations: response.recommendations,
           cards: response.cards,
+          responseType: response.response_type,
+          intent: response.intent,
+          antiPick: response.anti_pick,
+          sourcePanel: response.source_panel,
+          verifierFlags: response.verifier_flags,
         });
       } catch (fallbackErr) {
         console.error("Fallback also failed:", fallbackErr);
         updateLastMessage({
-          content: "Mình chưa kết nối được máy chủ. Bạn thử lại sau nhé.",
+          content: "Dạ em chưa kết nối được máy chủ. Anh/chị vui lòng thử lại sau ít phút ạ.",
+          responseType: "error",
         });
       }
     } finally {
@@ -83,6 +95,15 @@ export function ChatWidget() {
   const submit = (event: FormEvent) => {
     event.preventDefault();
     void send(input);
+  };
+
+  const handleReset = () => {
+    const previousSessionId = sessionId;
+    resetChat();
+    setHasConsented(false);
+    void api.deleteChatSession(previousSessionId).catch((error) => {
+      console.error("Could not delete server-side chat session:", error);
+    });
   };
 
   return (
@@ -110,10 +131,10 @@ export function ChatWidget() {
                 </p>
               </div>
               <button
-                aria-label="Làm mới cuộc trò chuyện"
-                title="Làm mới cuộc trò chuyện"
+                aria-label="Xóa cuộc trò chuyện"
+                title="Xóa cuộc trò chuyện"
                 className="grid h-8 w-8 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/15 mr-1"
-                onClick={resetChat}
+                onClick={handleReset}
               >
                 <RotateCcw className="h-4.5 w-4.5" />
               </button>
@@ -134,17 +155,35 @@ export function ChatWidget() {
               <div ref={bottom} />
             </div>
 
+            {!hasConsented && (
+              <div className="border-t border-border bg-sky-500/5 px-3 py-2.5 text-xs leading-4 text-muted-foreground">
+                <p>
+                  Hồ sơ nhu cầu trên máy chủ được giữ tối đa 30 phút không hoạt động. Nội dung
+                  vẫn hiện trên trình duyệt cho tới khi anh/chị bấm Xóa. Vui lòng không gửi số
+                  điện thoại, email hoặc thông tin thanh toán.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setHasConsented(true)}
+                  className="mt-2 rounded-lg bg-primary px-3 py-1.5 font-semibold text-primary-foreground"
+                >
+                  Đồng ý và bắt đầu
+                </button>
+              </div>
+            )}
+
             <form onSubmit={submit} className="flex items-center gap-2 border-t border-border p-3">
               <input
                 aria-label="Tin nhắn"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="VD: Phòng 18m²…"
+                disabled={!hasConsented}
                 className="h-11 flex-1 rounded-xl border border-input bg-background px-3.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/35"
               />
               <button
                 aria-label="Gửi"
-                disabled={!input.trim() || isLoading}
+                disabled={!hasConsented || !input.trim() || isLoading}
                 className="grid h-11 w-11 place-items-center rounded-xl bg-primary text-primary-foreground transition-all hover:brightness-110 disabled:opacity-50"
               >
                 <Send className="h-5 w-5" />

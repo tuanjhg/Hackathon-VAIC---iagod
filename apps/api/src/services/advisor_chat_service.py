@@ -7,11 +7,12 @@ The thin production shell around :func:`src.pipeline.orchestrator.run_turn`:
 * owns the per-process :class:`InMemorySessionStore` (ADR C7) keyed by the
   request's ``session_id``, with the request's ``context.need_profile`` as the
   stateless recovery copy after an API restart;
-* maps :class:`TurnResult` onto the wire :class:`ChatResponse` — cards render
+* maps :class:`TurnResult` onto the wire :class:`ChatResponse` — response kinds
+  stay distinct and cards render
   straight from the S5 candidate JSON (ADR C5), quick-reply slot tokens get
   display labels;
 * writes the best-effort audit row (Tầng 5) and degrades to a polite
-  follow-up message when the LLM chain fails — a chat turn never 500s over a
+  explicit error message when the LLM chain fails — a chat turn never 500s over a
   provider hiccup.
 """
 
@@ -42,6 +43,7 @@ from src.schemas.chat import (
     ChatContext,
     ChatMessageRequest,
     ChatResponse,
+    ChatResponseType,
 )
 from src.services.audit_service import write_audit_log
 from src.tools.catalog_search import catalog_search
@@ -136,7 +138,8 @@ class AdvisorChatService:
         except (LLMRouterError, S2ExtractionError, S6GenerationError):
             logger.exception("advisory turn failed for session %s", request.session_id)
             return ChatResponse(
-                response_type="follow_up",
+                response_type="error",
+                intent="system_error",
                 message=_FALLBACK_MESSAGE,
                 context=_context_from(profile),
             )
@@ -159,6 +162,7 @@ class AdvisorChatService:
             candidates = [
                 {
                     "sku": p.sku,
+                    "product_slug": p.slug,
                     "name": p.name,
                     "specs": p.specs_json or {},
                     "image_url": p.image_url,
@@ -251,6 +255,7 @@ def _build_cards(result: TurnResult) -> list[AdvisorCard]:
         cards.append(
             AdvisorCard(
                 sku=breakdown.sku,
+                product_slug=str(cand.get("product_slug")) if cand.get("product_slug") else None,
                 name=str(cand.get("name", breakdown.sku)),
                 label=_CARD_LABELS[index] if index < len(_CARD_LABELS) else "Gợi ý thêm",
                 match_score=scores[index],
@@ -260,7 +265,7 @@ def _build_cards(result: TurnResult) -> list[AdvisorCard]:
                 reason=reason,
                 strengths=_strengths(cand.get("specs") or {}),
                 trade_off=_trade_off_text(breakdown.sku, result.ranking, breakdown),
-                missing_fields=breakdown.missing_fields,
+                missing_fields=[field_label(field) for field in breakdown.missing_fields],
             )
         )
     return cards
@@ -285,6 +290,7 @@ def _to_chat_response(result: TurnResult) -> ChatResponse:
     if result.kind == "recommend" and result.ranking is not None:
         return ChatResponse(
             response_type="recommendations",
+            intent=result.intent,
             message=result.message,
             cards=_build_cards(result),
             anti_pick=_build_anti_pick(result),
@@ -293,10 +299,26 @@ def _to_chat_response(result: TurnResult) -> ChatResponse:
             context=context,
         )
 
+    response_types: dict[str, ChatResponseType] = {
+        "ask_category": "clarification",
+        "ask": "clarification",
+        "policy": "policy",
+        "no_results": "no_results",
+        "handoff": "handoff",
+        "out_of_scope": "out_of_scope",
+        "unsupported": "unsupported",
+    }
     return ChatResponse(
-        response_type="follow_up",
+        response_type=response_types[result.kind],
+        intent=result.intent,
         message=result.message,
         quick_replies=_quick_reply_labels(result.quick_replies),
         source_panel=result.source_panel,
+        verifier_flags=result.verifier_flags,
         context=context,
     )
+
+
+def delete_advisor_session(session_id: str) -> None:
+    """Delete the server-side profile for a user's privacy/reset request."""
+    _session_store.delete(session_id)

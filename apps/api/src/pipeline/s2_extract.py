@@ -5,7 +5,7 @@ Per `docs/research/dmx-ai-workflow-v1.md` §3 "S2" and ADR C2 of
 S1 result already computed by the caller, and the current Need Profile, S2 asks
 the LLM (``temperature=0`` + a ``response_format`` guided-JSON schema) to extract:
 
-* ``intent`` — one of five ASCII literals (see :data:`INTENTS`);
+* ``intent`` — one of the ASCII literals in :data:`INTENTS`;
 * ``category`` — a ``category_key`` known to the slot-profile system, or ``None``;
 * ``slots_moi`` — newly-extracted slot values, keyed by the slot names of the
   active category's :class:`~src.pipeline.slots.SlotProfile`.
@@ -34,13 +34,14 @@ from src.pipeline.need_profile import NeedProfile
 from src.pipeline.preprocess import S1Result
 from src.pipeline.slots import SlotDef, SlotProfile, available_categories, load_slot_profile
 
-# Five intent literals, ASCII (no diacritics) to match the slot-name convention
+# Intent literals, ASCII (no diacritics) to match the slot-name convention
 # already used in this codebase (``ngan_sach_max`` etc.).
 INTENTS: tuple[str, ...] = (
     "tu_van",
     "so_sanh_truc_tiep",
     "policy_faq",
     "hoi_chi_tiet_sp",
+    "ho_tro_giao_dich",
     "ngoai_pham_vi",
 )
 
@@ -50,6 +51,10 @@ _INTENT_DEFINITIONS: dict[str, str] = {
     "so_sanh_truc_tiep": "khách nêu tên >=2 sản phẩm cụ thể và muốn so sánh trực tiếp.",
     "policy_faq": "khách hỏi chính sách (bảo hành, trả góp, giao hàng), không phải chọn sản phẩm.",
     "hoi_chi_tiet_sp": "khách hỏi chi tiết về một sản phẩm cụ thể đã được giới thiệu.",
+    "ho_tro_giao_dich": (
+        "khách muốn tạo/kiểm tra/sửa/hủy đơn, xác nhận tồn kho chi nhánh hoặc "
+        "lịch giao hàng cụ thể theo thời gian thực. Không dùng cho câu hỏi chính sách chung."
+    ),
     "ngoai_pham_vi": "câu hỏi ngoài phạm vi tư vấn điện máy.",
 }
 
@@ -200,14 +205,30 @@ def _build_system_prompt(category_key: str | None, profile: NeedProfile) -> str:
 
 
 def _few_shot_examples() -> str:
-    """3-4 few-shot examples: no-diacritics, code-switching, and a mid-chat
-    category change. Rendered as ``<input> -> <json>`` lines.
+    """Few-shot examples cover complete needs, noisy Vietnamese, category
+    change, named-product comparison and transaction handoff. Rendered as
+    ``<input> -> <json>`` lines.
     """
     examples: list[tuple[str, dict[str, Any]]] = [
         # No-diacritics input.
         (
             "may lanh 1.5 ngua tam 12 trieu",
             {"intent": "tu_van", "category": "may_lanh", "slots_moi": {"ngan_sach_max": 12000000}},
+        ),
+        (
+            "máy lạnh dưới 20 triệu cho phòng ngủ 18m2, không bị nắng, ưu tiên tiết kiệm điện và chạy êm, không trả góp",
+            {
+                "intent": "tu_van",
+                "category": "may_lanh",
+                "slots_moi": {
+                    "ngan_sach_max": 20000000,
+                    "dien_tich_m2": 18,
+                    "loai_phong": "phong_ngu",
+                    "nang_truc_tiep": False,
+                    "uu_tien": ["tiet_kiem_dien", "em"],
+                    "tra_gop": False,
+                },
+            },
         ),
         # Code-switching (English tech terms mixed in).
         (
@@ -223,6 +244,10 @@ def _few_shot_examples() -> str:
         (
             "so sanh Panasonic XPU va Daikin FTKB cai nao tot hon",
             {"intent": "so_sanh_truc_tiep", "category": "may_lanh", "slots_moi": {}},
+        ),
+        (
+            "kiem tra giup don 123 dang giao den dau",
+            {"intent": "ho_tro_giao_dich", "category": None, "slots_moi": {}},
         ),
     ]
     return "\n".join(

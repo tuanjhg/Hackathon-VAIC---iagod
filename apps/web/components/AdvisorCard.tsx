@@ -6,6 +6,8 @@ import { formatPrice } from "@/lib/utils";
 import type { AdvisorCard as AdvisorCardType } from "@/types";
 
 export function AdvisorCard({ item }: { item: AdvisorCardType }) {
+  const productPath = item.product_slug || item.sku;
+
   return (
     <div className="overflow-hidden rounded-2xl border border-brand-500/20 bg-card shadow-md transition-all hover:border-brand-500/40">
       <div className="flex items-center justify-between gap-2 border-b border-border bg-brand-500/5 px-3 py-2">
@@ -14,14 +16,14 @@ export function AdvisorCard({ item }: { item: AdvisorCardType }) {
         </span>
         <span className="flex items-center gap-1 text-sm font-extrabold text-brand-600">
           {item.match_score}%
-          <span className="text-[10px] font-semibold text-muted-foreground">phù hợp</span>
+          <span className="text-[10px] font-semibold text-muted-foreground">điểm tương đối</span>
         </span>
       </div>
 
       <div className="p-3">
         <div className="flex gap-3">
           <Link
-            href={`/products/${item.sku}`}
+            href={`/products/${productPath}`}
             className="group relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-border"
           >
             <ProductImage
@@ -37,6 +39,11 @@ export function AdvisorCard({ item }: { item: AdvisorCardType }) {
             </p>
             {item.price !== null && (
               <p className="mt-1 font-extrabold text-destructive">{formatPrice(item.price)}</p>
+            )}
+            {item.price === null && (
+              <p className="mt-1 text-xs font-semibold text-muted-foreground">
+                Chưa có dữ liệu giá trực tuyến
+              </p>
             )}
           </div>
         </div>
@@ -67,15 +74,14 @@ export function AdvisorCard({ item }: { item: AdvisorCardType }) {
 
         {item.missing_fields && item.missing_fields.length > 0 && (
           <div className="mt-2 text-[10px] text-muted-foreground italic">
-            * Thiếu thông số: {item.missing_fields.join(", ")} (ước lượng tự động)
+            * Chưa có dữ liệu: {item.missing_fields.join(", ")}. Hệ thống không tự ước lượng.
           </div>
         )}
 
         <Button asChild size="sm" className="mt-3 w-full bg-brand-600 hover:bg-brand-700 text-white">
-          <Link href={`/products/${item.sku}`}>Xem chi tiết</Link>
+          <Link href={`/products/${productPath}`}>Xem chi tiết</Link>
         </Button>
       </div>
     </div>
   );
 }
-

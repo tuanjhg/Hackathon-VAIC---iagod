@@ -79,5 +79,11 @@ export const api = {
   product: (slug: string) => request<Product>(`/products/${slug}`),
   compare: (ids: number[]) => request<Comparison>("/compare", { method: "POST", body: JSON.stringify({ product_ids: ids }) }),
   chat: (sessionId: string, message: string, context: ChatContext) => request<ChatResponse>("/chat/messages", { method: "POST", body: JSON.stringify({ session_id: sessionId, message, context }) }),
+  deleteChatSession: async (sessionId: string): Promise<void> => {
+    const response = await fetch(`${API_URL}/chat/sessions/${encodeURIComponent(sessionId)}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) throw new Error("Không thể xóa phiên trò chuyện");
+  },
   chatStream,
 };

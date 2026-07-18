@@ -111,6 +111,37 @@ def load_golden(data_dir: Path) -> list[GoldenConversation]:
     return conversations
 
 
+def load_canonical(path: Path) -> list[GoldenConversation]:
+    """Load a privacy-reviewed canonical eval dataset.
+
+    This is the same clean shape emitted by :func:`write_normalized`, and lets
+    CI/business smoke runs use synthetic scenarios without sending the raw
+    historical chat exports to an external model provider.
+    """
+    data = json.loads(path.read_text(encoding="utf-8"))
+    conversations: list[GoldenConversation] = []
+    for index, entry in enumerate(data, 1):
+        if not isinstance(entry, dict):
+            continue
+        messages = [
+            GoldenMessage(role=m["role"], content=m["content"])
+            for m in entry.get("messages", [])
+            if isinstance(m, dict)
+            and m.get("role") in _VALID_ROLES
+            and isinstance(m.get("content"), str)
+            and m["content"].strip()
+        ]
+        if messages:
+            conversations.append(
+                GoldenConversation(
+                    id=str(entry.get("id") or f"canonical-{index}"),
+                    source=str(entry.get("source") or path.name),
+                    messages=messages,
+                )
+            )
+    return conversations
+
+
 def write_normalized(conversations: list[GoldenConversation], out_path: Path) -> None:
     """Write a clean combined copy (for human inspection); never touches sources."""
     out_path.parent.mkdir(parents=True, exist_ok=True)

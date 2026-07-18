@@ -14,9 +14,9 @@ linear reading of the S1→S8 diagram.
 
 Scope of this v1 (each boundary is deliberate, not an accident):
 
-* Only the ``tu_van`` intent gets the full pipeline. ``ngoai_pham_vi`` gets the
-  polite refusal; ``policy_faq`` / ``so_sanh_truc_tiep`` / ``hoi_chi_tiet_sp``
-  get an honest "chưa hỗ trợ" stub until their branches are built.
+* Only the ``tu_van`` intent gets the full pipeline. Other intents route to a
+  grounded policy answer, a safe transaction handoff, or an explicit scope
+  boundary instead of silently pretending the requested capability exists.
 * Clarifying questions are deterministic (slot YAML ``sample_question`` joined,
   ≤ ``MAX_ASK_BATCH`` per message) — no LLM call on the ask path, so the
   hỏi-ngược flow is explainable and its latency is just S2.
@@ -96,10 +96,30 @@ _OUT_OF_SCOPE_MESSAGE = (
     "Dạ em là trợ lý tư vấn điện máy nên câu này em xin phép không trả lời ạ. "
     "Anh/chị đang cần tìm sản phẩm nào để em hỗ trợ mình liền ạ?"
 )
-_UNSUPPORTED_MESSAGE = (
-    "Dạ phần này em đang được hoàn thiện nên chưa hỗ trợ được ngay ạ. "
-    "Anh/chị cần tư vấn chọn sản phẩm thì em giúp được liền!"
+_TRANSACTION_HANDOFF_MESSAGE = (
+    "Dạ hiện em chưa xem hoặc thay đổi được đơn hàng, số lượng còn tại cửa hàng và "
+    "lịch giao đang cập nhật nên không thể xác nhận các thông tin này ạ. Anh/chị vui "
+    "lòng mở mục Đơn hàng trên website hoặc ứng dụng, hoặc liên hệ bộ phận chăm sóc "
+    "khách hàng. Em vẫn có thể tiếp tục tư vấn chọn sản phẩm phù hợp cho anh/chị."
 )
+
+_UNSUPPORTED_MESSAGES: dict[str, str] = {
+    "so_sanh_truc_tiep": (
+        "Dạ hiện em chưa thể đối chiếu chính xác các mẫu chỉ từ tên trong hội thoại ạ. "
+        "Anh/chị có thể mở trang từng sản phẩm và dùng tính năng So sánh, hoặc cho em "
+        "biết nhu cầu chính để em đề xuất tối đa 3 lựa chọn có dữ liệu kiểm chứng."
+    ),
+    "hoi_chi_tiet_sp": (
+        "Dạ em chưa xác định chắc chắn sản phẩm cụ thể anh/chị đang nhắc tới nên không "
+        "muốn đoán thông số ạ. Anh/chị vui lòng mở trang chi tiết sản phẩm, hoặc cho em "
+        "biết ngành hàng và nhu cầu để em tư vấn từ dữ liệu hiện có."
+    ),
+    "policy_faq": (
+        "Dạ nguồn chính sách hiện chưa sẵn sàng nên em chưa thể trả lời chính xác câu "
+        "này ạ. Anh/chị vui lòng xem trang chính sách chính thức hoặc liên hệ chăm sóc "
+        "khách hàng."
+    ),
+}
 
 
 class LLMRouterLike(Protocol):
@@ -161,7 +181,8 @@ class TurnResult(BaseModel):
     """
 
     kind: Literal[
-        "ask_category", "ask", "recommend", "no_results", "out_of_scope", "unsupported", "policy"
+        "ask_category", "ask", "recommend", "no_results", "handoff", "out_of_scope",
+        "unsupported", "policy"
     ]
     message: str
     intent: str
@@ -262,7 +283,10 @@ def _build_question(decision: PolicyDecision) -> tuple[str, list[str]]:
     ("mỗi lượt ≤3 câu gom 1 tin nhắn"). Quick replies come from the first asked
     slot that has enum ``values`` — one tap answers the primary question.
     """
-    message = " ".join(slot.sample_question for slot in decision.slots_to_ask)
+    questions = " ".join(slot.sample_question for slot in decision.slots_to_ask)
+    message = "Dạ " + questions
+    if decision.question_reason:
+        message += " Em hỏi vì các thông tin này giúp thu hẹp lựa chọn và tránh gợi ý sai ạ."
     quick_replies: list[str] = []
     for slot in decision.slots_to_ask:
         if slot.values:
@@ -349,6 +373,15 @@ async def run_turn(
             profile=profile,
             timings_ms=sw.timings,
         )
+    if s2.intent == "ho_tro_giao_dich":
+        return TurnResult(
+            kind="handoff",
+            message=_TRANSACTION_HANDOFF_MESSAGE,
+            intent=s2.intent,
+            profile=profile,
+            quick_replies=["Tiếp tục tư vấn sản phẩm", "Xem chính sách giao hàng"],
+            timings_ms=sw.timings,
+        )
     if s2.intent == "policy_faq" and policy_search is not None:
         results = policy_search.search(text, limit=5)
         answer = await generate_policy_answer(router, text, results)
@@ -364,7 +397,10 @@ async def run_turn(
     if s2.intent != "tu_van":
         return TurnResult(
             kind="unsupported",
-            message=_UNSUPPORTED_MESSAGE,
+            message=_UNSUPPORTED_MESSAGES.get(
+                s2.intent,
+                "Dạ chức năng này hiện chưa được hỗ trợ nên em không muốn trả lời thiếu căn cứ ạ.",
+            ),
             intent=s2.intent,
             profile=profile,
             timings_ms=sw.timings,

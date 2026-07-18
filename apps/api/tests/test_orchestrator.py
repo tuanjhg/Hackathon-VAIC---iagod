@@ -186,6 +186,19 @@ def test_unbuilt_branches_get_honest_stub(intent: str) -> None:
     assert retriever.calls == []
 
 
+def test_transaction_request_gets_safe_handoff_without_retrieval() -> None:
+    router = QueuedRouter(_s2(intent="ho_tro_giao_dich", category=None))
+    retriever = _full_retriever()
+
+    res = _run("kiểm tra giúp đơn 123 đang ở đâu", NeedProfile(), router, retriever)
+
+    assert res.kind == "handoff"
+    assert res.intent == "ho_tro_giao_dich"
+    assert "chưa xem hoặc thay đổi được đơn hàng" in res.message
+    assert "chăm sóc khách hàng" in res.message
+    assert retriever.calls == []
+
+
 # --------------------------------------------------------------------------- #
 # Category resolution                                                         #
 # --------------------------------------------------------------------------- #
@@ -233,6 +246,7 @@ def test_ask_path_batches_slots_and_offers_quick_replies() -> None:
     assert profile.asked_slots == ["ngan_sach_max", "dien_tich_m2", "loai_phong"]
     assert "ngân sách" in res.message.lower()
     assert "mét vuông" in res.message.lower()
+    assert "em hỏi vì" in res.message.lower()
     # Quick replies from the first asked slot that has enum values (loai_phong).
     assert res.quick_replies == ["phong_ngu", "phong_khach", "van_phong", "khac"]
     assert profile.clarify_rounds == 1

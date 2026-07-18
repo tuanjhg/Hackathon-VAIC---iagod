@@ -111,6 +111,8 @@ def aggregate(reports: list[ConversationReport]) -> dict[str, Any]:
     recommended = sum(1 for r in reports if r.recommended)
     supported_engaged = sum(1 for r in reports if r.supported)
     any_error = sum(1 for r in reports if r.error_turns > 0)
+    handoff = sum(1 for r in reports if r.turn_kinds.get("handoff", 0) > 0)
+    policy_answered = sum(1 for r in reports if r.turn_kinds.get("policy", 0) > 0)
 
     # Golden intended-category buckets: in-catalog+supported / in-catalog-only /
     # not-in-catalog / non-product.
@@ -136,6 +138,9 @@ def aggregate(reports: list[ConversationReport]) -> dict[str, Any]:
         "recommended_pct": round(100 * recommended / total, 1),
         "engaged_supported_category_convs": supported_engaged,
         "convs_with_error_turn": any_error,
+        "error_free_pct": round(100 * (total - any_error) / total, 1),
+        "handoff_convs": handoff,
+        "policy_answered_convs": policy_answered,
         "turn_kind_distribution": dict(turn_kinds.most_common()),
         "golden_intent_buckets": dict(buckets),
         "supported_categories": sorted(supported_categories),

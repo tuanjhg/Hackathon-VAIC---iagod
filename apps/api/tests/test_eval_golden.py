@@ -9,7 +9,7 @@ the large data files.
 import json
 from pathlib import Path
 
-from src.eval.golden import load_file1, load_file2, load_golden
+from src.eval.golden import load_canonical, load_file1, load_file2, load_golden
 
 _VALID_FILE1 = [
     {
@@ -112,3 +112,29 @@ def test_load_golden_combines_both_sources_when_present(tmp_path: Path) -> None:
 
     assert len(convs) == 3  # 1 from file1 + 2 from file2
     assert {c.source for c in convs} == {FILE1, FILE2}
+
+
+def test_load_canonical_supports_privacy_reviewed_synthetic_dataset(tmp_path: Path) -> None:
+    path = tmp_path / "synthetic.json"
+    path.write_text(
+        json.dumps(
+            [
+                {
+                    "id": "business-1",
+                    "source": "synthetic_business",
+                    "messages": [
+                        {"role": "user", "content": "Tư vấn máy lạnh demo"},
+                        {"role": "assistant", "content": "Dạ phòng mình bao nhiêu m² ạ?"},
+                    ],
+                }
+            ],
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    conversations = load_canonical(path)
+
+    assert [conversation.id for conversation in conversations] == ["business-1"]
+    assert conversations[0].source == "synthetic_business"
+    assert conversations[0].user_turns == ["Tư vấn máy lạnh demo"]

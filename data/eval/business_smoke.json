@@ -1,0 +1,72 @@
+[
+  {
+    "id": "business-recommend-aircon",
+    "source": "synthetic_business",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Em cần máy lạnh dưới 20 triệu cho phòng ngủ 18m2, phòng không bị nắng trực tiếp, ưu tiên tiết kiệm điện và chạy êm, không cần trả góp."
+      },
+      {
+        "role": "assistant",
+        "content": "Dạ em hiểu anh/chị cần máy lạnh cho phòng ngủ 18m², ngân sách dưới 20 triệu, ưu tiên tiết kiệm điện và chạy êm. Em đề xuất tối đa 3 mẫu; mỗi mẫu cần nêu rõ ưu điểm, đánh đổi và một mẫu không nên chọn cùng lý do. Mọi giá và thông số đều phải lấy từ dữ liệu nguồn."
+      }
+    ]
+  },
+  {
+    "id": "business-clarify-fridge",
+    "source": "synthetic_business",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Tư vấn giúp anh một chiếc tủ lạnh cho gia đình."
+      },
+      {
+        "role": "assistant",
+        "content": "Dạ anh dự tính ngân sách khoảng bao nhiêu và gia đình có mấy người ạ? Em hỏi vì hai thông tin này giúp chọn đúng dung tích và tránh gợi ý vượt ngân sách."
+      }
+    ]
+  },
+  {
+    "id": "business-transaction-handoff",
+    "source": "synthetic_business",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Kiểm tra giúp đơn DEMO-001 đang giao tới đâu và đổi lịch nhận sang ngày mai."
+      },
+      {
+        "role": "assistant",
+        "content": "Dạ em không truy cập hệ thống đơn hàng hoặc lịch giao theo thời gian thực nên không thể kiểm tra hay đổi lịch. Anh/chị vui lòng dùng mục Đơn hàng hoặc liên hệ chăm sóc khách hàng; em vẫn có thể tiếp tục tư vấn sản phẩm."
+      }
+    ]
+  },
+  {
+    "id": "business-policy-installment",
+    "source": "synthetic_business",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Chính sách trả góp hiện có điều kiện gì?"
+      },
+      {
+        "role": "assistant",
+        "content": "Dạ em chỉ trả lời theo tài liệu chính sách hiện có, nêu rõ nguồn và không tự suy đoán điều kiện chưa có trong dữ liệu ạ."
+      }
+    ]
+  },
+  {
+    "id": "business-out-of-scope",
+    "source": "synthetic_business",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Viết giúp anh một chương trình giao dịch tiền mã hóa tự động."
+      },
+      {
+        "role": "assistant",
+        "content": "Dạ nội dung này ngoài phạm vi tư vấn điện máy nên em xin phép không trả lời. Nếu anh/chị cần chọn sản phẩm điện máy, em sẵn sàng hỗ trợ ạ."
+      }
+    ]
+  }
+]

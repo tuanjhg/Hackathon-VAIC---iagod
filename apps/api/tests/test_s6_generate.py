@@ -174,6 +174,14 @@ def test_glossary_renders_capacity_btu() -> None:
     rendered = render_spec("capacity_btu", 24000)
     assert rendered is not None
     assert "24000 BTU" in rendered
+    assert "diện tích phòng" in rendered
+
+
+def test_glossary_does_not_confuse_efficiency_index_with_energy_stars() -> None:
+    rendered = render_spec("energy_efficiency", 6.75)
+    assert rendered is not None
+    assert "chỉ số hiệu suất năng lượng 6.75" in rendered
+    assert "sao" not in rendered
 
 
 def test_glossary_unknown_field_returns_none() -> None:

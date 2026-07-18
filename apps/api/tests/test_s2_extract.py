@@ -74,8 +74,9 @@ def test_build_response_format_may_lanh_includes_required_slots() -> None:
     assert slots_props["ngan_sach_max"]["type"] == ["integer", "null"]
     assert slots_props["dien_tich_m2"]["type"] == ["number", "null"]
 
-    # intent is constrained to the five ASCII literals.
+    # intent is constrained to the canonical ASCII literals.
     assert set(schema["properties"]["intent"]["enum"]) == set(INTENTS)
+    assert "ho_tro_giao_dich" in INTENTS
 
 
 def test_build_response_format_generic_fallback_has_open_slots() -> None:
@@ -136,6 +137,8 @@ def test_extract_passes_raw_and_normalized_and_temperature_zero() -> None:
     # Both the raw (no-diacritics) text and the normalized text reach the LLM.
     assert "may lanh 1.5 ngua tam 12 trieu" in serialized
     assert "máy lạnh 1.5 ngựa tầm 12 triệu" in serialized
+    assert "loai_phong" in serialized and "phong_ngu" in serialized
+    assert "nang_truc_tiep" in serialized
 
     # Deterministic extraction + guided JSON per the ADR.
     assert router.last_kwargs is not None

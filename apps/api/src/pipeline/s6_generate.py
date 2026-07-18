@@ -119,8 +119,12 @@ GLOSSARY: dict[str, Callable[[Any], str]] = {
     "inverter": _render_inverter,
     "noise_db_indoor": _render_noise,
     "noise_db": _render_noise,
-    "capacity_btu": lambda v: f"đủ sức làm lạnh phòng theo công suất {v} BTU",
-    "energy_efficiency": lambda v: f"{v} sao tiết kiệm điện",
+    "capacity_btu": lambda v: (
+        f"công suất làm lạnh {v} BTU (mức công suất dùng để chọn theo diện tích phòng)"
+    ),
+    "energy_efficiency": lambda v: (
+        f"chỉ số hiệu suất năng lượng {v} (mức cao hơn thường tiết kiệm điện hơn)"
+    ),
     "energy_stars": lambda v: f"{v} sao tiết kiệm điện",
     "warranty_years_compressor": lambda v: f"bảo hành máy nén {v} năm",
     # tủ lạnh
@@ -291,6 +295,10 @@ _SYSTEM_PROMPT = (
     "để hệ thống đối chiếu được từng ý.\n"
     "- Không dùng markdown, không dùng từ quảng cáo thổi phồng ('tốt nhất', 'số 1'...), "
     "không thúc ép mua.\n\n"
+    "- Giữ nguyên phần giải thích bình dân đi kèm BTU, inverter và chỉ số hiệu suất; "
+    "không được gọi chỉ số hiệu suất năng lượng là số sao.\n"
+    "- Không biến ưu điểm của một sản phẩm thành điểm đánh đổi của chính sản phẩm đó; "
+    "chỉ nêu điểm mà lựa chọn khác thật sự làm tốt hơn theo DỮ KIỆN.\n\n"
     "CẤU TRÚC câu trả lời:\n"
     "① Một câu tóm tắt nhu cầu em hiểu (để khách thầm xác nhận).\n"
     "② Với mỗi sản phẩm gợi ý: vì sao hợp + ĐÚNG MỘT điểm đánh đổi thật lấy từ DỮ KIỆN.\n"

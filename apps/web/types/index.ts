@@ -46,6 +46,7 @@ export interface Recommendation { product: Product; label: string; match_score: 
 // AI-pipeline card: rendered straight from the S5 candidate JSON (ADR C5).
 export interface AdvisorCard {
   sku: string;
+  product_slug: string | null;
   name: string;
   label: string;
   match_score: number;
@@ -60,8 +61,19 @@ export interface AdvisorCard {
 export interface AdvisorAntiPick { sku: string; name: string; reason: string | null }
 export interface SourcePanelEntry { sku: string; field: string; dataset: string; fetched_at: string | null }
 export interface VerifierFlag { action: "corrected" | "removed"; sku: string | null; field: string | null; claimed_value: number | null; actual_value: number | null }
+export type ChatResponseType =
+  | "follow_up"
+  | "clarification"
+  | "recommendations"
+  | "policy"
+  | "no_results"
+  | "handoff"
+  | "out_of_scope"
+  | "unsupported"
+  | "error";
 export interface ChatResponse {
-  response_type: "follow_up" | "recommendations";
+  response_type: ChatResponseType;
+  intent?: string | null;
   message: string;
   quick_replies: string[];
   recommendations: Recommendation[];

@@ -1,5 +1,13 @@
 import { create } from "zustand";
-import type { ChatContext, Recommendation, AdvisorCard } from "@/types";
+import type {
+  AdvisorAntiPick,
+  AdvisorCard,
+  ChatContext,
+  ChatResponseType,
+  Recommendation,
+  SourcePanelEntry,
+  VerifierFlag,
+} from "@/types";
 
 export interface ChatEntry { 
   role: "user" | "assistant"; 
@@ -7,6 +15,11 @@ export interface ChatEntry {
   quickReplies?: string[]; 
   recommendations?: Recommendation[];
   cards?: AdvisorCard[];
+  responseType?: ChatResponseType;
+  intent?: string | null;
+  antiPick?: AdvisorAntiPick | null;
+  sourcePanel?: SourcePanelEntry[];
+  verifierFlags?: VerifierFlag[];
 }
 
 interface ChatState { 
@@ -26,7 +39,7 @@ interface ChatState {
 
 const getInitialMessage = (): ChatEntry => ({
   role: "assistant",
-  content: "Xin chào, tôi là NeedWise Copilot. Hãy chia sẻ về nhu cầu mua sắm của bạn và tôi sẽ tư vấn ra 1 sản phẩm phù hợp.",
+  content: "Dạ em là NeedWise Copilot. Anh/chị hãy chia sẻ nhu cầu, ngân sách và không gian sử dụng; em sẽ làm rõ khi cần rồi đề xuất tối đa 3 lựa chọn cùng ưu điểm và đánh đổi ạ.",
 });
 
 const generateSessionId = () => {
@@ -65,4 +78,3 @@ export const useChatStore = create<ChatState>((set) => ({
     isLoading: false,
   }),
 }));
-
