@@ -69,7 +69,7 @@ def main() -> None:
                     {"role": "user", "content": user},
                 ],
                 "temperature": 0.3,
-                "extra_body": {"chat_template_kwargs": {"enable_thinking": False}},
+                "reasoning": {"enabled": False},  # archived script, kept consistent with gate1/4 fix
             }
         )
         if result.ok and result.ttft_s is not None:

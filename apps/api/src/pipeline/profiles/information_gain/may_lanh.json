@@ -1,0 +1,41 @@
+{
+  "uu_tien": {
+    "entropy": 1.4317,
+    "n_samples": 1039,
+    "priority_rank": 3,
+    "fields": {
+      "specs.inverter": {
+        "path": "specs.inverter",
+        "entropy": 0.7978,
+        "n_buckets": 3,
+        "n_missing": 11
+      },
+      "specs.energy_efficiency": {
+        "path": "specs.energy_efficiency",
+        "entropy": 2.3154,
+        "n_buckets": 5,
+        "n_missing": 248
+      },
+      "specs.noise_db_indoor": {
+        "path": "specs.noise_db_indoor",
+        "entropy": 1.1819,
+        "n_buckets": 5,
+        "n_missing": 814
+      }
+    }
+  },
+  "ranked_slots": [
+    "uu_tien"
+  ],
+  "_meta": {
+    "category_key": "may_lanh",
+    "category_label": "Máy lạnh",
+    "n_records": 1039,
+    "unscored_slots": [
+      "loai_phong",
+      "nang_truc_tiep",
+      "tra_gop"
+    ],
+    "generated_by": "scripts/compute_information_gain.py"
+  }
+}

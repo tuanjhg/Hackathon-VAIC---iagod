@@ -75,7 +75,10 @@ CATALOG_SEARCH_TOOL = {
     },
 }
 
-EXTRA_BODY = {"chat_template_kwargs": {"enable_thinking": False}}
+# OpenRouter's own reasoning switch -- NOT vLLM's chat_template_kwargs (confirmed
+# 18/07: OpenRouter silently ignores chat_template_kwargs, model reasons at length
+# regardless, blowing latency/schema conformance).
+REASONING_OFF = {"enabled": False}
 
 
 def run_json_case(utterance: str) -> tuple[bool, str]:
@@ -87,7 +90,7 @@ def run_json_case(utterance: str) -> tuple[bool, str]:
             ],
             "temperature": 0,
             "response_format": RESPONSE_FORMAT,
-            "extra_body": EXTRA_BODY,
+            "reasoning": REASONING_OFF,
         }
     )
     if not result.ok or result.body is None:
@@ -113,7 +116,7 @@ def run_tool_case(utterance: str) -> tuple[bool, str]:
             "temperature": 0,
             "tools": [CATALOG_SEARCH_TOOL],
             "tool_choice": "auto",
-            "extra_body": EXTRA_BODY,
+            "reasoning": REASONING_OFF,
         }
     )
     if not result.ok or result.body is None:

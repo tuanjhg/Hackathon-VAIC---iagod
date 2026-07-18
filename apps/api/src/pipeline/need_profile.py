@@ -21,7 +21,7 @@ MAX_CLARIFY_ROUNDS = 2
 """Hard limit on clarify rounds per conversation (workflow doc §2 and §3:
 "tối đa 2 lượt hỏi/hội thoại"). ``clarify_rounds`` must never exceed this."""
 
-DEFAULT_PRESERVED_SLOTS: tuple[str, ...] = ("ngân_sách_max",)
+DEFAULT_PRESERVED_SLOTS: tuple[str, ...] = ("ngan_sach_max",)
 """Slots that survive a category change ("giữ ngân sách"). Budget-like by
 default; callers pass ``preserve_slots`` to override for categories whose
 budget slot is named differently."""

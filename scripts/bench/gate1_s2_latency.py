@@ -81,7 +81,10 @@ def main() -> None:
                 ],
                 "temperature": 0,
                 "response_format": RESPONSE_FORMAT,
-                "extra_body": {"chat_template_kwargs": {"enable_thinking": False}},
+                # OpenRouter's own reasoning switch -- NOT vLLM's chat_template_kwargs
+                # (confirmed 18/07: OpenRouter silently ignores chat_template_kwargs,
+                # model reasons at length regardless, blowing latency/schema conformance).
+                "reasoning": {"enabled": False},
             }
         )
         if result.ok:

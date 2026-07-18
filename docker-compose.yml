@@ -24,15 +24,17 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
       PRODUCTS_DATA_PATH: /app/data/demo/products.json
       REALDATA_PROCESSED_PATH: /app/data/realdata/processed
-      # Router A6 (apps/api/src/router) -- vLLM chạy tách rời (docker-compose.vllm.yml),
-      # trỏ LLM_BASE_URL vào IP VM GPU khi cửa sổ mở, xem docs/pipelines.md §6.9.
-      LLM_BASE_URL: ${LLM_BASE_URL:-http://localhost:8001/v1}
-      LLM_MODEL: ${LLM_MODEL:-qwen3-32b-fp8}
+      # Router A6 (apps/api/src/router) -- model chính qua API key OpenRouter
+      # (ADR A2'', không self-host, không FPT AI Factory). Set LLM_API_KEY
+      # thật trong .env; base_url có default OpenRouter sẵn vì đó luôn là
+      # provider dùng, chỉ key là bí mật thật sự cần .env riêng.
+      LLM_BASE_URL: ${LLM_BASE_URL:-https://openrouter.ai/api/v1}
+      LLM_MODEL: ${LLM_MODEL:-qwen/qwen3.6-27b}
       LLM_API_KEY: ${LLM_API_KEY:-}
       LLM_FALLBACK_ENABLED: ${LLM_FALLBACK_ENABLED:-false}
-      LLM_FALLBACK_BASE_URL: ${LLM_FALLBACK_BASE_URL:-https://api.openai.com/v1}
+      LLM_FALLBACK_BASE_URL: ${LLM_FALLBACK_BASE_URL:-}
       LLM_FALLBACK_API_KEY: ${LLM_FALLBACK_API_KEY:-}
-      LLM_FALLBACK_MODEL: ${LLM_FALLBACK_MODEL:-gpt-4o-mini}
+      LLM_FALLBACK_MODEL: ${LLM_FALLBACK_MODEL:-}
     expose:
       - "8000"
     ports:
@@ -53,9 +55,9 @@ services:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
+      API_URL: http://api:8000/api/v1
     expose:
       - "3000"
-      API_URL: http://api:8000/api/v1
     ports:
       - "3000:3000"
     depends_on:

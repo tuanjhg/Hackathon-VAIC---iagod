@@ -52,11 +52,11 @@ bench-gate4:
 	python3 scripts/bench/gate4_qwen3_clean_run.py
 
 bench-gates: bench-gate1 bench-gate3 bench-gate4
-	@echo "Gate 2 (vLLM flag pair) can be run manually with 2 different --label values, see scripts/bench/README.md"
+	@echo "Gate 2 (vLLM flag pair) is ARCHIVED -- không còn vLLM tự host để chỉnh flag, xem ADR A2'"
 
-# vLLM trên VM GPU thuê (FPT AI Factory H100 80GB) -- chạy lệnh này TRÊN VM
-# qua SSH, không phải máy dev local. Chỉ 10h credit tổng -- LUÔN vllm-down
-# ngay khi xong cửa sổ, xem docs/pipelines.md §6.9.
+# ⚠️ ARCHIVED (18/07): self-host vLLM không còn trong kế hoạch -- team dùng
+# API key FPT AI Factory cho Qwen3.6-27B (ADR A2'). Giữ target phòng khi
+# roadmap pilot (ADR A8) cần self-host lại; KHÔNG chạy trong kế hoạch hiện tại.
 vllm-up:
 	docker compose -f docker-compose.vllm.yml up -d vllm
 	@echo "Đang load model (~10 phút) -- theo dõi bằng: make vllm-logs"

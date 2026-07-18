@@ -1,3 +1,11 @@
+# ⚠️ ARCHIVED (18/07) -- KHÔNG dùng cho kế hoạch hiện tại. Team đã đổi sang
+# gọi API key của FPT AI Factory cho Qwen3.6-27B thay vì tự host vLLM trên VM
+# GPU thuê (ADR A2', xem docs/research/dmx-tech-decisions.md — supersedes
+# A2). File này giữ lại nguyên trạng phòng khi roadmap pilot (ADR A8) cần
+# quay lại self-host; KHÔNG chạy `make vllm-up` trong kế hoạch 24h hiện tại.
+#
+# --- Nội dung gốc bên dưới (không sửa, chỉ để tham khảo) ---
+#
 # vLLM inference service -- chạy TRÊN VM GPU thuê (FPT AI Factory, H100 80GB),
 # KHÔNG nằm trong docker-compose.yml chính. Lý do: ngân sách chỉ 10h GPU
 # credit tổng (docs/research/dmx-phan-tich-ke-hoach-2026-07-17.md §5b) -- vLLM

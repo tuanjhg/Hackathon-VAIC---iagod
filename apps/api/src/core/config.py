@@ -12,14 +12,15 @@ class Settings(BaseSettings):
     products_data_path: str = "../../data/demo/products.json"
     realdata_processed_path: str = "../../data/realdata/processed"
 
-    # LLM router (ADR A6): primary = local vLLM (OpenAI-compatible), fallback = cloud.
-    llm_base_url: str = "http://localhost:8001/v1"
+    # LLM router (ADR A6): primary = OpenRouter API, Qwen3.6-27B (ADR A2'',
+    # supersedes A2/A2' -- no self-host, no FPT AI Factory). OpenAI-compatible.
+    # No fallback provider chosen yet (only one provider = OpenRouter today).
+    llm_base_url: str = "https://openrouter.ai/api/v1"
     llm_api_key: str = ""
-    llm_model: str = "local-model"
-    llm_fallback_base_url: str = "https://api.openai.com/v1"
+    llm_model: str = "qwen/qwen3.6-27b"
+    llm_fallback_base_url: str = ""
     llm_fallback_api_key: str = ""
-    llm_fallback_model: str = "gpt-4o-mini"
-    # Off by default: demo runs pure on-prem; enable in dev for cloud fallback.
+    llm_fallback_model: str = ""
     llm_fallback_enabled: bool = False
     llm_timeout_seconds: float = 30.0
 

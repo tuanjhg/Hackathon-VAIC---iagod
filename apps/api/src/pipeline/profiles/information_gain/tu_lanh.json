@@ -1,0 +1,41 @@
+{
+  "kieu_ngan_da": {
+    "entropy": 1.9457,
+    "n_samples": 1692,
+    "priority_rank": 1,
+    "fields": {
+      "specs.style": {
+        "path": "specs.style",
+        "entropy": 1.9457,
+        "n_buckets": 7,
+        "n_missing": 62
+      }
+    }
+  },
+  "inverter": {
+    "entropy": 1.1452,
+    "n_samples": 1692,
+    "priority_rank": 2,
+    "fields": {
+      "specs.inverter": {
+        "path": "specs.inverter",
+        "entropy": 1.1452,
+        "n_buckets": 3,
+        "n_missing": 1052
+      }
+    }
+  },
+  "ranked_slots": [
+    "kieu_ngan_da",
+    "inverter"
+  ],
+  "_meta": {
+    "category_key": "tu_lanh",
+    "category_label": "Tủ lạnh",
+    "n_records": 1692,
+    "unscored_slots": [
+      "cho_dat"
+    ],
+    "generated_by": "scripts/compute_information_gain.py"
+  }
+}
