@@ -15,10 +15,11 @@ from __future__ import annotations
 import os
 from collections.abc import Sequence
 
+import sqlalchemy as sa
 from alembic import op
 
 revision: str = "20260718_0005"
-down_revision: str | None = "20260718_0004"
+down_revision: str | None = "20260718_0004_multicategory"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
@@ -145,27 +146,30 @@ def upgrade() -> None:
     op.execute("ALTER TABLE products ADD COLUMN display_name VARCHAR(500)")
     op.execute("ALTER TABLE products ADD COLUMN status VARCHAR(30) NOT NULL DEFAULT 'active'")
     op.execute("ALTER TABLE products ADD COLUMN source_data JSONB NOT NULL DEFAULT '{}'::jsonb")
-    op.execute(
-        """WITH web_id_counts AS (
-            SELECT product_web_id, count(*) AS occurrences
-            FROM catalog_products
-            WHERE product_web_id IS NOT NULL AND btrim(product_web_id) <> ''
-            GROUP BY product_web_id
-        )
-        UPDATE products p SET
-            product_web_id = CASE WHEN wc.occurrences = 1 THEN cp.product_web_id END,
-            model_code = cp.model_code,
-            display_name = p.name,
-            source_data = jsonb_build_object(
-                'source_category', cp.source_category,
-                'source_file', cp.source_file,
-                'source_hash', cp.source_hash,
-                'raw_product_web_id', cp.product_web_id
+    if sa.inspect(op.get_bind()).has_table("catalog_products"):
+        op.execute(
+            """WITH web_id_counts AS (
+                SELECT product_web_id, count(*) AS occurrences
+                FROM catalog_products
+                WHERE product_web_id IS NOT NULL AND btrim(product_web_id) <> ''
+                GROUP BY product_web_id
             )
-        FROM catalog_products cp
-        LEFT JOIN web_id_counts wc ON wc.product_web_id = cp.product_web_id
-        WHERE cp.sku = p.sku"""
-    )
+            UPDATE products p SET
+                product_web_id = CASE WHEN wc.occurrences = 1 THEN cp.product_web_id END,
+                model_code = cp.model_code,
+                display_name = p.name,
+                source_data = jsonb_build_object(
+                    'source_category', cp.source_category,
+                    'source_file', cp.source_file,
+                    'source_hash', cp.source_hash,
+                    'raw_product_web_id', cp.product_web_id
+                )
+            FROM catalog_products cp
+            LEFT JOIN web_id_counts wc ON wc.product_web_id = cp.product_web_id
+            WHERE cp.sku = p.sku"""
+        )
+    else:
+        op.execute("UPDATE products SET display_name = name")
     op.execute(
         """UPDATE products p SET brand_id = b.id
         FROM brands b

@@ -22,3 +22,4 @@ scripts/bench/results/*.json
 data/vector/*.sqlite3
 data/vector/*.sqlite3-shm
 data/vector/*.sqlite3-wal
+scripts/gcp/config.env

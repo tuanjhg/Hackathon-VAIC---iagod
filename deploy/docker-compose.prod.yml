@@ -1,0 +1,97 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-needwise}
+      POSTGRES_USER: ${POSTGRES_USER:-needwise}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    image: ${IMAGE_PREFIX:?IMAGE_PREFIX is required}/api:${IMAGE_TAG:?IMAGE_TAG is required}
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-needwise}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-needwise}
+      POLICY_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-needwise}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-needwise}
+      CORS_ORIGINS: ${SITE_SCHEME:-https}://${DOMAIN_NAME}
+      PRODUCTS_DATA_PATH: /app/data/demo/products.json
+      REALDATA_PROCESSED_PATH: /app/data/realdata/processed
+      CSV_DATA_DIR: /app/data/realdata/raw/clean
+      IMPORT_BATCH_SIZE: ${IMPORT_BATCH_SIZE:-500}
+      LLM_BASE_URL: ${LLM_BASE_URL:-https://openrouter.ai/api/v1}
+      LLM_MODEL: ${LLM_MODEL:-qwen/qwen3.6-27b}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      CHAT_PIPELINE: ${CHAT_PIPELINE:-mock}
+      LLM_FALLBACK_ENABLED: ${LLM_FALLBACK_ENABLED:-false}
+      LLM_FALLBACK_BASE_URL: ${LLM_FALLBACK_BASE_URL:-}
+      LLM_FALLBACK_API_KEY: ${LLM_FALLBACK_API_KEY:-}
+      LLM_FALLBACK_MODEL: ${LLM_FALLBACK_MODEL:-}
+    command: ["sh", "-c", "alembic upgrade head && python scripts/import_catalog.py --all --mode append && python -m src.seed.sync_catalog_products && python -m src.seed.seed_realdata && python -m src.rag.cli build --source /app/data/policy && uvicorn src.main:app --host 0.0.0.0 --port 8000"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+
+  web:
+    image: ${IMAGE_PREFIX:?IMAGE_PREFIX is required}/web:${IMAGE_TAG:?IMAGE_TAG is required}
+    restart: unless-stopped
+    environment:
+      API_URL: http://api:8000/api/v1
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME:?DOMAIN_NAME is required}
+    configs:
+      - source: caddyfile
+        target: /etc/caddy/Caddyfile
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      web:
+        condition: service_healthy
+
+configs:
+  caddyfile:
+    content: |
+      ${SITE_SCHEME:-https}://${DOMAIN_NAME} {
+        handle /api/* {
+          reverse_proxy api:8000
+        }
+        handle /docs* {
+          reverse_proxy api:8000
+        }
+        handle /openapi.json {
+          reverse_proxy api:8000
+        }
+        handle {
+          reverse_proxy web:3000
+        }
+      }
+
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:

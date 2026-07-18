@@ -243,3 +243,42 @@ def test_in_stock_bonus_breaks_tie_between_identical_specs() -> None:
     ]
     result = rank_candidates(cands, _profile(uu_tien=["tiet_kiem_dien"]), SLOT_PROFILE)
     assert result.top[0].sku == "STOCKED"
+
+
+# --------------------------------------------------------------------------- #
+# Right-sizing (soft oversize penalty — deprioritize, never exclude)          #
+# --------------------------------------------------------------------------- #
+def test_oversized_aircon_ranks_below_right_sized_for_small_room() -> None:
+    # 18m² → btu_can 10800, 1.3× tolerance = 14040. A 12000 BTU unit is
+    # right-sized; an 18000 BTU one is oversized. Otherwise identical specs, so
+    # the oversize penalty must decide the order (right-sized on top).
+    profile = _profile(dien_tich_m2=18, uu_tien=["tiet_kiem_dien"])
+    cands = [
+        _cand("BIG", price=13_000_000, inverter=True, energy_efficiency=6.0, capacity_btu=18000),
+        _cand("RIGHT", price=13_000_000, inverter=True, energy_efficiency=6.0, capacity_btu=12000),
+    ]
+    result = rank_candidates(cands, profile, SLOT_PROFILE)
+
+    assert result.top[0].sku == "RIGHT"
+    big = _by_sku(result)["BIG"]
+    assert any(k.startswith("penalty:oversize") for k in big.per_criterion)
+
+
+def test_no_oversize_penalty_when_room_area_unknown() -> None:
+    # Without dien_tich_m2 there is no need to size against → never penalized.
+    profile = _profile(uu_tien=["tiet_kiem_dien"])
+    cands = [_cand("BIG", inverter=True, energy_efficiency=6.0, capacity_btu=18000)]
+    result = rank_candidates(cands, profile, SLOT_PROFILE)
+
+    big = _by_sku(result)["BIG"]
+    assert not any(k.startswith("penalty:oversize") for k in big.per_criterion)
+
+
+def test_adequate_capacity_within_tolerance_is_not_penalized() -> None:
+    # 25m² → btu_can 15000, 1.3× = 19500; an 18000 BTU unit is within tolerance.
+    profile = _profile(dien_tich_m2=25, uu_tien=["tiet_kiem_dien"])
+    cands = [_cand("OK", inverter=True, energy_efficiency=6.0, capacity_btu=18000)]
+    result = rank_candidates(cands, profile, SLOT_PROFILE)
+
+    ok = _by_sku(result)["OK"]
+    assert not any(k.startswith("penalty:oversize") for k in ok.per_criterion)

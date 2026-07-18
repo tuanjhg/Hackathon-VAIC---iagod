@@ -102,6 +102,27 @@ PRICE_PRESENT_BONUS = 0.05
 IN_STOCK_BONUS = 0.05
 OVER_BUDGET_PENALTY = 0.5
 MISSING_STATED_FIELD_PENALTY = 0.5
+OVERSIZE_TOLERANCE = 1.3
+"""Capacity up to ``btu_can × OVERSIZE_TOLERANCE`` is treated as right-sized —
+a headroom band before any penalty applies."""
+OVERSIZE_PENALTY = 3.0
+"""Penalty *per unit of excess ratio* beyond the tolerance band — it scales with
+how grossly oversized a unit is (2× the room's need is hit far harder than
+1.4×), rather than a flat hit. A soft deprioritize, never an exclude: an
+oversized unit stays a valid option (a right-sized one is cheaper and, for
+"tiết kiệm điện", lower absolute draw than an oversized unit of equal
+efficiency rating). Only for categories with a capacity↔room-need rule (máy
+lạnh) and only when the room size is known."""
+
+# máy lạnh sizing rule (docs/pipelines.md §6.4), hand-authored Phase-0 seed —
+# the same formula S4's catalog_search hard-filter uses. The Category Profile
+# Compiler (ADR A7) will later generate this per category.
+_SIZED_CATEGORY = "may_lanh"
+_AREA_SLOT = "dien_tich_m2"
+_SUN_SLOT = "nang_truc_tiep"
+_CAPACITY_FIELD = "capacity_btu"
+_BTU_PER_M2 = 600
+_SUN_MULTIPLIER = 1.3
 
 _SPEC_FIELD_PREFIX = "specs."
 
@@ -121,6 +142,7 @@ _PRIORITY_FIELD_KEYWORDS: dict[str, tuple[str, ...]] = {
 _BONUS_PRICE_KEY = "bonus:price_available"
 _BONUS_STOCK_KEY = "bonus:in_stock"
 _PENALTY_OVER_BUDGET_KEY = "penalty:over_budget"
+_PENALTY_OVERSIZE_KEY = "penalty:oversize"
 _PENALTY_MISSING_PREFIX = "penalty:missing:"
 
 
@@ -225,6 +247,22 @@ def _stated_fields(criterion_fields: list[str], stated_values: list[str]) -> set
     return stated
 
 
+def _capacity_need(slot_profile: SlotProfile, profile: NeedProfile) -> float | None:
+    """The room's BTU need for right-sizing, or ``None`` when it does not apply.
+
+    ``None`` (no penalty) when the category has no sizing rule or the room area
+    is not yet known. ``btu_can = area × 600 × (1.3 if direct sun)`` (docs §6.4)
+    — the same formula S4's hard filter uses; scoring adds the tolerance band.
+    """
+    if slot_profile.category_key != _SIZED_CATEGORY:
+        return None
+    area = profile.slots.get(_AREA_SLOT)
+    if not isinstance(area, int | float) or isinstance(area, bool):
+        return None
+    sun = _SUN_MULTIPLIER if profile.slots.get(_SUN_SLOT) else 1.0
+    return float(area) * _BTU_PER_M2 * sun
+
+
 def _lower_is_better(name: str) -> bool:
     low = name.lower()
     return any(token in low for token in ("noise", "price", "cost", "consum"))
@@ -258,6 +296,7 @@ def _score_all(
     criterion_fields: list[str],
     stated_fields: set[str],
     budget: float | None,
+    capacity_need: float | None = None,
 ) -> list[_Scored]:
     # Min-max bounds per numeric field, computed across the set this turn.
     bounds: dict[str, tuple[float, float]] = {}
@@ -303,6 +342,19 @@ def _score_all(
         # Soft over-budget penalty (deprioritize, never exclude).
         if budget is not None and price is not None and price > budget:
             per_criterion[_PENALTY_OVER_BUDGET_KEY] = -OVER_BUDGET_PENALTY
+
+        # Soft right-sizing penalty: capacity beyond the tolerance band is
+        # deprioritized in proportion to how oversized it is (never excluded —
+        # it stays a valid option).
+        capacity = specs.get(_CAPACITY_FIELD)
+        if (
+            capacity_need
+            and isinstance(capacity, int | float)
+            and not isinstance(capacity, bool)
+        ):
+            ratio = capacity / capacity_need
+            if ratio > OVERSIZE_TOLERANCE:
+                per_criterion[_PENALTY_OVERSIZE_KEY] = -OVERSIZE_PENALTY * (ratio - OVERSIZE_TOLERANCE)
 
         total = sum(per_criterion.values())
         scored.append(
@@ -409,7 +461,8 @@ def rank_candidates(
     budget_raw = profile.slots.get(BUDGET_SLOT_NAME)
     budget = float(budget_raw) if isinstance(budget_raw, int | float) else None
 
-    scored = _score_all(candidates, criterion_fields, stated, budget)
+    capacity_need = _capacity_need(slot_profile, profile)
+    scored = _score_all(candidates, criterion_fields, stated, budget, capacity_need)
     scored.sort(key=_rank_key)
 
     top = scored[:3]

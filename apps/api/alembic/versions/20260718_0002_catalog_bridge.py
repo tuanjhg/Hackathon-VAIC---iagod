@@ -10,7 +10,7 @@ Revises: 20260717_0001
 from collections.abc import Sequence
 
 
-revision: str = "20260718_0002"
+revision: str = "20260718_0002_catalog_bridge"
 down_revision: str | None = "20260717_0001"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None

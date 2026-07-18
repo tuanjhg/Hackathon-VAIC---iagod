@@ -101,7 +101,7 @@ def db() -> Generator[Session, None, None]:
     testing_session = sessionmaker(bind=engine, expire_on_commit=False)
     Base.metadata.create_all(engine)
     with testing_session() as session:
-        category = Category(name="Máy lạnh", slug="may-lanh")
+        category = Category(code="may_lanh", name="Máy lạnh", slug="may-lanh")
         session.add(category)
         session.flush()
         # 3 rows fit an 18m² room (15–20) and 3 don't (25–35): an unfiltered
@@ -139,6 +139,7 @@ def db() -> Generator[Session, None, None]:
                     sku=sku,
                     slug=sku.replace("_", "-"),
                     name=name,
+                    display_name=name,
                     brand=name.split()[0],
                     category_id=category.id,
                     category_key="may_lanh",

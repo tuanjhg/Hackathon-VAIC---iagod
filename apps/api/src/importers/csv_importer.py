@@ -360,7 +360,6 @@ def upsert_product(
             featured=False,
             rating=0,
             review_count=0,
-            specifications=normalized.raw_specs,
             source_data={},
         )
         db.add(product)
@@ -383,7 +382,6 @@ def upsert_product(
         "category_code": config.code,
         "raw_product_web_id": product_web_id,
     }
-    product.specifications = normalized.raw_specs
 
     if product.specs is None:
         product.specs = ProductSpec()

@@ -1,5 +1,6 @@
 .PHONY: up down build migrate seed test lint typecheck bench-gate1 bench-gate3 bench-gate4 bench-gates vllm-up vllm-up-baseline vllm-down vllm-logs
 .PHONY: up down build migrate seed vector-build vector-search vector-test-integration test lint typecheck
+.PHONY: eval eval-judge eval-all
 
 up:
 	docker compose up --build
@@ -26,6 +27,18 @@ vector-search:
 
 vector-test-integration:
 	cd apps/api && pytest tests/test_policy_pgvector_integration.py -q
+
+# Golden-conversation eval (data/*.json -> replay through pipeline + LLM judge).
+# Tier 1 (structural) is free; --judge adds LLM-as-judge (costs OpenRouter calls).
+# Needs LLM_API_KEY in .env. Report lands in data/golden/eval_report.{md,json}.
+eval:
+	cd apps/api && python -m src.eval.run_eval --limit 5
+
+eval-judge:
+	cd apps/api && python -m src.eval.run_eval --limit 5 --judge
+
+eval-all:
+	cd apps/api && python -m src.eval.run_eval --all --judge
 
 test:
 	docker compose run --rm api pytest

@@ -55,11 +55,12 @@ def session() -> Generator[Session, None, None]:
 
 
 def _make_tu_lanh(db: Session) -> int:
-    category = Category(name="Tủ lạnh", slug="tu-lanh")
+    category = Category(code="tu_lanh", name="Tủ lạnh", slug="tu-lanh")
     product = Product(
         sku="1751098000999",
         slug="panasonic-nr-bl340-313l",
         name="Panasonic Inverter 313 lít NR-BL340",
+        display_name="Panasonic Inverter 313 lít NR-BL340",
         brand="Panasonic",
         category=category,
         category_key="tu_lanh",
@@ -111,11 +112,12 @@ def test_new_category_product_roundtrips_json_without_productspec(session: Sessi
 
 def test_json_columns_are_nullable(session: Session) -> None:
     # A product may omit all three new columns (e.g. legacy rows / máy-lạnh demo).
-    category = Category(name="Máy lạnh", slug="may-lanh")
+    category = Category(code="may_lanh", name="Máy lạnh", slug="may-lanh")
     product = Product(
         sku="sku-no-json",
         slug="sku-no-json",
         name="No JSON specs",
+        display_name="No JSON specs",
         brand="Daikin",
         category=category,
         short_description="x",

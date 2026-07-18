@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     cors_origins: list[str] | str = ["http://localhost:3000"]
     products_data_path: str = "../../data/demo/products.json"
     policy_embedding_dimension: int = 384
+    policy_data_path: str = "../../data/policy"
     realdata_processed_path: str = "../../data/realdata/processed"
 
     # LLM router (ADR A6): primary = OpenRouter API, Qwen3.6-27B (ADR A2'',

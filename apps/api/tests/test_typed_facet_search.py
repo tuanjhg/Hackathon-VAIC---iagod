@@ -42,7 +42,6 @@ def _add_product(
         featured=False,
         rating=0,
         review_count=0,
-        specifications={},
         source_data={},
     )
     product.specs = ProductSpec(raw_specs={}, normalized_specs={})
