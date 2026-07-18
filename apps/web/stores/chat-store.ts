@@ -25,7 +25,8 @@ interface ChatState {
 }
 
 const getInitialMessage = (): ChatEntry => ({
-  role: "Xin chào, tôi là NeedWise Copilot. Hãy chia sẻ về nhu cầu mua sắm của bạn và tôi sẽ tư vấn ra 1 sản phẩm phù hợp.",
+  role: "assistant",
+  content: "Xin chào, tôi là NeedWise Copilot. Hãy chia sẻ về nhu cầu mua sắm của bạn và tôi sẽ tư vấn ra 1 sản phẩm phù hợp.",
 });
 
 const generateSessionId = () => {
@@ -64,5 +65,4 @@ export const useChatStore = create<ChatState>((set) => ({
     isLoading: false,
   }),
 }));
-
 

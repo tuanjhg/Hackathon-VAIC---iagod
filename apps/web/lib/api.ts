@@ -1,4 +1,4 @@
-import type { ChatContext, ChatResponse, ChatStreamEvent, Comparison, Product, ProductFilters, ProductPage } from "@/types";
+import type { Category, ChatContext, ChatResponse, ChatStreamEvent, Comparison, Product, ProductFilters, ProductPage } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
 
