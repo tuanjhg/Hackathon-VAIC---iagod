@@ -1,10 +1,11 @@
 "use client";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Bot, Send, Sparkles, X } from "lucide-react";
+import { Bot, Headphones, RotateCcw, Send, Sparkles, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { api } from "@/lib/api";
 import { useChatStore } from "@/stores/chat-store";
 import { ChatMessage } from "@/components/ChatMessage";
+import { AdvisorContactModal } from "@/components/AdvisorContactModal";
 
 export function ChatWidget() {
   const {
@@ -17,8 +18,10 @@ export function ChatWidget() {
     addMessage,
     setLoading,
     setContext,
+    reset,
   } = useChatStore();
   const [input, setInput] = useState("");
+  const [advisorOpen, setAdvisorOpen] = useState(false);
   const bottom = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -80,6 +83,17 @@ export function ChatWidget() {
                 </p>
               </div>
               <button
+                aria-label="Bắt đầu lại hội thoại"
+                title="Bắt đầu lại hội thoại"
+                className="grid h-8 w-8 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/15"
+                onClick={() => {
+                  setInput("");
+                  reset();
+                }}
+              >
+                <RotateCcw className="h-4 w-4" />
+              </button>
+              <button
                 aria-label="Đóng chat"
                 className="grid h-8 w-8 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/15"
                 onClick={toggle}
@@ -95,6 +109,15 @@ export function ChatWidget() {
               {isLoading && <TypingIndicator />}
               <div ref={bottom} />
             </div>
+
+            <button
+              type="button"
+              onClick={() => setAdvisorOpen(true)}
+              className="flex items-center justify-center gap-1.5 border-t border-border bg-muted/40 px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <Headphones className="h-3.5 w-3.5" />
+              Cần hỗ trợ thêm? Gặp tư vấn viên
+            </button>
 
             <form onSubmit={submit} className="flex items-center gap-2 border-t border-border p-3">
               <input
@@ -130,6 +153,8 @@ export function ChatWidget() {
           </span>
         )}
       </button>
+
+      <AdvisorContactModal open={advisorOpen} onClose={() => setAdvisorOpen(false)} />
     </div>
   );
 }

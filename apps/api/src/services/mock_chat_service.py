@@ -12,6 +12,27 @@ BUDGET_MAP = {
     "Không giới hạn": 0,
 }
 
+# H2.1 pronoun mirroring: once the customer addresses themselves with one of
+# these kinship terms, the bot mirrors it back for the rest of the session
+# instead of the generic "bạn" (detect once, never overwrite -- "trong suốt
+# phiên"). A real style-guide/system-prompt version belongs to the AI-Native
+# pipeline's Need Profile (see docs/research/dmx-local-context-h2.md §H2.1);
+# this is the equivalent behavior against the current rule-based service.
+_XUNG_HO_TERMS = ("cô", "chú", "bác", "anh", "chị", "em", "ông", "bà")
+_XUNG_HO_RE = re.compile(r"\b(" + "|".join(_XUNG_HO_TERMS) + r")\b", re.IGNORECASE)
+
+
+def _detect_xung_ho(message: str) -> str | None:
+    match = _XUNG_HO_RE.search(message.lower())
+    return match.group(1).capitalize() if match else None
+
+
+def _addr(context: ChatContext, *, capitalized: bool) -> str:
+    term = context.xung_ho
+    if term is None:
+        return "Bạn" if capitalized else "bạn"
+    return term if capitalized else term.lower()
+
 
 class MockChatService:
     def __init__(self, product_service: ProductService):
@@ -22,17 +43,29 @@ class MockChatService:
         area_match = re.search(r"(\d+(?:[.,]\d+)?)\s*m2", request.message.lower())
         if area_match and context.room_area_m2 is None:
             context.room_area_m2 = float(area_match.group(1).replace(",", "."))
+        if context.xung_ho is None:
+            detected = _detect_xung_ho(request.message)
+            if detected:
+                context.xung_ho = detected
         if request.message in BUDGET_OPTIONS:
             context.budget_max = BUDGET_MAP.get(request.message)
         if request.message in PRIORITY_OPTIONS:
             context.priority = request.message
 
         if context.room_area_m2 is None:
-            return self._follow_up("Phòng của bạn rộng khoảng bao nhiêu m²?", [], context)
+            return self._follow_up(
+                f"Phòng của {_addr(context, capitalized=False)} rộng khoảng bao nhiêu m²?", [], context
+            )
         if context.budget_max is None:
-            return self._follow_up("Bạn muốn ngân sách tối đa khoảng bao nhiêu?", BUDGET_OPTIONS, context)
+            return self._follow_up(
+                f"{_addr(context, capitalized=True)} muốn ngân sách tối đa khoảng bao nhiêu?",
+                BUDGET_OPTIONS,
+                context,
+            )
         if context.priority is None:
-            return self._follow_up("Bạn ưu tiên điều gì nhất?", PRIORITY_OPTIONS, context)
+            return self._follow_up(
+                f"{_addr(context, capitalized=True)} ưu tiên điều gì nhất?", PRIORITY_OPTIONS, context
+            )
 
         products = self.product_service.products_for_need(
             context.room_area_m2, context.budget_max, context.priority
@@ -57,7 +90,7 @@ class MockChatService:
             )
         return ChatResponse(
             response_type="recommendations",
-            message="Dưới đây là 3 lựa chọn phù hợp nhất",
+            message=f"Dưới đây là 3 lựa chọn phù hợp nhất cho {_addr(context, capitalized=False)}",
             recommendations=recommendations,
             context=context,
         )

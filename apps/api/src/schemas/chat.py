@@ -9,6 +9,7 @@ class ChatContext(BaseModel):
     budget_max: int | None = None
     room_area_m2: float | None = None
     priority: str | None = None
+    xung_ho: str | None = None
 
 
 class ChatMessageRequest(BaseModel):
