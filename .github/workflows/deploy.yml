@@ -63,10 +63,10 @@ jobs:
       - name: Copy manifest through IAP
         run: |
           gcloud compute scp deploy/docker-compose.prod.yml scripts/gcp/remote-deploy.sh \
-            "${{ vars.GCP_VM_NAME }}:/tmp/" --project "${{ vars.GCP_PROJECT_ID }}" \
+            "${{ vars.GCP_VM_NAME }}:~/" --project "${{ vars.GCP_PROJECT_ID }}" \
             --zone "${{ vars.GCP_ZONE }}" --tunnel-through-iap --quiet
       - name: Roll out and wait for health checks
         run: |
           gcloud compute ssh "${{ vars.GCP_VM_NAME }}" --project "${{ vars.GCP_PROJECT_ID }}" \
             --zone "${{ vars.GCP_ZONE }}" --tunnel-through-iap --quiet --command \
-            "sudo bash /tmp/remote-deploy.sh '${{ vars.GCP_PROJECT_ID }}' '${{ vars.GCP_REGION }}' '${{ vars.GCP_AR_REPOSITORY }}' '${IMAGE_TAG}' '${{ vars.GCP_SECRET_NAME }}' 'https' '${{ vars.GCP_PUBLIC_HOST }}'"
+            "sudo bash ~/remote-deploy.sh '${{ vars.GCP_PROJECT_ID }}' '${{ vars.GCP_REGION }}' '${{ vars.GCP_AR_REPOSITORY }}' '${IMAGE_TAG}' '${{ vars.GCP_SECRET_NAME }}' 'https' '${{ vars.GCP_PUBLIC_HOST }}'"

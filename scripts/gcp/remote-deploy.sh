@@ -3,6 +3,7 @@ set -Eeuo pipefail
 [[ $# -eq 7 ]] || { echo 'Expected PROJECT REGION REPOSITORY TAG SECRET SITE_SCHEME DOMAIN'; exit 2; }
 PROJECT_ID="$1"; REGION="$2"; REPOSITORY="$3"; TAG="$4"; SECRET_NAME="$5"
 SITE_SCHEME="$6"; DOMAIN_NAME="$7"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 DEPLOY_DIR=/opt/needwise
 COMPOSE_FILE="${DEPLOY_DIR}/docker-compose.prod.yml"
 PREVIOUS_TAG=""
@@ -22,7 +23,7 @@ rollback() {
 trap rollback ERR
 
 install -d -m 0750 -o root -g docker "${DEPLOY_DIR}"
-install -m 0640 -o root -g docker /tmp/docker-compose.prod.yml "${COMPOSE_FILE}"
+install -m 0640 -o root -g docker "${SCRIPT_DIR}/docker-compose.prod.yml" "${COMPOSE_FILE}"
 gcloud secrets versions access latest --secret "${SECRET_NAME}" --project "${PROJECT_ID}" \
   > "${DEPLOY_DIR}/.env.next"
 sed -i -E '/^(DOMAIN_NAME|SITE_SCHEME)=/d' "${DEPLOY_DIR}/.env.next"
