@@ -16,4 +16,8 @@ dist/
 scripts/bench/results/*.json
 .DS_Store
 .agents
-
+.test-tmp/
+# Legacy local vector database; production retrieval uses PostgreSQL/pgvector.
+data/vector/*.sqlite3
+data/vector/*.sqlite3-shm
+data/vector/*.sqlite3-wal
