@@ -70,6 +70,7 @@ async function chatStream(
 }
 
 export const api = {
+  categories: () => request<Category[]>("/categories"),
   products: (filters: ProductFilters = {}) => {
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => { if (value !== undefined && value !== "") params.set(key, String(value)); });

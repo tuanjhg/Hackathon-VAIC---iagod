@@ -96,7 +96,10 @@ class ProductRepository:
             product = self.db.scalar(self._base_query().where(Product.id == int(identifier)))
             if product is not None:
                 return product
-        return self.get_by_slug(identifier)
+        product = self.get_by_slug(identifier)
+        if product is not None:
+            return product
+        return self.db.scalar(self._base_query().where(Product.sku == identifier))
 
     def get_by_ids(self, product_ids: list[int]) -> list[Product]:
         products = list(self.db.scalars(self._base_query().where(Product.id.in_(product_ids))).unique())
