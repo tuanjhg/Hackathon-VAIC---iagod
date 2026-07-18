@@ -7,6 +7,7 @@ export interface Product {
   name: string;
   brand: string;
   category: string;
+  category_slug: string;
   original_price: string;
   sale_price: string;
   currency: string;
@@ -26,10 +27,12 @@ export interface Product {
   rating: number;
   review_count: number;
   featured: boolean;
+  specifications: Record<string, unknown>;
 }
 
 export interface ProductPage { items: Product[]; total: number; page: number; page_size: number; pages: number }
-export interface ProductFilters { search?: string; brand?: string; min_price?: number; max_price?: number; room_area?: number; inverter?: boolean; in_stock?: boolean; sort?: string; page?: number; page_size?: number }
+export interface Category { id: number; name: string; slug: string }
+export interface ProductFilters { search?: string; category?: string; brand?: string; min_price?: number; max_price?: number; room_area?: number; inverter?: boolean; in_stock?: boolean; sort?: string; page?: number; page_size?: number }
 export interface Comparison { products: Product[]; best_price_id: number | null; quietest_id: number | null; best_overall_id: number | null }
 export interface NeedProfile {
   category: string | null;
