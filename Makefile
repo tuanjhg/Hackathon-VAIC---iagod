@@ -13,7 +13,7 @@ migrate:
 	docker compose run --rm api alembic upgrade head
 
 seed:
-	docker compose run --rm api python -m src.seed.seed_products
+	docker compose run --rm api python -m src.seed.sync_catalog_products
 
 test:
 	docker compose run --rm api pytest

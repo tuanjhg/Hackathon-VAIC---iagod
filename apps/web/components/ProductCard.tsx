@@ -13,10 +13,12 @@ import type { Product } from "@/types";
 export function ProductCard({ product }: { product: Product }) {
   const addCart = useCartStore((s) => s.add);
   const addCompare = useComparisonStore((s) => s.add);
-  const isOut = product.stock_status === "out_of_stock";
-  const discount = Math.round(
-    (1 - Number(product.sale_price) / Number(product.original_price)) * 100,
-  );
+  const isUnavailable = !["in_stock", "low_stock"].includes(product.stock_status);
+  const originalPrice = Number(product.original_price);
+  const salePrice = Number(product.sale_price);
+  const discount = originalPrice > 0 && salePrice > 0
+    ? Math.max(0, Math.round((1 - salePrice / originalPrice) * 100))
+    : 0;
 
   const handleCompare = () => {
     const before = useComparisonStore.getState().products;
@@ -47,7 +49,7 @@ export function ProductCard({ product }: { product: Product }) {
           <span className="font-bold uppercase tracking-wide text-primary">{product.brand}</span>
           <span className="flex items-center gap-1 text-muted-foreground">
             <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-            {product.rating} ({product.review_count})
+            {product.review_count > 0 ? `${product.rating} (${product.review_count})` : "Chưa có đánh giá"}
           </span>
         </div>
 
@@ -68,9 +70,11 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
 
         <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
-          <div>{product.capacity_btu.toLocaleString("vi-VN")} BTU</div>
+          <div>{product.capacity_btu > 0 ? `${product.capacity_btu.toLocaleString("vi-VN")} BTU` : "Chưa có công suất"}</div>
           <div>
-            {product.recommended_area_min}–{product.recommended_area_max} m²
+            {product.recommended_area_max > 0
+              ? `${product.recommended_area_min}–${product.recommended_area_max} m²`
+              : "Chưa có diện tích"}
           </div>
           <div>{product.energy_rating}</div>
           <div>{product.noise_db === null ? "Chưa có dữ liệu" : `${product.noise_db} dB`}</div>
@@ -78,10 +82,10 @@ export function ProductCard({ product }: { product: Product }) {
 
         <p
           className={`mt-3 flex items-center gap-1.5 text-xs font-semibold ${
-            isOut ? "text-destructive" : "text-success"
+            isUnavailable ? "text-muted-foreground" : "text-success"
           }`}
         >
-          <span className={`h-1.5 w-1.5 rounded-full ${isOut ? "bg-destructive" : "bg-success"}`} />
+          <span className={`h-1.5 w-1.5 rounded-full ${isUnavailable ? "bg-muted-foreground" : "bg-success"}`} />
           {stockLabel(product.stock_status)}
         </p>
 
@@ -91,7 +95,7 @@ export function ProductCard({ product }: { product: Product }) {
           </Button>
           <Button
             size="sm"
-            disabled={isOut}
+            disabled={isUnavailable}
             onClick={() => {
               addCart(product);
               toast.success("Đã thêm vào giỏ hàng");

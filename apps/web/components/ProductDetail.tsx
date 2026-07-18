@@ -39,14 +39,14 @@ export function ProductDetail({ slug }: { slug: string }) {
     );
 
   const specs: [string, string][] = [
-    ["Công suất", `${product.capacity_btu.toLocaleString("vi-VN")} BTU (${product.horsepower} HP)`],
-    ["Diện tích phù hợp", `${product.recommended_area_min}–${product.recommended_area_max} m²`],
-    ["Công nghệ", product.inverter ? "Inverter" : "Non-inverter"],
+    ["Công suất", product.capacity_btu > 0 ? `${product.capacity_btu.toLocaleString("vi-VN")} BTU (${product.horsepower} HP)` : "Chưa có dữ liệu"],
+    ["Diện tích phù hợp", product.recommended_area_max > 0 ? `${product.recommended_area_min}–${product.recommended_area_max} m²` : "Chưa có dữ liệu"],
+    ["Công nghệ", product.inverter ? "Inverter" : "Không Inverter"],
     ["Độ ồn", product.noise_db === null ? "Chưa có dữ liệu" : `${product.noise_db} dB`],
     ["Nhãn năng lượng", product.energy_rating],
-    ["Bảo hành", `${product.warranty_months} tháng`],
+    ["Bảo hành", product.warranty_months > 0 ? `${product.warranty_months} tháng` : "Chưa có dữ liệu"],
   ];
-  const isOut = product.stock_status === "out_of_stock";
+  const isUnavailable = !["in_stock", "low_stock"].includes(product.stock_status);
 
   return (
     <div className="container py-8">
@@ -75,16 +75,20 @@ export function ProductDetail({ slug }: { slug: string }) {
           <h1 className="mt-2 font-heading text-3xl font-extrabold leading-tight">{product.name}</h1>
           <p className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
             <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-            {product.rating} · {product.review_count} đánh giá
+            {product.review_count > 0
+              ? `${product.rating} · ${product.review_count} đánh giá`
+              : "Chưa có đánh giá"}
           </p>
 
           <div className="mt-6 flex items-baseline gap-3">
             <span className="text-3xl font-extrabold text-destructive">
               {formatPrice(product.sale_price)}
             </span>
-            <span className="text-muted-foreground line-through">
-              {formatPrice(product.original_price)}
-            </span>
+            {Number(product.original_price) > Number(product.sale_price) && (
+              <span className="text-muted-foreground line-through">
+                {formatPrice(product.original_price)}
+              </span>
+            )}
           </div>
 
           {product.promotion && (
@@ -96,11 +100,12 @@ export function ProductDetail({ slug }: { slug: string }) {
 
           <p
             className={`mt-4 flex items-center gap-2 font-semibold ${
-              isOut ? "text-destructive" : "text-success"
+              isUnavailable ? "text-muted-foreground" : "text-success"
             }`}
           >
-            <span className={`h-2 w-2 rounded-full ${isOut ? "bg-destructive" : "bg-success"}`} />
-            {stockLabel(product.stock_status)} · {product.stock_quantity} sản phẩm
+            <span className={`h-2 w-2 rounded-full ${isUnavailable ? "bg-muted-foreground" : "bg-success"}`} />
+            {stockLabel(product.stock_status)}
+            {product.stock_status !== "unknown" && ` · ${product.stock_quantity} sản phẩm`}
           </p>
 
           <p className="mt-5 leading-7 text-muted-foreground">{product.short_description}</p>
@@ -108,7 +113,7 @@ export function ProductDetail({ slug }: { slug: string }) {
           <div className="mt-7 flex flex-wrap gap-3">
             <Button
               size="lg"
-              disabled={isOut}
+              disabled={isUnavailable}
               onClick={() => {
                 add(product);
                 toast.success("Đã thêm vào giỏ hàng");
@@ -143,16 +148,16 @@ export function ProductDetail({ slug }: { slug: string }) {
             <ShieldCheck className="h-6 w-6 text-success" />
             <h2 className="mt-3 font-heading font-bold">Chính sách bảo hành</h2>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Bảo hành chính hãng {product.warranty_months} tháng. Hỗ trợ đổi mới theo điều kiện của
-              nhà sản xuất.
+              {product.warranty_months > 0
+                ? `Bảo hành chính hãng ${product.warranty_months} tháng theo điều kiện của nhà sản xuất.`
+                : "Chưa có dữ liệu bảo hành từ nhà sản xuất."}
             </p>
           </section>
           <section className="rounded-2xl border border-border bg-card p-6 shadow-card">
             <h2 className="font-heading font-bold">Đánh giá gần đây</h2>
-            <p className="mt-3 text-sm italic leading-6 text-muted-foreground">
-              “Làm lạnh nhanh, giao lắp đúng hẹn. Thông tin tư vấn dễ hiểu.”
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              Chưa có đánh giá thực tế cho sản phẩm này.
             </p>
-            <p className="mt-2 text-xs text-muted-foreground">— Khách hàng demo</p>
           </section>
         </div>
       </div>
