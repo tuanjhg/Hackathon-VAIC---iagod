@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, ForeignKey, String, Text
+from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.core.database import Base
@@ -14,7 +14,9 @@ class Promotion(Base):
     __tablename__ = "promotions"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), unique=True)
+    product_id: Mapped[int] = mapped_column(
+        BigInteger().with_variant(Integer, "sqlite"), ForeignKey("products.id"), unique=True
+    )
     title: Mapped[str] = mapped_column(String(180))
     description: Mapped[str] = mapped_column(Text)
     valid_from: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

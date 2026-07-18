@@ -6,10 +6,26 @@ from fastapi import HTTPException, status
 from src.models import Product
 from src.repositories.product_repository import ProductRepository
 from src.schemas.common import PaginatedResponse
-from src.schemas.product import ProductRead, PromotionRead
+from src.schemas.product import (
+    ProductRead,
+    ProductSearchRequest,
+    ProductSearchResponse,
+    PromotionRead,
+)
 
 
 def serialize_product(product: Product) -> ProductRead:
+    current_offer = next((offer for offer in product.offers if offer.is_current), None)
+    original_price = (
+        current_offer.original_price
+        if current_offer and current_offer.original_price is not None
+        else product.price.original_price
+    )
+    sale_price = (
+        current_offer.sale_price
+        if current_offer and current_offer.sale_price is not None
+        else product.price.sale_price
+    )
     return ProductRead(
         id=product.id,
         sku=product.sku,
@@ -17,9 +33,10 @@ def serialize_product(product: Product) -> ProductRead:
         name=product.name,
         brand=product.brand,
         category=product.category.name,
-        original_price=product.price.original_price,
-        sale_price=product.price.sale_price,
-        currency=product.price.currency,
+        category_slug=product.category.slug,
+        original_price=original_price,
+        sale_price=sale_price,
+        currency=current_offer.currency if current_offer else product.price.currency,
         capacity_btu=product.specs.capacity_btu,
         horsepower=product.specs.horsepower,
         recommended_area_min=product.specs.recommended_area_min,
@@ -45,6 +62,7 @@ def serialize_product(product: Product) -> ProductRead:
         rating=product.rating,
         review_count=product.review_count,
         featured=product.featured,
+        specifications=product.specs.raw_specs or product.specifications,
     )
 
 
@@ -69,10 +87,22 @@ class ProductService:
         )
 
     def get_product(self, slug: str) -> ProductRead:
-        product = self.repository.get_by_slug(slug)
+        product = self.repository.get_by_identifier(slug)
         if product is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
         return serialize_product(product)
+
+    def search_products(self, request: ProductSearchRequest) -> ProductSearchResponse:
+        try:
+            products, total = self.repository.search_facets(request)
+        except ValueError as exc:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
+        return ProductSearchResponse(
+            items=[serialize_product(product) for product in products],
+            total=total,
+            limit=request.limit,
+            offset=request.offset,
+        )
 
     def products_for_need(
         self, room_area: float, budget_max: int | None, priority: str
