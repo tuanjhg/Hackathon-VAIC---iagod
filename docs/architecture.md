@@ -4,7 +4,7 @@
 
 ## Mục tiêu
 
-Hệ thống là monorepo gồm một Next.js storefront, một FastAPI service, PostgreSQL, và — khi lên AI-Native — một vLLM service tự host. Phase skeleton (đã xong) ưu tiên luồng dữ liệu rõ ràng, khả năng test và các seam để thay mock advisor bằng pipeline AI thật; pipeline đó nay đã có kiến trúc chốt.
+Hệ thống là monorepo gồm một Next.js storefront, một FastAPI service, PostgreSQL, và — khi lên AI-Native — một LLM qua API (Qwen3.6-27B, OpenRouter — ADR A2'', không tự host). Phase skeleton (đã xong) ưu tiên luồng dữ liệu rõ ràng, khả năng test và các seam để thay mock advisor bằng pipeline AI thật; pipeline đó nay đã có kiến trúc chốt.
 
 ```text
 Browser
@@ -12,9 +12,9 @@ Browser
        ├─ TanStack Query ──────────────┐
        └─ Zustand (cart/compare/chat)  │
                                       ▼
-                              FastAPI /api/v1  ◄──router OpenAI-compatible (ADR A6)──  vLLM
-                               ├─ Routes                                              (Qwen3-32B FP8,
-                               ├─ Services                                             self-host, §6.9)
+                              FastAPI /api/v1  ◄──router OpenAI-compatible (ADR A6)──  OpenRouter API
+                               ├─ Routes                                              (Qwen3.6-27B,
+                               ├─ Services                                             ADR A2'', §6.9)
                                │   ├─ Product/Comparison
                                │   ├─ MockChat (rules — đang chạy)
                                │   └─ Pipeline S1–S8 (kế hoạch — xem pipelines.md §6)
@@ -51,7 +51,7 @@ Hệ quả cho code: khu vực cần control UI thật và không được lẫn
 
 - `apps/api/src/pipeline/`: stage S1–S8, mỗi stage một module, theo `dmx-ai-workflow-v1.md` §3.
 - `apps/api/src/tools/`: 5 tool MCP-compatible (`catalog_search`, `price_promo_stock`, `policy_faq`, `review_summary`, `need_profile`) — ADR A5.
-- `apps/api/src/router/`: client OpenAI-compatible trỏ vLLM + fallback cloud khi tắt vLLM — ADR A6.
+- `apps/api/src/router/`: client OpenAI-compatible trỏ API OpenRouter (Qwen3.6-27B, ADR A2''), fallback chưa chọn provider thứ 2 — ADR A6. Đã build, xem `apps/api/src/router/client.py`.
 - `apps/api/src/verifier/`: per-claim verification, numeric/enum matching — ADR C6.
 - `apps/api/src/compiler/` (batch, ngoài request path): Category Profile Compiler — ADR A7.
 

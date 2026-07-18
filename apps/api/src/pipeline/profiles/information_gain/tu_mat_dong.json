@@ -1,0 +1,59 @@
+{
+  "dung_tich_l": {
+    "entropy": 5.8224,
+    "n_samples": 222,
+    "priority_rank": 1,
+    "fields": {
+      "specs_raw.Dung tích tổng": {
+        "path": "specs_raw.Dung tích tổng",
+        "entropy": 5.8224,
+        "n_buckets": 97,
+        "n_missing": 22
+      }
+    }
+  },
+  "so_cua": {
+    "entropy": 1.6572,
+    "n_samples": 222,
+    "priority_rank": 2,
+    "fields": {
+      "specs_raw.Số cửa": {
+        "path": "specs_raw.Số cửa",
+        "entropy": 1.5421,
+        "n_buckets": 4,
+        "n_missing": 23
+      },
+      "specs_raw.Số ngăn": {
+        "path": "specs_raw.Số ngăn",
+        "entropy": 1.7723,
+        "n_buckets": 5,
+        "n_missing": 11
+      }
+    }
+  },
+  "tiet_kiem_dien": {
+    "entropy": 1.2524,
+    "n_samples": 222,
+    "priority_rank": 3,
+    "fields": {
+      "specs_raw.Công nghệ tiết kiệm điện": {
+        "path": "specs_raw.Công nghệ tiết kiệm điện",
+        "entropy": 1.2524,
+        "n_buckets": 4,
+        "n_missing": 14
+      }
+    }
+  },
+  "ranked_slots": [
+    "dung_tich_l",
+    "so_cua",
+    "tiet_kiem_dien"
+  ],
+  "_meta": {
+    "category_key": "tu_mat_dong",
+    "category_label": "Tủ mát, tủ đông",
+    "n_records": 222,
+    "unscored_slots": [],
+    "generated_by": "scripts/compute_information_gain.py"
+  }
+}

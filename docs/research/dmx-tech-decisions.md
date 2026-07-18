@@ -14,10 +14,29 @@
 - **Trình bày với giám khảo**: đây vẫn là "agentic workflow" — LLM là bộ não định tuyến + diễn đạt, tools là MCP-compatible; điểm AI-Native nằm ở "LLM quyết định hỏi gì/khi nào đủ", không nằm ở vòng lặp tự do
 - **Rủi ro**: câu hỏi ngoài luồng thiết kế → lối thoát: intent `hỏi_chi_tiết_SP` có nhánh function-calling tự do (hermes parser) trong phạm vi 4 tool read-only
 
-### A2. Model chính: Qwen3-32B FP8, tắt thinking mode 🧪
-- **Chọn**: `Qwen3-32B` FP8 trên vLLM, `enable_thinking=False` (chat template arg) — thinking mode đốt token + phá latency budget
+### A2. Model chính: Qwen3-32B FP8, tắt thinking mode 🧪 — ⚠️ SUPERSEDED (18/07, xem A2')
+- **Chọn (gốc)**: `Qwen3-32B` FP8 trên vLLM tự host, `enable_thinking=False` (chat template arg) — thinking mode đốt token + phá latency budget
 - **Thay vì**: Qwen2.5-32B-Instruct (cũ hơn nhưng đã chứng minh; là fallback nếu Qwen3 gặp vấn đề template/tool parser) · 72B (đã loại — VRAM/latency, xem phân tích trước) · 14B (dự phòng nếu benchmark 32B không đạt p95)
 - **Rủi ro**: chất lượng tiếng Việt 32B kém kỳ vọng → lối thoát đã cài sẵn: eval harness so 32B vs 14B vs cloud API trên D3/D6 ngay Phase 0, số quyết định chứ không phải cảm giác
+- **Ghi chú superseded**: giữ nguyên để tham khảo benchmark gate 1-4 (`scripts/bench/`) — logic đo p95/TTFT/clean-run vẫn áp dụng được cho A2', chỉ có hạ tầng phục vụ đổi.
+
+### A2'. Model chính (revised 18/07): Qwen3.6-27B qua API key FPT AI Factory — KHÔNG tự host vLLM — ⚠️ SUPERSEDED (18/07, cùng ngày, xem A2'')
+- **Chọn**: gọi model qua managed inference API của **FPT AI Factory** bằng API key (OpenAI-compatible, qua router A6) — không thuê/khởi động VM GPU, không tự vận hành vLLM
+- **Thay vì**: self-host Qwen3-32B FP8 trên VM H100 thuê (A2 gốc) — loại vì: (a) API có sẵn ngay, không tốn thời gian dựng hạ tầng + benchmark flag vLLM trong ngân sách 24h còn lại; (b) không còn giới hạn cứng 10h GPU credit — API tính phí theo request/token, vận hành đơn giản hơn nhiều cho một team nhỏ trong hackathon; (c) đổi model cụ thể (27B thay vì 32B) theo đúng model FPT AI Factory cung cấp sẵn
+- **Ghi chú superseded**: đổi tiếp sang OpenRouter (A2'') chỉ vài giờ sau — giữ lại đây vì lý do "không self-host" vẫn đúng, chỉ đổi provider cụ thể.
+
+### A2''. Model chính (revised 18/07, lần 2): Qwen3.6-27B qua API key OpenRouter — không dùng FPT AI Factory
+- **Chọn**: gọi model qua **OpenRouter** bằng API key (OpenAI-compatible, qua router A6, base_url `https://openrouter.ai/api/v1`) — cùng router code với A2', chỉ đổi config
+- **Thay vì**: FPT AI Factory (A2', huỷ trong ngày) · self-host vLLM (A2 gốc)
+- **Hệ quả cho benchmark gate**: Gate 1 (p95 S2) và Gate 4 (clean guided_json + tool-call) chạy bằng cách trỏ `VLLM_BASE_URL`/`VLLM_MODEL` sang OpenRouter. Gate 2 vẫn archived (không tự host, không có flag server để chỉnh) — không đổi so với A2'.
+- **Fallback**: chưa chọn provider dự phòng thứ 2 (chỉ còn 1 provider = OpenRouter cho cả primary) — `LLM_FALLBACK_ENABLED=false` mặc định; bật khi có key dự phòng thật.
+- **Roadmap pilot**: self-host vẫn là hướng đúng khi traffic đủ lớn để amortize chi phí GPU rental so với API theo token (nói trong pitch nếu bị hỏi về chi phí dài hạn).
+
+**XÁC NHẬN THẬT 18/07 (Gate 1 + Gate 4 chạy với key thật):**
+- Slug `qwen/qwen3.6-27b` **có tồn tại thật** trong catalog OpenRouter — xác nhận qua `GET /api/v1/models`.
+- **Phát hiện quan trọng**: tham số tắt reasoning của vLLM (`extra_body.chat_template_kwargs.enable_thinking`) **bị OpenRouter âm thầm bỏ qua** — model vẫn suy luận đầy đủ (1498 reasoning token trong 1 lần thử, 25.8s, `content` trả về `null`/sai schema). Phải dùng tham số chuẩn của OpenRouter: **`"reasoning": {"enabled": false}`**. Đã sửa `apps/api/src/pipeline/s2_extract.py` và `scripts/bench/gate1_s2_latency.py`/`gate4_qwen3_clean_run.py`/`gate2_vllm_flags.py` (archived) dùng đúng tham số này — bất kỳ code nào gọi router sau này với model OpenRouter phải dùng `reasoning`, không dùng `chat_template_kwargs`.
+- Sau khi sửa: **Gate 4 = 10/10 PASS** (5 guided_json + 5 tool-call, đều sạch).
+- **Gate 1 = FAIL rõ ràng**: p50 3.8s, **p95 7.4s**, p99 9.0s — vượt ngưỡng <700ms hơn **10 lần**. Khác hẳn kỳ vọng self-host (không có prefix caching giữa các lượt gọi vì OpenRouter đổi provider backend ngẫu nhiên mỗi request — quan sát được "Phala", "Alibaba", "SiliconFlow" luân phiên). **Đây là rủi ro thật cho H3 (<3s hỏi ngược, <5s top-3)** ở kiến trúc hiện tại — S2 gọi API ngoài, không phải model tại chỗ. Cần quyết định tiếp: thử model Qwen nhỏ hơn trên OpenRouter cho riêng S2 (ADR A3 — tách model), thử ghim 1 provider cụ thể qua tham số `provider` của OpenRouter, hoặc chấp nhận rủi ro trễ SLA và nêu rõ trong pitch.
 
 ### A3. Một model dùng chung cho S2 + S6 trước, chỉ tách khi benchmark bắt buộc 🧪
 - **Chọn**: 32B làm cả extraction (S2) lẫn generation (S6); S2 dùng prompt ngắn + guided decoding + prefix caching → nhanh
@@ -50,7 +69,7 @@
 - **Chọn**: đạt "ngôn ngữ bình dị, ít thông số" bằng 4 đòn bẩy không-training: (1) system prompt style guide + 2–3 few-shot mẫu giọng chuẩn; (2) statement templates + cards đã tách thông số ra khỏi lời văn về mặt cấu trúc; (3) **bảng quy đổi cảm nhận** (glossary tool: inverter → "tự điều chỉnh công suất, đỡ tốn điện"; 24dB → "êm hơn tiếng thì thầm"; BTU → "sức làm lạnh") — deterministic, nhét vào template; (4) vòng lặp prompt-eval: LLM-judge câu #2 "bình dân" chấm → sửa prompt → chạy lại, đạt hiệu quả của fine-tune với chi phí ≈0 GPU
 - **Thay vì**: LoRA/QLoRA SFT trên 32B — bị loại vì: (a) style là bài prompt giải tốt với instruct model 32B, fine-tune là dùng búa tạ đóng đinh mũ; (b) không có dataset (cần hàng nghìn cặp hội thoại tư vấn giọng chuẩn — tự sinh + QA tốn hơn 10h credit hiện có); (c) rủi ro thật: SFT lệch làm **thoái hóa tool-calling/guided-JSON** — vỡ S2 là vỡ cả pipeline; (d) mỗi giờ training = một giờ mất khỏi serving/demo trong quỹ 10h
 - **Roadmap pilot** (nói trong pitch nếu bị hỏi): sau 3 tháng pilot có corpus hội thoại thật → LoRA style + DPO từ feedback nhân viên duyệt — lúc đó mới có data và có lý
-- **Hệ quả ràng buộc 10h credit**: mọi dev logic chạy qua router (A6) trỏ **API cloud/model nhỏ local**; H100 chỉ bật theo **cửa sổ tập trung** (xem ngân sách GPU trong master plan §5b); style iteration bắt buộc làm trong cửa sổ H100 vì giọng văn là thứ model-specific
+- **Hệ quả ràng buộc 10h credit (SUPERSEDED 18/07 — xem A2')**: mục này viết khi kế hoạch còn tự host vLLM trên GPU thuê. Từ A2' trở đi, model chính là API FPT AI Factory (không giới hạn giờ GPU cứng) — mọi dev logic + style iteration chạy trực tiếp qua router (A6) trỏ API đó, không cần "cửa sổ tập trung" nữa. `LLM_FALLBACK_*` (OpenRouter) vẫn là lối thoát khi API FPT lỗi/quá tải, không phải lối thoát cho giới hạn giờ GPU.
 
 ## Nhóm B — Data & Retrieval
 
