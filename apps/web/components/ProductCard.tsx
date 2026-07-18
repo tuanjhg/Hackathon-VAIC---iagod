@@ -19,6 +19,9 @@ export function ProductCard({ product }: { product: Product }) {
   const discount = originalPrice > 0 && salePrice > 0
     ? Math.max(0, Math.round((1 - salePrice / originalPrice) * 100))
     : 0;
+  const genericSpecs = Object.entries(product.specifications)
+    .filter(([, value]) => ["string", "number", "boolean"].includes(typeof value))
+    .slice(0, 4);
 
   const handleCompare = () => {
     const before = useComparisonStore.getState().products;
@@ -46,7 +49,9 @@ export function ProductCard({ product }: { product: Product }) {
 
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-center justify-between text-xs">
-          <span className="font-bold uppercase tracking-wide text-primary">{product.brand}</span>
+          <span className="font-bold uppercase tracking-wide text-primary">
+            {product.brand} · {product.category}
+          </span>
           <span className="flex items-center gap-1 text-muted-foreground">
             <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
             {product.review_count > 0 ? `${product.rating} (${product.review_count})` : "Chưa có đánh giá"}
@@ -69,16 +74,26 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </div>
 
-        <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
-          <div>{product.capacity_btu > 0 ? `${product.capacity_btu.toLocaleString("vi-VN")} BTU` : "Chưa có công suất"}</div>
-          <div>
-            {product.recommended_area_max > 0
-              ? `${product.recommended_area_min}–${product.recommended_area_max} m²`
-              : "Chưa có diện tích"}
-          </div>
-          <div>{product.energy_rating}</div>
-          <div>{product.noise_db === null ? "Chưa có dữ liệu" : `${product.noise_db} dB`}</div>
-        </dl>
+        {product.category_slug === "may-lanh" ? (
+          <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
+            <div>{product.capacity_btu > 0 ? `${product.capacity_btu.toLocaleString("vi-VN")} BTU` : "Chưa có công suất"}</div>
+            <div>
+              {product.recommended_area_max > 0
+                ? `${product.recommended_area_min}–${product.recommended_area_max} m²`
+                : "Chưa có diện tích"}
+            </div>
+            <div>{product.energy_rating}</div>
+            <div>{product.noise_db === null ? "Chưa có dữ liệu" : `${product.noise_db} dB`}</div>
+          </dl>
+        ) : (
+          <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
+            {genericSpecs.map(([key, value]) => (
+              <div key={key} className="truncate" title={`${specLabel(key)}: ${specValue(value)}`}>
+                {specValue(value)}
+              </div>
+            ))}
+          </dl>
+        )}
 
         <p
           className={`mt-3 flex items-center gap-1.5 text-xs font-semibold ${
@@ -112,6 +127,15 @@ export function ProductCard({ product }: { product: Product }) {
       </div>
     </article>
   );
+}
+
+function specLabel(key: string) {
+  return key.replaceAll("_", " ");
+}
+
+function specValue(value: unknown) {
+  if (typeof value === "boolean") return value ? "Có" : "Không";
+  return String(value);
 }
 
 export function ProductCardSkeleton() {

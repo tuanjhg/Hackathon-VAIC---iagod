@@ -38,7 +38,7 @@ export function ProductDetail({ slug }: { slug: string }) {
       </div>
     );
 
-  const specs: [string, string][] = [
+  const airConditionerSpecs: [string, string][] = [
     ["Công suất", product.capacity_btu > 0 ? `${product.capacity_btu.toLocaleString("vi-VN")} BTU (${product.horsepower} HP)` : "Chưa có dữ liệu"],
     ["Diện tích phù hợp", product.recommended_area_max > 0 ? `${product.recommended_area_min}–${product.recommended_area_max} m²` : "Chưa có dữ liệu"],
     ["Công nghệ", product.inverter ? "Inverter" : "Không Inverter"],
@@ -46,6 +46,10 @@ export function ProductDetail({ slug }: { slug: string }) {
     ["Nhãn năng lượng", product.energy_rating],
     ["Bảo hành", product.warranty_months > 0 ? `${product.warranty_months} tháng` : "Chưa có dữ liệu"],
   ];
+  const genericSpecs: [string, string][] = Object.entries(product.specifications)
+    .filter(([, value]) => value !== null && value !== "" && typeof value !== "object")
+    .map(([key, value]) => [specLabel(key), specValue(value)]);
+  const specs = product.category_slug === "may-lanh" ? airConditionerSpecs : genericSpecs;
   const isUnavailable = !["in_stock", "low_stock"].includes(product.stock_status);
 
   return (
@@ -69,7 +73,9 @@ export function ProductDetail({ slug }: { slug: string }) {
 
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-bold uppercase tracking-wider text-primary">{product.brand}</span>
+            <span className="font-bold uppercase tracking-wider text-primary">
+              {product.brand} · {product.category}
+            </span>
             {product.inverter && <Badge variant="accent">Inverter</Badge>}
           </div>
           <h1 className="mt-2 font-heading text-3xl font-extrabold leading-tight">{product.name}</h1>
@@ -163,6 +169,16 @@ export function ProductDetail({ slug }: { slug: string }) {
       </div>
     </div>
   );
+}
+
+function specLabel(key: string) {
+  const words = key.replaceAll("_", " ");
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
+function specValue(value: unknown) {
+  if (typeof value === "boolean") return value ? "Có" : "Không";
+  return String(value);
 }
 
 function DetailSkeleton() {

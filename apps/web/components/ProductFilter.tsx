@@ -1,16 +1,12 @@
 "use client";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import type { ProductFilters } from "@/types";
-
-const BRANDS = [
-  "LG", "Panasonic", "Daikin", "Samsung", "Gree", "Toshiba", "Aqua",
-  "Sharp", "Casper", "Midea", "Comfee", "Tcl", "Nagakawa",
-  "Mitsubishi Heavy", "Funiki", "Electrolux", "Beko",
-];
+import { api } from "@/lib/api";
 
 export function ProductFilter({
   filters,
@@ -20,11 +16,17 @@ export function ProductFilter({
   onChange: (filters: ProductFilters) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: api.categories,
+  });
   const update = (key: keyof ProductFilters, value: string | number | boolean | undefined) =>
     onChange({ ...filters, [key]: value, page: 1 });
+  const showAirConditionerFilters = !filters.category || filters.category === "may-lanh";
 
   const activeCount = [
     filters.search,
+    filters.category,
     filters.brand,
     filters.max_price,
     filters.room_area,
@@ -72,6 +74,26 @@ export function ProductFilter({
           />
         </Field>
 
+        <Field label="Ngành hàng">
+          <Select
+            aria-label="Ngành hàng"
+            value={filters.category ?? ""}
+            onValueChange={(value) =>
+              onChange({
+                ...filters,
+                category: value || undefined,
+                room_area: undefined,
+                inverter: undefined,
+                page: 1,
+              })
+            }
+            options={[
+              { value: "", label: "Tất cả 14 ngành hàng" },
+              ...categories.map((category) => ({ value: category.slug, label: category.name })),
+            ]}
+          />
+        </Field>
+
         <Field label="Khoảng giá">
           <Select
             aria-label="Khoảng giá"
@@ -87,37 +109,37 @@ export function ProductFilter({
         </Field>
 
         <Field label="Thương hiệu">
-          <Select
-            aria-label="Thương hiệu"
+          <Input
             value={filters.brand ?? ""}
-            onValueChange={(v) => update("brand", v || undefined)}
-            options={[
-              { value: "", label: "Tất cả" },
-              ...BRANDS.map((brand) => ({ value: brand, label: brand })),
-            ]}
+            onChange={(event) => update("brand", event.target.value || undefined)}
+            placeholder="Nhập thương hiệu"
           />
         </Field>
 
-        <Field label="Diện tích phòng">
-          <Select
-            aria-label="Diện tích phòng"
-            value={filters.room_area != null ? String(filters.room_area) : ""}
-            onValueChange={(v) => update("room_area", v ? Number(v) : undefined)}
-            options={[
-              { value: "", label: "Tất cả" },
-              { value: "12", label: "Dưới 15 m²" },
-              { value: "18", label: "15–20 m²" },
-              { value: "25", label: "20–30 m²" },
-            ]}
-          />
-        </Field>
+        {showAirConditionerFilters && (
+          <Field label="Diện tích phòng">
+            <Select
+              aria-label="Diện tích phòng"
+              value={filters.room_area != null ? String(filters.room_area) : ""}
+              onValueChange={(v) => update("room_area", v ? Number(v) : undefined)}
+              options={[
+                { value: "", label: "Tất cả" },
+                { value: "12", label: "Dưới 15 m²" },
+                { value: "18", label: "15–20 m²" },
+                { value: "25", label: "20–30 m²" },
+              ]}
+            />
+          </Field>
+        )}
 
         <div className="grid gap-3 border-t border-border pt-4">
-          <Toggle
-            checked={filters.inverter === true}
-            onChange={(v) => update("inverter", v || undefined)}
-            label="Chỉ máy Inverter"
-          />
+          {showAirConditionerFilters && (
+            <Toggle
+              checked={filters.inverter === true}
+              onChange={(v) => update("inverter", v || undefined)}
+              label="Chỉ máy Inverter"
+            />
+          )}
           <Toggle
             checked={filters.in_stock === true}
             onChange={(v) => update("in_stock", v || undefined)}

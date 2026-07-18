@@ -16,6 +16,7 @@ dist/
 .DS_Store
 .agents
 .test-tmp/
+.pytest-tmp*
 # Legacy local vector database; production retrieval uses PostgreSQL/pgvector.
 data/vector/*.sqlite3
 data/vector/*.sqlite3-shm

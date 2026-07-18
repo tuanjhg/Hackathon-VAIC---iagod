@@ -1,6 +1,8 @@
 # NeedWise Copilot
 
-## Import catalog CSV vào PostgreSQL
+## Legacy raw-table importer
+
+> `scripts/import_catalog.py` được giữ để đối chiếu/khôi phục 14 bảng raw cũ. Nguồn catalog chính của API là hybrid schema và importer `python -m app.importers.csv_importer` được mô tả ở phần **Migration và đồng bộ catalog** bên dưới. Không chạy legacy sync sau hybrid import vì thao tác đó không tạo typed facets.
 
 Script [`scripts/import_catalog.py`](scripts/import_catalog.py) đọc 14 file CSV, tự nhận diện
 encoding/delimiter/header, chuẩn hóa cột, suy luận schema và import mỗi ngành hàng vào một
@@ -156,17 +158,17 @@ Các lỗi thường gặp:
 - Dữ liệu mới dài hơn schema `VARCHAR` cũ hoặc không phù hợp kiểu cũ: dùng `ALTER TABLE`
   có kiểm soát, hoặc sau khi sao lưu dùng `--mode replace` để suy luận lại schema.
 
-Skeleton chạy được cho ứng dụng **AI Product Comparison Advisor Based on Real Customer Needs**, tập trung ngành hàng máy lạnh. Người dùng có thể duyệt/filter catalog, xem chi tiết, thêm giỏ, so sánh tối đa ba sản phẩm và đi qua flow tư vấn rule-based hai bước để nhận ba đề xuất từ API.
+Ứng dụng **AI Product Comparison Advisor Based on Real Customer Needs** phục vụ catalog thực tế 8.746 sản phẩm thuộc 14 ngành hàng. Người dùng có thể lọc theo ngành hàng/giá/thương hiệu, xem thông số đặc thù, thêm giỏ và so sánh tối đa ba sản phẩm. Flow tư vấn rule-based hiện vẫn tập trung vào máy lạnh.
 
 ## Tech stack
 
 - Web: Next.js 15, TypeScript, Tailwind CSS, shadcn/ui conventions, TanStack Query, Zustand, Vitest.
 - API: Python 3.12, FastAPI, Pydantic v2, SQLAlchemy 2, Alembic, Pytest.
-- Data/deploy: PostgreSQL 16, Docker, Docker Compose.
+- Data/deploy: PostgreSQL 16+ (Neon hiện dùng PostgreSQL 17), Docker, Docker Compose.
 
 ## Kiến trúc
 
-Frontend chỉ giao tiếp qua REST API. FastAPI route gọi service, service gọi repository; route không query database. Dữ liệu PostgreSQL được chuẩn hóa thành category, product, specs, price, inventory và promotion. Xem [tài liệu kiến trúc](docs/architecture.md) và [pipeline backend/frontend](docs/pipelines.md).
+Frontend chỉ giao tiếp qua REST API. FastAPI route gọi service, service gọi repository; route không query database. Catalog dùng kiến trúc **Hybrid Relational + JSONB + Typed Facet Index**: dữ liệu chung ở `products`/`brands`/`categories`, thông số đầy đủ ở `product_specs`, giá lịch sử ở `product_offers`, còn các thuộc tính cần lọc/so sánh ở `product_attribute_values`. Xem [báo cáo migration hybrid](docs/hybrid-database-migration.md), [tài liệu kiến trúc](docs/architecture.md) và [pipeline backend/frontend](docs/pipelines.md).
 
 ## Cấu trúc thư mục
 
@@ -192,7 +194,15 @@ cp .env.example .env
 docker compose up --build
 ```
 
-Compose đợi PostgreSQL healthy, chạy migration, đồng bộ catalog thực tế idempotent rồi khởi động API. Truy cập:
+Compose đợi PostgreSQL healthy, chạy migration, seed metadata idempotent và index policy RAG rồi khởi động API. Import CSV là thao tác chủ động, không chạy lại mỗi lần restart API.
+
+Import catalog sau khi stack đã chạy:
+
+```bash
+docker compose run --rm api python -m src.importers.csv_importer --directory /app/data/realdata/raw/clean --update-existing
+```
+
+Truy cập:
 
 - Frontend: http://localhost:3000
 - Backend OpenAPI: http://localhost:8000/docs
@@ -219,12 +229,14 @@ Khi stack đang chạy:
 
 ```bash
 docker compose exec api alembic upgrade head
-docker compose exec api python -m src.seed.sync_catalog_products
+docker compose exec api python -m src.db.seed
+docker compose run --rm api python -m src.importers.csv_importer --directory /app/data/realdata/raw/clean --update-existing
 ```
 
 Hoặc dùng container one-off: `make migrate` và `make seed`. Lệnh đồng bộ đọc bảng
-`air_conditioners` đã import, upsert 1.039 SKU thực tế và loại các SKU demo cũ trong ngành
-hàng máy lạnh. Lệnh có thể chạy lặp lại mà không nhân bản dữ liệu.
+cả 14 CSV, ghi lineage vào `import_batches`/`raw_product_rows`, upsert 8.746 SKU, chuẩn hóa
+`product_specs.normalized_specs` và tạo typed facets. Giá thay đổi sẽ đóng offer hiện tại và
+tạo offer mới; chạy lại với dữ liệu không đổi không nhân bản product hoặc current offer.
 
 Tạo migration mới sau khi đổi model:
 
@@ -240,11 +252,19 @@ API (mặc định dùng SQLite để phát triển nhanh nếu chưa đặt `DA
 python -m venv .venv
 # Windows: .venv\Scripts\activate
 # macOS/Linux: source .venv/bin/activate
-pip install -e "./apps/api[dev]"
+pip install -r requirements.txt
 cd apps/api
 alembic upgrade head
-python -m src.seed.sync_catalog_products
-uvicorn src.main:app --reload --port 8000
+python -m app.db.seed
+python -m app.importers.csv_importer --directory ../../data/realdata/raw/clean --update-existing
+pytest
+uvicorn app.main:app --reload --port 8000
+```
+
+Nếu đặt CSV trong `data/products` của working directory, lệnh canonical là:
+
+```bash
+python -m app.importers.csv_importer --directory data/products
 ```
 
 Web ở terminal khác:

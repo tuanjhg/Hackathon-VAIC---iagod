@@ -1,4 +1,4 @@
-import type { ChatContext, ChatResponse, Comparison, Product, ProductFilters, ProductPage } from "@/types";
+import type { Category, ChatContext, ChatResponse, Comparison, Product, ProductFilters, ProductPage } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
 
@@ -9,6 +9,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export const api = {
+  categories: () => request<Category[]>("/categories"),
   products: (filters: ProductFilters = {}) => {
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => { if (value !== undefined && value !== "") params.set(key, String(value)); });
@@ -18,4 +19,3 @@ export const api = {
   compare: (ids: number[]) => request<Comparison>("/compare", { method: "POST", body: JSON.stringify({ product_ids: ids }) }),
   chat: (sessionId: string, message: string, context: ChatContext) => request<ChatResponse>("/chat/messages", { method: "POST", body: JSON.stringify({ session_id: sessionId, message, context }) }),
 };
-

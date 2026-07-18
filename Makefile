@@ -13,7 +13,10 @@ migrate:
 	docker compose run --rm api alembic upgrade head
 
 seed:
-	docker compose run --rm api python -m src.seed.sync_catalog_products
+	docker compose run --rm api python -m src.db.seed
+
+import-catalog:
+	docker compose run --rm api python -m src.importers.csv_importer --directory /app/data/realdata/raw/clean --update-existing
 
 vector-build:
 	python scripts/build_policy_vector_db.py
