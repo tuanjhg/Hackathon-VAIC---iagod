@@ -46,9 +46,9 @@ class ProductRepository:
         if brand:
             query = query.where(func.lower(Product.brand) == brand.lower())
         if min_price is not None:
-            query = query.where(Price.sale_price >= min_price)
+            query = query.where(Price.sale_price > 0, Price.sale_price >= min_price)
         if max_price is not None:
-            query = query.where(Price.sale_price <= max_price)
+            query = query.where(Price.sale_price > 0, Price.sale_price <= max_price)
         if room_area is not None:
             query = query.where(
                 ProductSpec.recommended_area_min <= room_area,
@@ -62,11 +62,13 @@ class ProductRepository:
         count_query = select(func.count()).select_from(query.order_by(None).subquery())
         total = self.db.scalar(count_query) or 0
         if sort == "price_asc":
-            query = query.order_by(Price.sale_price.asc())
+            query = query.order_by((Price.sale_price <= 0).asc(), Price.sale_price.asc())
         elif sort == "price_desc":
-            query = query.order_by(Price.sale_price.desc())
+            query = query.order_by((Price.sale_price <= 0).asc(), Price.sale_price.desc())
         else:
-            query = query.order_by(Product.featured.desc(), Product.rating.desc())
+            query = query.order_by(
+                Product.featured.desc(), (Price.sale_price > 0).desc(), Product.id.asc()
+            )
         products = list(
             self.db.scalars(query.offset((page - 1) * page_size).limit(page_size)).unique().all()
         )

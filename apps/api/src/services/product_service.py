@@ -86,13 +86,12 @@ class ProductService:
         if len(products) < 3:
             products, _ = self.repository.list_products(
                 max_price=Decimal(budget_max) if budget_max else None,
-                in_stock=True,
                 page_size=50,
             )
         if priority == "Chạy êm":
             products.sort(key=lambda p: p.specs.noise_db if p.specs.noise_db is not None else 999)
         elif priority == "Giá tốt":
-            products.sort(key=lambda p: p.price.sale_price)
+            products.sort(key=lambda p: p.price.sale_price if p.price.sale_price > 0 else Decimal("Infinity"))
         elif priority == "Tiết kiệm điện":
             products.sort(key=lambda p: (not p.specs.inverter, p.price.sale_price))
         elif priority == "Làm lạnh nhanh":

@@ -4,7 +4,7 @@ import type { ProductFilters } from "@/types";
 
 export const metadata: Metadata = {
   title: "Sản phẩm máy lạnh",
-  description: "Duyệt catalog máy lạnh với bộ lọc theo giá, thương hiệu, diện tích phòng và inverter.",
+  description: "Duyệt catalog máy lạnh thực tế theo giá, thương hiệu, diện tích phòng và Inverter.",
 };
 
 type SearchParams = {
@@ -32,9 +32,9 @@ export default async function ProductsPage({
   return (
     <div className="container py-10">
       <p className="font-bold text-primary">CATALOG</p>
-      <h1 className="mt-2 font-heading text-3xl font-extrabold">Máy lạnh cho mọi không gian</h1>
+      <h1 className="mt-2 font-heading text-3xl font-extrabold">Máy lạnh từ catalog thực tế</h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">
-        Dữ liệu giá, tồn kho và thông số được cung cấp từ backend API.
+        Dữ liệu sản phẩm và thông số được đọc từ PostgreSQL qua backend API. Các trường chưa có trong nguồn được hiển thị rõ ràng.
       </p>
       <div className="mt-8">
         <ProductsBrowser initialFilters={initialFilters} />

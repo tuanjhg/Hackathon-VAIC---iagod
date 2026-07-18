@@ -10,5 +10,4 @@ export const useCartStore = create<CartState>()(persist((set) => ({
   remove: (id) => set((state) => ({ items: state.items.filter((item) => item.product.id !== id) })),
   setQuantity: (id, quantity) => set((state) => ({ items: quantity <= 0 ? state.items.filter((item) => item.product.id !== id) : state.items.map((item) => item.product.id === id ? { ...item, quantity } : item) })),
   clear: () => set({ items: [] }),
-}), { name: "needwise-cart" }));
-
+}), { name: "needwise-cart-real-catalog-v1" }));

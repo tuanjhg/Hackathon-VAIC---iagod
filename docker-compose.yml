@@ -35,6 +35,8 @@ services:
       LLM_FALLBACK_MODEL: ${LLM_FALLBACK_MODEL:-gpt-4o-mini}
     expose:
       - "8000"
+    ports:
+      - "8000:8000"
     volumes:
       - ./data:/app/data:ro
     depends_on:
@@ -56,6 +58,9 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
     expose:
       - "3000"
+      API_URL: http://api:8000/api/v1
+    ports:
+      - "3000:3000"
     depends_on:
       api:
         condition: service_healthy
