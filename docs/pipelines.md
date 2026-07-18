@@ -1004,6 +1004,21 @@ Middleware đo timing từng stage S1–S8 → ghi Postgres `audit_log` mỗi tu
 
 **Hạ tầng vLLM:** 1× H100 80GB, Qwen3-32B FP8 (`enable_thinking=False`), prefix-caching + chunked-prefill 🧪 (phải benchmark ở Phase 0 — cặp flag từng có bug). Chỉ **10h GPU credit tổng** — vLLM không chạy thường trực, bật theo cửa sổ tập trung (lịch chi tiết: `dmx-phan-tich-ke-hoach-2026-07-17.md` §5b); mọi dev logic ngoài cửa sổ chạy qua router (§6.5) trỏ cloud/model nhỏ.
 
+### Vận hành vLLM trên FPT AI Factory (18/07)
+
+Hạ tầng thật đã chốt: 1× VM thuê trên **FPT AI Factory**, GPU H100 80GB, ngân sách **10h credit**. vLLM tách hẳn khỏi `docker-compose.yml` chính — sống ở `docker-compose.vllm.yml` riêng — để `api`/`web` local phát triển được suốt qua router fallback (§6.5) mà không cần VM GPU bật, và để không lỡ tay đưa vLLM vào `docker compose up` mặc định.
+
+Quy trình mỗi cửa sổ GPU:
+
+1. SSH vào VM FPT AI Factory (cần NVIDIA driver + `nvidia-container-toolkit` sẵn trên VM — ảnh GPU cloud thường có sẵn).
+2. `make vllm-up` (hoặc `make vllm-up-baseline` khi đang đo Gate 2 baseline, xem `scripts/bench/README.md`) — pull image, load model (~10 phút, đúng ghi chú ngân sách §5b, cache HF weights vào volume `vllm_hf_cache` để lần bật sau không tải lại).
+3. `make vllm-logs`, chờ tới khi thấy `Application startup complete`.
+4. Set `LLM_BASE_URL=http://<IP public VM>:8001/v1` trong `.env` thật (không commit) của máy đang chạy `api` — local dev machine hoặc chính VM nếu chạy full stack ở đó.
+5. Chạy đúng việc đã gom sẵn cho cửa sổ này (benchmark gate — `scripts/bench/`, style iteration, `make eval` full — xem bảng cửa sổ GPU trong master plan §5b).
+6. `make vllm-down` **ngay khi xong** — không để chạy thừa; kiểm tra dashboard FPT AI Factory để chắc chắn không bị tính phí ngoài ý muốn.
+
+**Cần xác nhận trước khi chạy thật:** `VLLM_MODEL_PATH` trong `.env` đang để placeholder `Qwen/Qwen3-32B-FP8` — nếu không có sẵn checkpoint FP8 dựng sẵn trên HuggingFace, đổi sang checkpoint gốc (bf16) và thêm `--quantization=fp8` vào `command` trong `docker-compose.vllm.yml`.
+
 ## 6.10. Interface cần giữ ổn định
 
 - `ChatMessageRequest` / `ChatContext` — mở rộng `ChatContext` với `need_profile` (thay vì 3 field rời `budget_max`/`room_area_m2`/`priority` như bản rule-based) để chứa toàn bộ Need Profile (§6.2).
