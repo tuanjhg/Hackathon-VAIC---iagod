@@ -1,0 +1,299 @@
+"""Advisor chat service + SSE endpoint tests.
+
+Service-level tests run the REAL catalog_search over an in-memory SQLite
+catalog (category_key rows) and the real S1/S3/S5/S6-layer-1/S7/S8 stages —
+only the LLM router and the price/promo/stock tool are faked. The SSE wire
+format is exercised at the endpoint level in mock-pipeline mode (no LLM),
+since the wrapper is pipeline-agnostic.
+"""
+
+import asyncio
+import json
+from collections.abc import Generator
+from typing import Any
+
+import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine, select
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.pool import StaticPool
+
+from src.core.config import settings
+from src.core.database import Base
+from src.models import AuditLog, Category, Product
+from src.pipeline.need_profile import NeedProfile
+from src.pipeline.session_store import InMemorySessionStore
+from src.router.client import LLMRouterError
+from src.schemas.chat import ChatContext, ChatMessageRequest
+from src.services.advisor_chat_service import AdvisorChatService
+from src.tools.price_promo_stock import Fact, ProductFacts
+
+FETCHED_AT = "2026-07-18T09:00:00+00:00"
+
+
+# --------------------------------------------------------------------------- #
+# Fakes (same doubles as tests/test_orchestrator.py)                          #
+# --------------------------------------------------------------------------- #
+class QueuedRouter:
+    def __init__(self, *contents: str) -> None:
+        self._queue = list(contents)
+        self.calls: list[Any] = []
+
+    async def complete(self, messages: list[dict[str, Any]], **kwargs: Any) -> dict[str, Any]:
+        self.calls.append(messages)
+        return {"choices": [{"message": {"role": "assistant", "content": self._queue.pop(0)}}]}
+
+
+class RaisingRouter:
+    async def complete(self, messages: list[dict[str, Any]], **kwargs: Any) -> dict[str, Any]:
+        raise LLMRouterError("provider down")
+
+
+class FakeFactsTool:
+    def __init__(self, facts: dict[str, ProductFacts | None]) -> None:
+        self._facts = facts
+
+    async def get_facts_many(self, skus: list[str]) -> dict[str, ProductFacts | None]:
+        return {sku: self._facts.get(sku) for sku in skus}
+
+
+def _s2(category: str | None = "may_lanh", slots: dict[str, Any] | None = None,
+        intent: str = "tu_van") -> str:
+    return json.dumps({"intent": intent, "category": category, "slots_moi": slots or {}})
+
+
+def _product_facts(sku: str, sale_price: int | None) -> ProductFacts:
+    def fact(field: str, value: Any) -> Fact:
+        return Fact(
+            value=value,
+            source={"dataset": "may_lanh", "row": sku, "field": field},
+            fetched_at=FETCHED_AT,
+        )
+
+    return ProductFacts(
+        sku=sku,
+        original_price=fact("original_price", None),
+        sale_price=fact("sale_price", sale_price),
+        promotions=fact("promotions", []),
+        stock=Fact(
+            value=None,
+            source={"dataset": "unavailable", "row": sku, "field": "stock"},
+            fetched_at=FETCHED_AT,
+        ),
+    )
+
+
+FACTS = {
+    "ml_a": _product_facts("ml_a", 15_990_000),
+    "ml_b": _product_facts("ml_b", 17_990_000),
+    # ml_c absent — no facts-tool entry, price stays honest None.
+}
+
+
+# --------------------------------------------------------------------------- #
+# Catalog fixture — 3 realdata-shaped rows (category_key + specs_json)        #
+# --------------------------------------------------------------------------- #
+@pytest.fixture()
+def db() -> Generator[Session, None, None]:
+    engine = create_engine(
+        "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
+    )
+    testing_session = sessionmaker(bind=engine, expire_on_commit=False)
+    Base.metadata.create_all(engine)
+    with testing_session() as session:
+        category = Category(name="Máy lạnh", slug="may-lanh")
+        session.add(category)
+        session.flush()
+        # 3 rows fit an 18m² room (15–20) and 3 don't (25–35): an unfiltered
+        # turn sees 6 candidates (> LOW threshold → S3 asks), while a turn with
+        # dien_tich_m2=18 narrows to 3 (≤ LOW → proceed to recommend).
+        specs = [
+            ("ml_a", "Panasonic Inverter 12000 BTU",
+             {"capacity_btu": 12000, "noise_db_indoor": 29, "inverter": True,
+              "energy_efficiency": 6.2, "recommended_area_min": 15.0,
+              "recommended_area_max": 20.0}),
+            ("ml_b", "Daikin 12000 BTU",
+             {"capacity_btu": 12000, "noise_db_indoor": 31, "inverter": False,
+              "energy_efficiency": 5.0, "recommended_area_min": 15.0,
+              "recommended_area_max": 20.0}),
+            ("ml_c", "Casper 12000 BTU",
+             {"capacity_btu": 12000, "noise_db_indoor": 33, "inverter": False,
+              "energy_efficiency": 4.8, "recommended_area_min": 15.0,
+              "recommended_area_max": 20.0}),
+            ("ml_d", "LG 18000 BTU",
+             {"capacity_btu": 18000, "noise_db_indoor": 34, "inverter": True,
+              "energy_efficiency": 5.5, "recommended_area_min": 25.0,
+              "recommended_area_max": 35.0}),
+            ("ml_e", "Samsung 18000 BTU",
+             {"capacity_btu": 18000, "noise_db_indoor": 35, "inverter": False,
+              "energy_efficiency": 5.1, "recommended_area_min": 25.0,
+              "recommended_area_max": 35.0}),
+            ("ml_f", "Aqua 18000 BTU",
+             {"capacity_btu": 18000, "noise_db_indoor": 36, "inverter": False,
+              "energy_efficiency": 4.9, "recommended_area_min": 25.0,
+              "recommended_area_max": 35.0}),
+        ]
+        for sku, name, spec in specs:
+            session.add(
+                Product(
+                    sku=sku,
+                    slug=sku.replace("_", "-"),
+                    name=name,
+                    brand=name.split()[0],
+                    category_id=category.id,
+                    category_key="may_lanh",
+                    specs_json=spec,
+                    short_description=name,
+                    image_url=f"https://img.example/{sku}.jpg",
+                )
+            )
+        session.commit()
+        yield session
+    Base.metadata.drop_all(engine)
+
+
+def _service(db: Session, router: Any, store: InMemorySessionStore | None = None) -> AdvisorChatService:
+    return AdvisorChatService(
+        db, router=router, facts_tool=FakeFactsTool(FACTS), store=store or InMemorySessionStore()
+    )
+
+
+def _request(message: str, profile: NeedProfile | None = None,
+             session_id: str = "s-1") -> ChatMessageRequest:
+    return ChatMessageRequest(
+        session_id=session_id,
+        message=message,
+        context=ChatContext(need_profile=profile),
+    )
+
+
+def _ready_profile() -> NeedProfile:
+    return NeedProfile(
+        category="may_lanh", slots={"ngan_sach_max": 20_000_000, "dien_tich_m2": 18.0}
+    )
+
+
+# --------------------------------------------------------------------------- #
+# AI-mode service                                                             #
+# --------------------------------------------------------------------------- #
+def test_recommend_turn_builds_cards_from_candidate_json(db: Session) -> None:
+    router = QueuedRouter(_s2(), "[1] có độ ồn 29dB.")
+    response = asyncio.run(
+        _service(db, router).reply(_request("chốt giúp em", _ready_profile()))
+    )
+
+    assert response.response_type == "recommendations"
+    assert response.message.startswith("[1] có độ ồn 29dB.")
+    assert [c.sku for c in response.cards] == ["ml_a", "ml_b", "ml_c"]
+
+    top = response.cards[0]
+    assert top.match_score == 100
+    assert top.price == 15_990_000  # from the facts tool, not the catalog
+    assert top.image_url == "https://img.example/ml_a.jpg"
+    assert top.label == "Phù hợp nhất với nhu cầu"
+    assert not top.reason.startswith("[1]")  # marker stripped for display
+    assert top.trade_off  # Tầng 4: never empty
+    assert response.cards[2].price is None  # ml_c honest absence
+
+    # With only 3 candidates the anti-pick coincides with a recommended SKU
+    # and is suppressed rather than contradicting the cards.
+    assert response.anti_pick is None
+
+    panel = {(e.sku, e.field): e.dataset for e in response.source_panel}
+    assert panel[("ml_a", "price")] == "may_lanh"
+    assert panel[("ml_a", "noise_db_indoor")] == "catalog_snapshot"
+
+    assert response.context.need_profile is not None
+    assert response.context.need_profile.category == "may_lanh"
+    assert response.context.budget_max == 20_000_000
+
+    audit = db.scalars(select(AuditLog)).one()
+    assert audit.response_kind == "recommend"
+    assert audit.verdict_counts == {"match": 1}
+
+
+def test_ask_turn_offers_labelled_quick_replies_and_persists_session(db: Session) -> None:
+    store = InMemorySessionStore()
+    router = QueuedRouter(_s2())
+    response = asyncio.run(
+        _service(db, router, store).reply(_request("tư vấn máy lạnh", session_id="s-ask"))
+    )
+
+    assert response.response_type == "follow_up"
+    assert "Phòng ngủ" in response.quick_replies  # enum token mapped for display
+    saved = store.get("s-ask")
+    assert saved is not None and saved.clarify_rounds == 1
+    assert saved.asked_slots == ["ngan_sach_max", "dien_tich_m2", "loai_phong"]
+
+
+def test_conversation_carries_profile_across_turns(db: Session) -> None:
+    store = InMemorySessionStore()
+    router1 = QueuedRouter(_s2())
+    asyncio.run(_service(db, router1, store).reply(_request("cần máy lạnh", session_id="s-2")))
+
+    router2 = QueuedRouter(
+        _s2(slots={"ngan_sach_max": 20_000_000, "dien_tich_m2": 18.0}),
+        "[1] có độ ồn 29dB.",
+    )
+    response = asyncio.run(
+        _service(db, router2, store).reply(_request("phòng 18m2, tầm 20 triệu", session_id="s-2"))
+    )
+
+    assert response.response_type == "recommendations"
+    saved = store.get("s-2")
+    assert saved is not None
+    assert saved.slots["ngan_sach_max"] == 20_000_000
+    assert saved.clarify_rounds == 1  # first turn's ask round survived
+
+
+def test_llm_failure_degrades_to_polite_follow_up(db: Session) -> None:
+    response = asyncio.run(
+        _service(db, RaisingRouter()).reply(_request("tư vấn máy lạnh", _ready_profile()))
+    )
+    assert response.response_type == "follow_up"
+    assert "thử lại" in response.message
+    assert db.scalars(select(AuditLog)).first() is None  # failed turn, no audit row
+
+
+# --------------------------------------------------------------------------- #
+# SSE wire format (endpoint level, mock pipeline — no LLM needed)             #
+# --------------------------------------------------------------------------- #
+def test_sse_streams_deltas_then_final(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(settings, "chat_pipeline", "mock")
+    response = client.post(
+        "/api/v1/chat/messages",
+        json={"session_id": "sse", "message": "Tư vấn máy lạnh cho phòng 18m2",
+              "context": {"budget_max": None, "room_area_m2": None, "priority": None}},
+        headers={"accept": "text/event-stream"},
+    )
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/event-stream")
+
+    events = [
+        json.loads(line[len("data: "):])
+        for line in response.text.splitlines()
+        if line.startswith("data: ")
+    ]
+    assert [e["type"] for e in events[:-1]] == ["delta"] * (len(events) - 1)
+    assert len(events) >= 2  # at least one delta + final
+    final = events[-1]
+    assert final["type"] == "final"
+    assert final["response"]["response_type"] == "follow_up"
+    # The deltas reassemble the final message.
+    assert "".join(e["text"] for e in events[:-1]).replace(" ", "") in (
+        final["response"]["message"].replace(" ", "")
+    )
+
+
+def test_plain_json_mode_unchanged_without_accept_header(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(settings, "chat_pipeline", "mock")
+    response = client.post(
+        "/api/v1/chat/messages",
+        json={"session_id": "json", "message": "Tư vấn máy lạnh cho phòng 18m2",
+              "context": {"budget_max": None, "room_area_m2": None, "priority": None}},
+    )
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("application/json")
+    assert response.json()["response_type"] == "follow_up"

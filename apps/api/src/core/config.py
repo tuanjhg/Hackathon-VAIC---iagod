@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     llm_fallback_enabled: bool = False
     llm_timeout_seconds: float = 30.0
 
+    # Chat pipeline switch: "ai" = S1–S8 advisory pipeline (needs LLM_API_KEY),
+    # "mock" = legacy rule-based MockChatService (no LLM, demo-safe).
+    chat_pipeline: str = "ai"
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @field_validator("cors_origins", mode="before")

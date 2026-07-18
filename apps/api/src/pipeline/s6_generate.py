@@ -299,22 +299,32 @@ _SYSTEM_PROMPT = (
 )
 
 
-def _build_user_content(profile: NeedProfile, statements: list[str]) -> str:
+def _build_user_content(
+    profile: NeedProfile, statements: list[str], corrective_note: str | None = None
+) -> str:
     """User-turn content: a short Need-Profile summary for context + the Layer-1
     statements as the ONLY source of facts. Deliberately never dumps the raw
     candidate dicts or ``RankingResult`` — keeps the "only rephrase what is true"
-    guarantee auditable.
+    guarantee auditable. ``corrective_note`` is the S8 escalation path's specific
+    error feedback for the one retry ("sinh lại 1 lần với nhắc lỗi cụ thể").
     """
     known_slots = {k: v for k, v in profile.slots.items() if v is not None}
     slots_summary = (
         ", ".join(f"{k}={v}" for k, v in known_slots.items()) if known_slots else "chưa rõ thêm"
     )
     facts = "\n".join(f"- {s}" for s in statements)
-    return (
+    content = (
         f"Ngành hàng: {profile.category}. Nhu cầu đã biết: {slots_summary}.\n\n"
         "DỮ KIỆN (chỉ được dùng đúng những dữ kiện này, không thêm số/thông tin nào khác):\n"
         f"{facts}"
     )
+    if corrective_note:
+        content += (
+            "\n\nLẦN TRƯỚC BỊ LỖI SỐ LIỆU — PHẢI SỬA:\n"
+            f"{corrective_note}\n"
+            "Viết lại toàn bộ, chỉ dùng đúng số trong DỮ KIỆN."
+        )
+    return content
 
 
 def _parse_content(response: dict[str, Any]) -> str:
@@ -332,6 +342,7 @@ async def generate(
     ranking: RankingResult,
     candidates: list[dict[str, Any]],
     profile: NeedProfile,
+    corrective_note: str | None = None,
 ) -> GeneratedAdvice:
     """Run S6: build deterministic statements, then LLM-rephrase them into prose.
 
@@ -340,13 +351,14 @@ async def generate(
     (plus a short Need-Profile summary) to the router — at a low non-zero
     temperature for phrasing variety, with OpenRouter's ``reasoning`` switch OFF
     — and returns the parsed prose. Raises :class:`S6GenerationError` if the
-    response shape is unexpected.
+    response shape is unexpected. ``corrective_note`` (S8 escalation, guardrail
+    doc §4.6) injects specific error feedback for the single regenerate retry.
     """
     statements, marker_map = build_advisory_statements(ranking, candidates)
 
     messages: list[dict[str, Any]] = [
         {"role": "system", "content": _SYSTEM_PROMPT},
-        {"role": "user", "content": _build_user_content(profile, statements)},
+        {"role": "user", "content": _build_user_content(profile, statements, corrective_note)},
     ]
 
     response = await router.complete(
