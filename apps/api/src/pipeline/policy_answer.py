@@ -12,9 +12,11 @@ tested with fakes and no vector store.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import Any, Protocol
 
+from src.pipeline.humanize import fold_ascii
 from src.rag.models import SearchResult
 
 _MAX_CHUNKS = 4
@@ -51,6 +53,84 @@ class PolicyAnswer:
     text: str
     sources: list[PolicySource]
     grounded: bool  # False = no relevant excerpt found (honest no-data path)
+    fallback_used: bool = False
+
+
+_NUMBER_RE = re.compile(
+    r"(?P<number>\d+(?:[.,]\d+)*)(?:\s*(?P<unit>triệu|tr|nghìn|ngàn|k))?",
+    re.IGNORECASE,
+)
+_WORD_RE = re.compile(r"[a-z0-9_]+")
+_STOPWORDS = frozenset(
+    {
+        "anh",
+        "chi",
+        "da",
+        "em",
+        "la",
+        "va",
+        "co",
+        "theo",
+        "duoc",
+        "trong",
+        "nay",
+        "hien",
+        "tai",
+        "a",
+    }
+)
+
+
+def _normalized_numbers(text: str) -> set[str]:
+    normalized: set[str] = set()
+    multipliers = {"triệu": 1_000_000, "tr": 1_000_000, "nghìn": 1_000, "ngàn": 1_000, "k": 1_000}
+    for match in _NUMBER_RE.finditer(text):
+        raw = match.group("number")
+        unit = (match.group("unit") or "").lower()
+        if unit:
+            value = float(raw.replace(",", "."))
+            normalized.add(str(round(value * multipliers[unit])))
+        else:
+            normalized.add(re.sub(r"[.,]", "", raw))
+    return normalized
+
+
+def _content_tokens(text: str) -> set[str]:
+    return {
+        token
+        for token in _WORD_RE.findall(fold_ascii(text).replace("_", " "))
+        if len(token) > 2 and token not in _STOPWORDS
+    }
+
+
+def _is_grounded_answer(text: str, query: str, results: list[SearchResult]) -> bool:
+    """Conservative post-check for policy prose before it reaches customers.
+
+    Every number must exist in the retrieved material/query and the substantive
+    vocabulary must overlap the evidence.  A rejected paraphrase is replaced by
+    a direct excerpt, preferring an occasional plain answer over a fabricated
+    policy term or deadline.
+    """
+    evidence = query + "\n" + "\n".join(
+        f"{result.chunk.title} {result.chunk.heading or ''} {result.chunk.content}"
+        for result in results
+    )
+    if not _normalized_numbers(text) <= _normalized_numbers(evidence):
+        return False
+    answer_tokens = _content_tokens(text)
+    if not answer_tokens:
+        return False
+    overlap = len(answer_tokens & _content_tokens(evidence)) / len(answer_tokens)
+    return len(text) <= 1200 and overlap >= 0.35
+
+
+def _direct_excerpt(result: SearchResult) -> str:
+    chunk = result.chunk
+    content = " ".join(chunk.content.split())
+    if len(content) > 700:
+        content = content[:697].rstrip() + "…"
+    section = chunk.heading or chunk.title
+    return f"Dạ theo mục chính sách “{section}” ({chunk.title}): {content}"
 
 
 def _excerpt_block(results: list[SearchResult]) -> str:
@@ -83,4 +163,12 @@ async def generate_policy_answer(
         PolicySource(title=r.chunk.title, heading=r.chunk.heading, source_path=r.chunk.source_path)
         for r in top
     ]
-    return PolicyAnswer(text=content.strip(), sources=sources, grounded=True)
+    text = content.strip() if isinstance(content, str) else ""
+    if not _is_grounded_answer(text, query, top):
+        return PolicyAnswer(
+            text=_direct_excerpt(top[0]),
+            sources=sources,
+            grounded=True,
+            fallback_used=True,
+        )
+    return PolicyAnswer(text=text, sources=sources, grounded=True)

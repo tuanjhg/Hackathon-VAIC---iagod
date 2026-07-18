@@ -20,6 +20,7 @@ describe("ChatWidget", () => {
     fireEvent.click(screen.getByLabelText("Mở chatbot"));
     expect(screen.getByLabelText("Chat tư vấn")).toBeInTheDocument();
     expect(screen.getByText("Đồng ý và bắt đầu")).toBeInTheDocument();
+    expect(screen.getByText(/nhà cung cấp AI bên ngoài/)).toBeInTheDocument();
     expect(screen.getByLabelText("Tin nhắn")).toBeDisabled();
 
     fireEvent.click(screen.getByText("Đồng ý và bắt đầu"));

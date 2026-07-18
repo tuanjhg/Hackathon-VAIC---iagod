@@ -8,11 +8,10 @@ required_slots:
     type: money
     catalog_field: price.sale_price
     sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
-  - name: quy_mo_gia_dinh
-    label: "Quy mô gia đình"
-    type: enum
-    values: [mot_hai_nguoi, ba_bon_nguoi, nam_nguoi_tro_len]
-    catalog_field: "specs_raw.Số người sử dụng"
+  - name: so_nguoi_dung
+    label: "Số người trong gia đình"
+    type: integer
+    catalog_field: null
     sample_question: "Nhà mình có khoảng bao nhiêu người dùng máy giặt ạ?"
 optional_slots:
   - name: loai_cua
@@ -36,7 +35,7 @@ optional_slots:
     priority_rank: 3
     sample_question: "Anh/chị có cần hỗ trợ trả góp không ạ?"
 catalog_field_map:
-  quy_mo_gia_dinh: "specs_raw.Số người sử dụng"
+  so_nguoi_dung: "specs_raw.Số người sử dụng"
   loai_may: "specs_raw.Loại máy"
   khoi_luong_giat: "specs_raw.Khối lượng giặt"
   dong_co: "specs_raw.Động cơ"

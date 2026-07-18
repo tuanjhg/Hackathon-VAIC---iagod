@@ -17,6 +17,49 @@ ChatResponseType = Literal[
     "unsupported",
     "error",
 ]
+GuardrailStatus = Literal[
+    "verified",
+    "corrected",
+    "grounded_fallback",
+    "limited",
+    "not_applicable",
+    "unavailable",
+]
+ActionKind = Literal["quick_reply", "category", "prompt", "retry", "link"]
+
+
+class SelectedAction(BaseModel):
+    """A UI action selected by the customer.
+
+    ``slot_name`` + ``value`` are validated again against the active server-side
+    SlotProfile before they can mutate the Need Profile; the browser is never a
+    trusted source of slot values.
+    """
+
+    id: str = Field(min_length=1, max_length=120)
+    value: str = Field(min_length=1, max_length=120)
+    slot_name: str | None = Field(default=None, max_length=80)
+
+
+class ResponseAction(BaseModel):
+    id: str
+    kind: ActionKind
+    label: str
+    value: str
+    slot_name: str | None = None
+    url: str | None = None
+
+
+class GuardrailMeta(BaseModel):
+    """Customer-safe guardrail state; internal stage names stay in audit/eval."""
+
+    status: GuardrailStatus
+    label: str
+    source_count: int = 0
+    corrected_claims: int = 0
+    omitted_claims: int = 0
+    missing_data_count: int = 0
+    notices: list[str] = Field(default_factory=list)
 
 
 class ChatContext(BaseModel):
@@ -38,6 +81,7 @@ class ChatMessageRequest(BaseModel):
     session_id: str = Field(min_length=1, max_length=100)
     message: str = Field(min_length=1, max_length=1000)
     context: ChatContext = Field(default_factory=ChatContext)
+    selected_action: SelectedAction | None = None
 
 
 class Recommendation(BaseModel):
@@ -85,11 +129,17 @@ class ChatResponse(BaseModel):
     intent: str | None = None
     message: str
     quick_replies: list[str] = Field(default_factory=list)
+    actions: list[ResponseAction] = Field(default_factory=list)
     recommendations: list[Recommendation] = Field(default_factory=list)
     cards: list[AdvisorCard] = Field(default_factory=list)
     anti_pick: AdvisorAntiPick | None = None
     source_panel: list[SourceEntry] = Field(default_factory=list)
     verifier_flags: list[VerifierFlag] = Field(default_factory=list)
+    guardrail: GuardrailMeta = Field(
+        default_factory=lambda: GuardrailMeta(
+            status="not_applicable", label="Không áp dụng đối chiếu dữ liệu"
+        )
+    )
     context: ChatContext
 
 

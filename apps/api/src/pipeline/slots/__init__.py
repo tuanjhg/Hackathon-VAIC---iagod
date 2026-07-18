@@ -22,7 +22,15 @@ from pydantic import BaseModel
 _SLOTS_DIR = Path(__file__).parent
 
 SlotType = Literal[
-    "money", "area_m2", "volume_liter", "power_watt", "enum", "multi_enum", "boolean", "text"
+    "money",
+    "integer",
+    "area_m2",
+    "volume_liter",
+    "power_watt",
+    "enum",
+    "multi_enum",
+    "boolean",
+    "text",
 ]
 
 

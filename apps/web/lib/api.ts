@@ -1,4 +1,4 @@
-import type { Category, ChatContext, ChatResponse, ChatStreamEvent, Comparison, Product, ProductFilters, ProductPage } from "@/types";
+import type { Category, ChatContext, ChatResponse, ChatStreamEvent, Comparison, Product, ProductFilters, ProductPage, SelectedAction } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
 
@@ -26,11 +26,12 @@ async function chatStream(
   message: string,
   context: ChatContext,
   handlers: ChatStreamHandlers,
+  selectedAction?: SelectedAction,
 ): Promise<void> {
   const response = await fetch(`${API_URL}/chat/messages`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
-    body: JSON.stringify({ session_id: sessionId, message, context }),
+    body: JSON.stringify({ session_id: sessionId, message, context, selected_action: selectedAction }),
   });
   if (!response.ok) throw new Error((await response.json().catch(() => null))?.detail ?? "Không thể kết nối máy chủ");
 
@@ -78,7 +79,7 @@ export const api = {
   },
   product: (slug: string) => request<Product>(`/products/${slug}`),
   compare: (ids: number[]) => request<Comparison>("/compare", { method: "POST", body: JSON.stringify({ product_ids: ids }) }),
-  chat: (sessionId: string, message: string, context: ChatContext) => request<ChatResponse>("/chat/messages", { method: "POST", body: JSON.stringify({ session_id: sessionId, message, context }) }),
+  chat: (sessionId: string, message: string, context: ChatContext, selectedAction?: SelectedAction) => request<ChatResponse>("/chat/messages", { method: "POST", body: JSON.stringify({ session_id: sessionId, message, context, selected_action: selectedAction }) }),
   deleteChatSession: async (sessionId: string): Promise<void> => {
     const response = await fetch(`${API_URL}/chat/sessions/${encodeURIComponent(sessionId)}`, {
       method: "DELETE",

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { RecommendationCard } from "@/components/RecommendationCard";
 import { AdvisorCard } from "@/components/AdvisorCard";
 import type { ChatEntry } from "@/stores/chat-store";
+import type { GuardrailStatus, ResponseAction } from "@/types";
 
 const RESPONSE_LABELS: Partial<Record<NonNullable<ChatEntry["responseType"]>, string>> = {
   clarification: "Đang làm rõ nhu cầu",
@@ -20,7 +21,7 @@ export function ChatMessage({
   onQuickReply,
 }: {
   message: ChatEntry;
-  onQuickReply: (value: string) => void;
+  onQuickReply: (value: string, action?: ResponseAction) => void;
 }) {
   const assistant = message.role === "assistant";
 
@@ -56,7 +57,31 @@ export function ChatMessage({
           </p>
         )}
 
-        {message.quickReplies && message.quickReplies.length > 0 && (
+        {message.actions && message.actions.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {message.actions.map((action) =>
+              action.kind === "link" && action.url ? (
+                <a
+                  key={action.id}
+                  href={action.url}
+                  className="rounded-full border border-primary/40 bg-card px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary/10"
+                >
+                  {action.label}
+                </a>
+              ) : (
+                <button
+                  key={action.id}
+                  onClick={() => onQuickReply(action.label, action)}
+                  className="rounded-full border border-primary/40 bg-card px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary/10"
+                >
+                  {action.label}
+                </button>
+              ),
+            )}
+          </div>
+        )}
+
+        {!message.actions?.length && message.quickReplies && message.quickReplies.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1.5">
             {message.quickReplies.map((reply) => (
               <button
@@ -99,17 +124,14 @@ export function ChatMessage({
           </div>
         )}
 
-        {assistant && message.verifierFlags && message.verifierFlags.length > 0 && (
-          <div className="mt-2 flex items-start gap-1.5 rounded-lg bg-amber-500/10 px-2.5 py-2 text-[11px] leading-4 text-amber-800 dark:text-amber-200">
-            <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-            Nội dung đã được tự động điều chỉnh theo dữ liệu nguồn trước khi hiển thị.
-          </div>
+        {assistant && message.guardrail && message.guardrail.status !== "not_applicable" && (
+          <GuardrailNotice status={message.guardrail.status} label={message.guardrail.label} />
         )}
 
         {assistant && message.sourcePanel && message.sourcePanel.length > 0 && (
           <details className="mt-2 rounded-xl border border-border bg-card px-3 py-2 text-xs">
             <summary className="flex cursor-pointer list-none items-center gap-1.5 font-semibold text-foreground">
-              {message.verifierFlags?.length ? (
+              {message.guardrail?.status === "corrected" || message.guardrail?.status === "limited" ? (
                 <BookOpen className="h-3.5 w-3.5 text-amber-600" />
               ) : (
                 <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
@@ -128,14 +150,24 @@ export function ChatMessage({
           </details>
         )}
 
-        {assistant && message.responseType === "recommendations" && !message.verifierFlags?.length && (
-          <div className="mt-2 flex items-center gap-1.5 text-[10px] font-medium text-emerald-700 dark:text-emerald-300">
-            <CheckCircle2 className="h-3.5 w-3.5" />
-            Nội dung đã qua bước đối chiếu dữ liệu.
-          </div>
-        )}
-
       </div>
     </motion.div>
+  );
+}
+
+function GuardrailNotice({ status, label }: { status: GuardrailStatus; label: string }) {
+  const verified = status === "verified";
+  const corrected = status === "corrected";
+  const tone = verified
+    ? "text-emerald-700 dark:text-emerald-300"
+    : corrected
+      ? "bg-amber-500/10 text-amber-800 dark:text-amber-200"
+      : "bg-sky-500/10 text-sky-800 dark:text-sky-200";
+  const Icon = verified ? CheckCircle2 : corrected ? AlertTriangle : ShieldCheck;
+  return (
+    <div className={`mt-2 flex items-start gap-1.5 rounded-lg px-2.5 py-2 text-[11px] leading-4 ${tone}`}>
+      <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+      {label}
+    </div>
   );
 }

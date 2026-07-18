@@ -33,6 +33,7 @@ from src.pipeline.s5_ranking import RankingResult, ScoreBreakdown
 from src.pipeline.s6_generate import S6GenerationError, render_spec
 from src.pipeline.s8_respond import field_label
 from src.pipeline.session_store import InMemorySessionStore, SessionStore
+from src.pipeline.slots import available_categories, load_slot_profile
 from src.rag.embeddings import HashingEmbedding
 from src.rag.memory_store import MemoryVectorStore
 from src.rag.pipeline import PolicyIndexPipeline
@@ -44,6 +45,9 @@ from src.schemas.chat import (
     ChatMessageRequest,
     ChatResponse,
     ChatResponseType,
+    GuardrailMeta,
+    ResponseAction,
+    SelectedAction,
 )
 from src.services.audit_service import write_audit_log
 from src.tools.catalog_search import catalog_search
@@ -96,6 +100,12 @@ _QUICK_REPLY_LABELS: dict[str, str] = {
     "em": "Chạy êm",
     "ben": "Bền bỉ",
     "gia_re": "Giá rẻ",
+    "ngan_da_tren": "Ngăn đá trên",
+    "ngan_da_duoi": "Ngăn đá dưới",
+    "side_by_side": "Side-by-side",
+    "multi_door": "Nhiều cửa",
+    "cua_tren": "Cửa trên",
+    "cua_truoc": "Cửa trước",
 }
 
 _MARKER_PREFIX_RE = re.compile(r"^\[[^\]]+\]\s*")
@@ -125,6 +135,8 @@ class AdvisorChatService:
             or request.context.need_profile
             or NeedProfile()
         )
+        if request.selected_action is not None:
+            _apply_selected_action(profile, request.selected_action)
 
         try:
             result = await run_turn(
@@ -141,6 +153,19 @@ class AdvisorChatService:
                 response_type="error",
                 intent="system_error",
                 message=_FALLBACK_MESSAGE,
+                actions=[
+                    ResponseAction(
+                        id="retry:last-message",
+                        kind="retry",
+                        label="Thử lại",
+                        value=request.message,
+                    )
+                ],
+                guardrail=GuardrailMeta(
+                    status="unavailable",
+                    label="Chưa thể kiểm tra dữ liệu lúc này",
+                    notices=["Không có thông tin sản phẩm nào được suy đoán."],
+                ),
                 context=_context_from(profile),
             )
 
@@ -199,6 +224,143 @@ def _quick_reply_labels(tokens: list[str]) -> list[str]:
     return [_QUICK_REPLY_LABELS.get(token, token) for token in tokens]
 
 
+def _apply_selected_action(profile: NeedProfile, action: SelectedAction) -> None:
+    """Validate a browser-selected action against the current server schema.
+
+    The visible label is presentation only.  Only canonical category/enum
+    values that still exist in the active SlotProfile are allowed to update the
+    Need Profile, so a modified request cannot inject arbitrary slot data.
+    """
+    if action.slot_name == "category":
+        if action.value in available_categories() and action.id == f"category:{action.value}":
+            profile.change_category(action.value)
+        return
+    if action.slot_name is None or profile.category is None:
+        return
+    slot_profile = load_slot_profile(profile.category)
+    slot = next(
+        (
+            candidate
+            for candidate in [*slot_profile.required_slots, *slot_profile.optional_slots]
+            if candidate.name == action.slot_name
+        ),
+        None,
+    )
+    if (
+        slot is None
+        or slot.type not in ("enum", "multi_enum")
+        or action.value not in (slot.values or [])
+        or action.id != f"slot:{slot.name}:{action.value}"
+    ):
+        return
+    if slot.type == "multi_enum":
+        existing = profile.slots.get(slot.name)
+        values = [str(value) for value in existing] if isinstance(existing, list) else []
+        if action.value not in values:
+            values.append(action.value)
+        profile.merge_slots({slot.name: values})
+    else:
+        profile.merge_slots({slot.name: action.value})
+
+
+def _response_actions(result: TurnResult) -> list[ResponseAction]:
+    if result.kind == "ask_category":
+        return [
+            ResponseAction(
+                id=f"category:{key}",
+                kind="category",
+                label=load_slot_profile(key).category_label,
+                value=key,
+                slot_name="category",
+            )
+            for key in available_categories()
+        ]
+    if result.kind == "ask" and result.policy is not None:
+        slot = next((item for item in result.policy.slots_to_ask if item.values), None)
+        if slot is not None:
+            return [
+                ResponseAction(
+                    id=f"slot:{slot.name}:{value}",
+                    kind="quick_reply",
+                    label=_QUICK_REPLY_LABELS.get(value, value),
+                    value=value,
+                    slot_name=slot.name,
+                )
+                for value in (slot.values or [])
+            ]
+    if result.quick_replies:
+        return [
+            ResponseAction(
+                id=f"prompt:{index}",
+                kind="prompt",
+                label=label,
+                value=label,
+            )
+            for index, label in enumerate(_quick_reply_labels(result.quick_replies))
+        ]
+    return []
+
+
+def _guardrail_meta(result: TurnResult) -> GuardrailMeta:
+    source_count = len(result.source_panel)
+    corrected = sum(flag.action == "corrected" for flag in result.verifier_flags)
+    omitted = sum(flag.action == "removed" for flag in result.verifier_flags)
+    missing = (
+        sum(len(item.missing_fields) for item in result.ranking.top)
+        if result.ranking is not None
+        else 0
+    )
+    if result.kind == "recommend":
+        if result.used_fallback_table:
+            return GuardrailMeta(
+                status="grounded_fallback",
+                label="Đang hiển thị dữ liệu nguồn trực tiếp",
+                source_count=source_count,
+                missing_data_count=missing,
+                notices=["Phần diễn giải AI đã được thay bằng nội dung xác định từ dữ liệu."],
+            )
+        if corrected or omitted:
+            return GuardrailMeta(
+                status="corrected",
+                label="Đã tự động hiệu chỉnh theo dữ liệu nguồn",
+                source_count=source_count,
+                corrected_claims=corrected,
+                omitted_claims=omitted,
+                missing_data_count=missing,
+            )
+        if missing:
+            return GuardrailMeta(
+                status="limited",
+                label="Đã đối chiếu; một số dữ liệu còn thiếu",
+                source_count=source_count,
+                missing_data_count=missing,
+                notices=["Hệ thống không tự ước lượng các trường đang thiếu."],
+            )
+        return GuardrailMeta(
+            status="verified",
+            label="Đã đối chiếu dữ liệu nguồn",
+            source_count=source_count,
+        )
+    if result.kind == "policy":
+        if result.used_fallback_table and source_count:
+            return GuardrailMeta(
+                status="grounded_fallback",
+                label="Đang hiển thị trích đoạn chính sách trực tiếp",
+                source_count=source_count,
+                notices=["Phần diễn giải AI không đạt kiểm tra bám nguồn nên đã được thay thế."],
+            )
+        return GuardrailMeta(
+            status="verified" if source_count else "limited",
+            label=(
+                "Đã đối chiếu nguồn chính sách"
+                if source_count
+                else "Nguồn chính sách hiện còn hạn chế"
+            ),
+            source_count=source_count,
+        )
+    return GuardrailMeta(status="not_applicable", label="Không áp dụng đối chiếu dữ liệu")
+
+
 def _match_scores(top: list[ScoreBreakdown]) -> list[int]:
     """Relative fit percent of the best score (explainable: 'x% điểm của top-1').
 
@@ -225,10 +387,21 @@ def _trade_off_text(sku: str, ranking: RankingResult, breakdown: ScoreBreakdown)
             va, vb = trade_off.values[field]
             return f"Kém hơn về {field_label(field)} ({vb} so với {va})"
     if breakdown.missing_fields:
-        return "Chưa có dữ liệu: " + ", ".join(
+        return "Cần cân nhắc vì chưa có dữ liệu " + ", ".join(
             field_label(f) for f in breakdown.missing_fields
+        ) + " để đối chiếu đầy đủ"
+    criteria = {
+        field: score
+        for field, score in breakdown.per_criterion.items()
+        if ":" not in field
+    }
+    if criteria:
+        weakest = min(criteria, key=lambda field: criteria[field])
+        return (
+            f"Mẫu này ít nổi bật hơn về {field_label(weakest)} so với các ưu điểm còn lại; "
+            "anh/chị nên cân nhắc nếu đây là ưu tiên chính"
         )
-    return "Không có điểm yếu nổi bật trong nhóm so sánh"
+    return "Nên đối chiếu thêm bảo hành và chi phí lắp đặt trước khi quyết định"
 
 
 def _strengths(specs: dict[str, Any]) -> list[str]:
@@ -249,7 +422,7 @@ def _build_cards(result: TurnResult) -> list[AdvisorCard]:
     cards: list[AdvisorCard] = []
     for index, breakdown in enumerate(result.ranking.top):
         cand = by_sku.get(breakdown.sku, {})
-        reason = ""
+        reason = "Phù hợp với nhu cầu đã nêu dựa trên thông tin sản phẩm hiện có."
         if index < len(statements):
             reason = _MARKER_PREFIX_RE.sub("", statements[index])
         cards.append(
@@ -296,6 +469,7 @@ def _to_chat_response(result: TurnResult) -> ChatResponse:
             anti_pick=_build_anti_pick(result),
             source_panel=result.source_panel,
             verifier_flags=result.verifier_flags,
+            guardrail=_guardrail_meta(result),
             context=context,
         )
 
@@ -313,8 +487,10 @@ def _to_chat_response(result: TurnResult) -> ChatResponse:
         intent=result.intent,
         message=result.message,
         quick_replies=_quick_reply_labels(result.quick_replies),
+        actions=_response_actions(result),
         source_panel=result.source_panel,
         verifier_flags=result.verifier_flags,
+        guardrail=_guardrail_meta(result),
         context=context,
     )
 

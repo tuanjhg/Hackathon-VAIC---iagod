@@ -61,6 +61,23 @@ export interface AdvisorCard {
 export interface AdvisorAntiPick { sku: string; name: string; reason: string | null }
 export interface SourcePanelEntry { sku: string; field: string; dataset: string; fetched_at: string | null }
 export interface VerifierFlag { action: "corrected" | "removed"; sku: string | null; field: string | null; claimed_value: number | null; actual_value: number | null }
+export type GuardrailStatus = "verified" | "corrected" | "grounded_fallback" | "limited" | "not_applicable" | "unavailable";
+export interface GuardrailMeta {
+  status: GuardrailStatus;
+  label: string;
+  source_count: number;
+  corrected_claims: number;
+  omitted_claims: number;
+  missing_data_count: number;
+  notices: string[];
+}
+export type ActionKind = "quick_reply" | "category" | "prompt" | "retry" | "link";
+export interface SelectedAction { id: string; value: string; slot_name?: string | null }
+export interface ResponseAction extends SelectedAction {
+  kind: ActionKind;
+  label: string;
+  url?: string | null;
+}
 export type ChatResponseType =
   | "follow_up"
   | "clarification"
@@ -76,11 +93,13 @@ export interface ChatResponse {
   intent?: string | null;
   message: string;
   quick_replies: string[];
+  actions: ResponseAction[];
   recommendations: Recommendation[];
   cards?: AdvisorCard[];
   anti_pick?: AdvisorAntiPick | null;
   source_panel?: SourcePanelEntry[];
   verifier_flags?: VerifierFlag[];
+  guardrail: GuardrailMeta;
   context: ChatContext;
 }
 // SSE events emitted by POST /chat/messages with Accept: text/event-stream.

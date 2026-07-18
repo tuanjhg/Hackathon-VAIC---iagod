@@ -41,3 +41,31 @@ def test_aggregate_separates_degraded_turns_from_errors() -> None:
     assert summary["error_free_pct"] == 100.0
     assert summary["degraded_convs"] == 1
     assert summary["degraded_stage_distribution"] == {"s2": 1, "s6": 1}
+
+
+def test_aggregate_reports_guardrail_and_latency_sla() -> None:
+    report = ConversationReport(
+        id="sla-1",
+        source="synthetic",
+        golden_category="may_giat",
+        engaged_category="may_giat",
+        supported=True,
+        recommended=True,
+        turn_kinds={"ask": 1, "recommend": 1},
+        stage_latency_ms={"s2": [650.0, 420.0]},
+        kind_latency_ms={"ask": [900.0], "recommend": [4_200.0]},
+        post_guardrail_claims=4,
+        post_guardrail_mismatches=0,
+        post_guardrail_honesty_violations=0,
+        honesty_opportunities=2,
+        corrected_claims=1,
+    )
+
+    sla = aggregate([report])["sla"]
+
+    assert sla["s2"]["p95_ms"] == 650.0
+    assert sla["clarification"]["passes"] is True
+    assert sla["recommendation"]["passes"] is True
+    assert sla["guardrail"]["hallucination_rate_pct"] == 0.0
+    assert sla["guardrail"]["honesty_recall_pct"] == 100.0
+    assert sla["overall_passes"] is True

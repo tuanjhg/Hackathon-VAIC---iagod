@@ -24,7 +24,7 @@ from src.models import AuditLog, Category, Product
 from src.pipeline.need_profile import NeedProfile
 from src.pipeline.session_store import InMemorySessionStore
 from src.router.client import LLMRouterError
-from src.schemas.chat import ChatContext, ChatMessageRequest
+from src.schemas.chat import ChatContext, ChatMessageRequest, SelectedAction
 from src.services.advisor_chat_service import AdvisorChatService
 from src.tools.price_promo_stock import Fact, ProductFacts
 
@@ -185,7 +185,8 @@ def test_recommend_turn_builds_cards_from_candidate_json(db: Session) -> None:
 
     assert response.response_type == "recommendations"
     assert response.intent == "tu_van"
-    assert response.message.startswith("[1] có độ ồn 29dB.")
+    assert "đã ghi nhận anh/chị cần máy lạnh" in response.message
+    assert "[1] có độ ồn 29dB." in response.message
     assert [c.sku for c in response.cards] == ["ml_a", "ml_b", "ml_c"]
 
     top = response.cards[0]
@@ -196,6 +197,7 @@ def test_recommend_turn_builds_cards_from_candidate_json(db: Session) -> None:
     assert top.label == "Phù hợp nhất với nhu cầu"
     assert not top.reason.startswith("[1]")  # marker stripped for display
     assert top.trade_off  # Tầng 4: never empty
+    assert "dữ liệu xếp hạng" not in top.trade_off
     assert response.cards[2].price is None  # ml_c honest absence
 
     # With only 3 candidates the anti-pick coincides with a recommended SKU
@@ -209,6 +211,8 @@ def test_recommend_turn_builds_cards_from_candidate_json(db: Session) -> None:
     assert response.context.need_profile is not None
     assert response.context.need_profile.category == "may_lanh"
     assert response.context.budget_max == 20_000_000
+    assert response.guardrail.status in {"verified", "limited"}
+    assert response.guardrail.source_count == len(response.source_panel)
 
     audit = db.scalars(select(AuditLog)).one()
     assert audit.response_kind == "recommend"
@@ -226,6 +230,9 @@ def test_ask_turn_offers_labelled_quick_replies_and_persists_session(db: Session
     assert response.intent == "tu_van"
     assert "vì" in response.message
     assert "Phòng ngủ" in response.quick_replies  # enum token mapped for display
+    room_action = next(action for action in response.actions if action.value == "phong_ngu")
+    assert room_action.label == "Phòng ngủ"
+    assert room_action.slot_name == "loai_phong"
     saved = store.get("s-ask")
     assert saved is not None and saved.clarify_rounds == 1
     assert saved.asked_slots == ["ngan_sach_max", "dien_tich_m2", "loai_phong"]
@@ -259,9 +266,52 @@ def test_llm_failure_degrades_to_grounded_recommendations(db: Session) -> None:
     assert response.intent == "tu_van"
     assert "số liệu trực tiếp từ hệ thống" in response.message
     assert response.cards
+    assert response.guardrail.status == "grounded_fallback"
+    assert "trực tiếp" in response.guardrail.label
     audit = db.scalars(select(AuditLog)).one()
     assert audit.response_kind == "recommend"
     assert audit.used_fallback_table
+
+
+def test_selected_action_is_validated_and_merged_server_side(db: Session) -> None:
+    store = InMemorySessionStore()
+    profile = NeedProfile(category="may_lanh")
+    request = ChatMessageRequest(
+        session_id="action-session",
+        message="Phòng ngủ",
+        context=ChatContext(need_profile=profile),
+        selected_action=SelectedAction(
+            id="slot:loai_phong:phong_ngu",
+            slot_name="loai_phong",
+            value="phong_ngu",
+        ),
+    )
+
+    asyncio.run(_service(db, QueuedRouter(_s2()), store).reply(request))
+
+    saved = store.get("action-session")
+    assert saved is not None
+    assert saved.slots["loai_phong"] == "phong_ngu"
+
+
+def test_tampered_selected_action_cannot_inject_a_slot(db: Session) -> None:
+    store = InMemorySessionStore()
+    request = ChatMessageRequest(
+        session_id="tampered-action",
+        message="Bất kỳ",
+        context=ChatContext(need_profile=NeedProfile(category="may_lanh")),
+        selected_action=SelectedAction(
+            id="slot:loai_phong:not_allowed",
+            slot_name="loai_phong",
+            value="not_allowed",
+        ),
+    )
+
+    asyncio.run(_service(db, QueuedRouter(_s2()), store).reply(request))
+
+    saved = store.get("tampered-action")
+    assert saved is not None
+    assert "loai_phong" not in saved.slots
 
 
 # --------------------------------------------------------------------------- #

@@ -26,6 +26,7 @@ router's job, not S2's.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from typing import Any, Protocol
 
@@ -97,7 +98,7 @@ def _slot_property_schema(slot: SlotDef) -> dict[str, Any]:
     array of enum strings (empty array when nothing selected).
     """
     slot_type = slot.type
-    if slot_type == "money":
+    if slot_type in ("money", "integer"):
         return {"type": ["integer", "null"]}
     if slot_type in ("area_m2", "volume_liter", "power_watt"):
         return {"type": ["number", "null"]}
@@ -303,7 +304,9 @@ _TRANSACTION_TERMS: tuple[str, ...] = (
     "sua don",
     "doi dia chi",
     "giao den dau",
+    "giao toi dau",
     "lich giao",
+    "doi lich nhan",
     "con hang tai",
     "ton kho chi nhanh",
 )
@@ -316,6 +319,21 @@ _POLICY_TERMS: tuple[str, ...] = (
     "giao hang",
     "lap dat",
     "du lieu ca nhan",
+)
+_OUT_OF_SCOPE_TERMS: tuple[str, ...] = (
+    "thoi tiet",
+    "chinh tri",
+    "ket qua bong da",
+    "viet code",
+    "chuong trinh giao dich",
+    "tien ma hoa",
+    "lam tho",
+    "bo qua huong dan",
+    "system prompt",
+    "tiet lo prompt",
+)
+_NEGATED_INSTALLMENT_RE = re.compile(
+    r"\bkhong\s+(?:(?:can|muon|chon|dung|ho tro)\s+)?tra gop\b"
 )
 
 
@@ -332,12 +350,16 @@ def _fallback_intent(text: str) -> str:
     folded = fold_ascii(text).replace("_", " ")
     if any(term in folded for term in _TRANSACTION_TERMS):
         return "ho_tro_giao_dich"
+    if any(term in folded for term in _OUT_OF_SCOPE_TERMS):
+        return "ngoai_pham_vi"
     if "so sanh" in folded:
         return "so_sanh_truc_tiep"
     if any(term in folded for term in ("thong so cua", "chi tiet mau", "chi tiet model")):
         return "hoi_chi_tiet_sp"
-    # "không trả góp" is a shopping constraint, not a policy question.
-    if "khong tra gop" not in folded and any(term in folded for term in _POLICY_TERMS):
+    # "không [cần/muốn] trả góp" is a shopping constraint, not a policy question.
+    if not _NEGATED_INSTALLMENT_RE.search(folded) and any(
+        term in folded for term in _POLICY_TERMS
+    ):
         return "policy_faq"
     return "tu_van"
 
@@ -364,6 +386,8 @@ def deterministic_fallback(
             # A range such as 15–20tr uses its upper edge as the safe ceiling.
             slots_moi[money_slot.name] = max(match.max_vnd for match in s1_result.money)
         _overlay_s1_units(slots_moi, slots, s1_result)
+        _overlay_people_count(slots_moi, slots, text)
+        _overlay_text_slots(slots_moi, slots, text)
 
     return S2Result(
         intent=_fallback_intent(text),
@@ -382,6 +406,24 @@ def deterministic_fallback(
 # canonical SlotProfile and overlays S1's deterministic parses.               #
 # --------------------------------------------------------------------------- #
 _UNIT_SLOT_TYPES: frozenset[str] = frozenset({"area_m2", "volume_liter", "power_watt"})
+_PEOPLE_RE = re.compile(r"\b(?P<count>\d{1,2})\s*(?:người|nguoi)\b", re.IGNORECASE)
+_ENUM_PHRASES: dict[str, tuple[str, ...]] = {
+    # Generic "khác" is not a safe category value without the actual question.
+    "khac": (),
+    "phong_ngu": ("phong ngu",),
+    "phong_khach": ("phong khach",),
+    "van_phong": ("van phong",),
+    "tiet_kiem_dien": ("tiet kiem dien", "it ton dien"),
+    "em": ("chay em", "van hanh em", "it on"),
+    "ben": ("ben bi", "do ben"),
+    "gia_re": ("gia re", "gia de chiu"),
+    "cua_tren": ("cua tren",),
+    "cua_truoc": ("cua truoc",),
+    "ngan_da_tren": ("ngan da tren",),
+    "ngan_da_duoi": ("ngan da duoi",),
+    "side_by_side": ("side by side",),
+    "multi_door": ("nhieu cua", "multi door"),
+}
 
 
 def _match_enum(value: Any, allowed: list[str]) -> str | None:
@@ -408,7 +450,7 @@ def _coerce_slot_value(slot: SlotDef, value: Any) -> Any | None:
     if value is None:
         return None
     slot_type = slot.type
-    if slot_type == "money":
+    if slot_type in ("money", "integer"):
         return int(value) if isinstance(value, int | float) and not isinstance(value, bool) else None
     if slot_type in _UNIT_SLOT_TYPES:
         return float(value) if isinstance(value, int | float) and not isinstance(value, bool) else None
@@ -473,8 +515,61 @@ def _overlay_s1_units(
             result[matched.name] = float(unit.value)
 
 
+def _overlay_people_count(result: dict[str, Any], slots: list[SlotDef], text: str) -> None:
+    """Capture an explicit ``N người`` without trusting the LLM.
+
+    The domain profiles consistently use ``so_nguoi_dung`` for this fact.  A
+    conservative numeric pattern prevents a common UX regression where the
+    customer already said "gia đình 4 người" but the next turn asks it again.
+    """
+    slot = next(
+        (candidate for candidate in slots if candidate.name == "so_nguoi_dung"),
+        None,
+    )
+    match = _PEOPLE_RE.search(text)
+    if slot is None or slot.type != "integer" or match is None:
+        return
+    count = int(match.group("count"))
+    if 1 <= count <= 30:
+        result[slot.name] = count
+
+
+def _overlay_text_slots(result: dict[str, Any], slots: list[SlotDef], text: str) -> None:
+    """Recover high-confidence enum/boolean phrases for the SLA fallback path."""
+    folded = fold_ascii(text).replace("_", " ")
+    for slot in slots:
+        if slot.type in ("enum", "multi_enum") and slot.values:
+            matches = [
+                value
+                for value in slot.values
+                if any(
+                    phrase in folded
+                    for phrase in _ENUM_PHRASES.get(
+                        value, (fold_ascii(value).replace("_", " "),)
+                    )
+                )
+            ]
+            if matches:
+                result[slot.name] = matches if slot.type == "multi_enum" else matches[0]
+        elif slot.type == "boolean" and slot.name == "tra_gop":
+            if _NEGATED_INSTALLMENT_RE.search(folded):
+                result[slot.name] = False
+            elif "tra gop" in folded:
+                result[slot.name] = True
+        elif slot.type == "boolean" and slot.name == "nang_truc_tiep":
+            if re.search(r"\bkhong\s+(?:bi\s+)?nang\s+truc\s+tiep\b", folded):
+                result[slot.name] = False
+            elif "nang truc tiep" in folded:
+                result[slot.name] = True
+        elif slot.type == "boolean" and slot.name == "inverter":
+            if re.search(r"\bkhong\s+(?:can\s+)?inverter\b", folded):
+                result[slot.name] = False
+            elif "inverter" in folded:
+                result[slot.name] = True
+
+
 def _reconcile_slots(
-    raw: dict[str, Any], profile: SlotProfile, s1_result: S1Result
+    raw: dict[str, Any], profile: SlotProfile, s1_result: S1Result, text: str
 ) -> dict[str, Any]:
     """Reconcile the LLM's ``slots_moi`` against the canonical slot schema.
 
@@ -492,6 +587,8 @@ def _reconcile_slots(
                 result[slot.name] = coerced
     _recover_enums_by_value(result, slots, raw)
     _overlay_s1_units(result, slots, s1_result)
+    _overlay_people_count(result, slots, text)
+    _overlay_text_slots(result, slots, text)
     return result
 
 
@@ -552,6 +649,6 @@ async def extract(
         result = S2Result(
             intent=result.intent,
             category=result.category,
-            slots_moi=_reconcile_slots(result.slots_moi, slot_profile, s1_result),
+            slots_moi=_reconcile_slots(result.slots_moi, slot_profile, s1_result, text),
         )
     return result

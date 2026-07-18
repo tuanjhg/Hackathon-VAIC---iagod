@@ -287,24 +287,39 @@ def build_source_panel(
 def render_fallback_table(
     ranking: RankingResult, candidates: list[dict[str, Any]]
 ) -> str:
-    """Plain listing of the top candidates' real facts, zero generation.
+    """Compact listing of top candidates, zero generation.
 
     Used when even the regenerated answer exceeds :data:`MAX_INCIDENTS` — the
-    reply degrades to data straight from the facts JSON instead of prose.
+    reply degrades to deterministic candidate names instead of prose. Detailed
+    facts stay in the structured cards/source panel, avoiding an unreadable
+    mobile message that duplicates every raw catalog field.
     """
     by_sku = {str(c.get("sku")): c for c in candidates}
-    lines = ["Dạ để đảm bảo chính xác, em gửi anh/chị số liệu trực tiếp từ hệ thống:"]
+    rows: list[str] = []
     for index, breakdown in enumerate(ranking.top, start=1):
         cand = by_sku.get(breakdown.sku, {})
         name = str(cand.get("name", breakdown.sku))
         price = cand.get("price")
-        parts = [f"{field_label('price')}: {_fmt_vnd(price) if price is not None else 'chưa có dữ liệu'}"]
-        for field, value in (cand.get("specs") or {}).items():
-            if value is None:
-                continue
+        parts = [
+            f"{field_label('price')}: {_fmt_vnd(price) if price is not None else 'chưa có dữ liệu'}"
+        ]
+        first_spec = next(
+            (
+                (field, value)
+                for field, value in (cand.get("specs") or {}).items()
+                if value is not None
+            ),
+            None,
+        )
+        if first_spec is not None:
+            field, value = first_spec
             parts.append(f"{field_label(field)}: {value}")
-        lines.append(f"[{index}] {name} — " + "; ".join(parts))
-    return "\n".join(lines)
+        rows.append(f"[{index}] {name} — " + "; ".join(parts))
+    return (
+        "Dạ dưới đây là các lựa chọn được xếp hạng bằng số liệu trực tiếp từ hệ thống. "
+        "Anh/chị có thể xem giá, điểm phù hợp và điều cần cân nhắc trên từng thẻ.\n"
+        + "\n".join(rows)
+    )
 
 
 # --------------------------------------------------------------------------- #

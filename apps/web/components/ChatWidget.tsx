@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { api } from "@/lib/api";
 import { useChatStore } from "@/stores/chat-store";
 import { ChatMessage } from "@/components/ChatMessage";
+import type { ResponseAction, SelectedAction } from "@/types";
 
 export function ChatWidget() {
   const {
@@ -28,7 +29,7 @@ export function ChatWidget() {
     bottom.current?.scrollIntoView?.({ behavior: "smooth", block: "end" });
   }, [messages, isLoading]);
 
-  const send = async (text: string) => {
+  const send = async (text: string, selectedAction?: SelectedAction) => {
     const value = text.trim();
     if (!value || isLoading || !hasConsented) return;
     addMessage({ role: "user", content: value });
@@ -54,6 +55,7 @@ export function ChatWidget() {
           updateLastMessage({
             content: response.message,
             quickReplies: response.quick_replies,
+            actions: response.actions,
             recommendations: response.recommendations,
             cards: response.cards,
             responseType: response.response_type,
@@ -61,17 +63,19 @@ export function ChatWidget() {
             antiPick: response.anti_pick,
             sourcePanel: response.source_panel,
             verifierFlags: response.verifier_flags,
+            guardrail: response.guardrail,
           });
         },
-      });
+      }, selectedAction);
     } catch (err) {
       console.error("Streaming failed, falling back to unary:", err);
       try {
-        const response = await api.chat(sessionId, value, context);
+        const response = await api.chat(sessionId, value, context, selectedAction);
         setContext(response.context);
         updateLastMessage({
           content: response.message,
           quickReplies: response.quick_replies,
+          actions: response.actions,
           recommendations: response.recommendations,
           cards: response.cards,
           responseType: response.response_type,
@@ -79,6 +83,7 @@ export function ChatWidget() {
           antiPick: response.anti_pick,
           sourcePanel: response.source_panel,
           verifierFlags: response.verifier_flags,
+          guardrail: response.guardrail,
         });
       } catch (fallbackErr) {
         console.error("Fallback also failed:", fallbackErr);
@@ -149,7 +154,18 @@ export function ChatWidget() {
 
             <div className="flex-1 space-y-3 overflow-y-auto bg-background/50 p-3">
               {messages.map((message, index) => (
-                <ChatMessage key={index} message={message} onQuickReply={(v) => void send(v)} />
+                <ChatMessage
+                  key={index}
+                  message={message}
+                  onQuickReply={(label: string, action?: ResponseAction) =>
+                    void send(
+                      label,
+                      action
+                        ? { id: action.id, value: action.value, slot_name: action.slot_name }
+                        : undefined,
+                    )
+                  }
+                />
               ))}
               {isLoading && <TypingIndicator />}
               <div ref={bottom} />
@@ -158,9 +174,10 @@ export function ChatWidget() {
             {!hasConsented && (
               <div className="border-t border-border bg-sky-500/5 px-3 py-2.5 text-xs leading-4 text-muted-foreground">
                 <p>
-                  Hồ sơ nhu cầu trên máy chủ được giữ tối đa 30 phút không hoạt động. Nội dung
-                  vẫn hiện trên trình duyệt cho tới khi anh/chị bấm Xóa. Vui lòng không gửi số
-                  điện thoại, email hoặc thông tin thanh toán.
+                  Nội dung chat có thể được gửi tới nhà cung cấp AI bên ngoài để xử lý. Hồ sơ
+                  nhu cầu trên máy chủ được giữ tối đa 30 phút không hoạt động và vẫn hiện trên
+                  trình duyệt cho tới khi anh/chị bấm Xóa. Vui lòng không gửi số điện thoại,
+                  email hoặc thông tin thanh toán.
                 </p>
                 <button
                   type="button"

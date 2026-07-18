@@ -17,7 +17,7 @@ required_slots:
     sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
   - name: so_nguoi_dung
     label: "Số người trong nhà"
-    type: text
+    type: integer
     catalog_field: null
     sample_question: "Gia đình mình khoảng mấy người ạ, để em tính dung tích phù hợp?"
 

@@ -69,3 +69,14 @@ def test_grounded_answer_caps_number_of_excerpts() -> None:
     answer = asyncio.run(generate_policy_answer(router, "hỏi", results, max_chunks=3))
 
     assert len(answer.sources) == 3  # capped to max_chunks
+
+
+def test_unsubstantiated_policy_number_is_replaced_by_direct_excerpt() -> None:
+    router = FakeRouter("Dạ chính sách cho phép đổi trả trong 99 ngày ạ.")
+    results = [_result("doi_tra", "Thời hạn", "Sản phẩm được đổi trong 7 ngày.", 0.9)]
+
+    answer = asyncio.run(generate_policy_answer(router, "đổi trả trong bao lâu?", results))
+
+    assert answer.fallback_used is True
+    assert "99" not in answer.text
+    assert "7 ngày" in answer.text

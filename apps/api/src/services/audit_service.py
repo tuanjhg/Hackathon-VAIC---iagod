@@ -27,8 +27,9 @@ def write_audit_log(
     """
     try:
         verdict_counts: dict[str, int] = {}
-        if result.verification is not None:
-            verdict_counts = dict(Counter(c.verdict for c in result.verification.claims))
+        verification = result.output_verification or result.verification
+        if verification is not None:
+            verdict_counts = dict(Counter(c.verdict for c in verification.claims))
 
         row = AuditLog(
             session_id=session_id,

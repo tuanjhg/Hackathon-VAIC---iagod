@@ -125,10 +125,18 @@ def decide_policy(profile: NeedProfile, candidate_count: int) -> PolicyDecision:
     missing_required = [s for s in slot_profile.required_slots if profile.should_ask(s.name)]
     askable_optional = [s for s in slot_profile.optional_slots if profile.should_ask(s.name)]
     nothing_to_ask = not missing_required and not askable_optional
+    known_optional_count = sum(
+        profile.slots.get(slot.name) not in (None, [], "")
+        for slot in slot_profile.optional_slots
+    )
 
     # --- Determine the intended level (ignoring the clarify quota, which is
     # applied at ask-commit time via increment_clarify_round). ---
-    if candidate_count <= LOW_CANDIDATE_THRESHOLD or nothing_to_ask:
+    if (
+        candidate_count <= LOW_CANDIDATE_THRESHOLD
+        or nothing_to_ask
+        or (not missing_required and known_optional_count >= 2)
+    ):
         intended: Literal["cao", "vua", "thap"] = "thap"
     elif missing_required or candidate_count > HIGH_CANDIDATE_THRESHOLD:
         intended = "cao"

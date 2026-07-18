@@ -39,7 +39,22 @@ from src.router.client import LLMRouter
 from src.seed.seed_realdata import seed_realdata
 from src.services.advisor_chat_service import _get_policy_pipeline
 
-REPO = Path(__file__).resolve().parents[4]
+
+def _find_repo_root() -> Path:
+    """Find the nearest runtime root containing ``data``.
+
+    A source checkout places this module at ``apps/api/src/eval`` while the
+    container installs it at ``/app/src/eval``.  Looking for the actual data
+    directory keeps the eval CLI portable across both layouts.
+    """
+    source = Path(__file__).resolve()
+    for parent in source.parents:
+        if (parent / "data").is_dir():
+            return parent
+    raise RuntimeError(f"Could not locate repository data directory from {source}")
+
+
+REPO = _find_repo_root()
 DATA_DIR = REPO / "data"
 PROCESSED_DIR = DATA_DIR / "realdata" / "processed"
 DEFAULT_DB = Path(tempfile.gettempdir()) / "needwise_eval.db"

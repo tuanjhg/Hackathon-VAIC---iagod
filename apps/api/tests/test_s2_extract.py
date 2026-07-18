@@ -105,6 +105,15 @@ def test_build_response_format_maps_enum_and_multi_enum() -> None:
     assert uu_tien["items"]["enum"] == ["tiet_kiem_dien", "em", "ben", "gia_re"]
 
 
+@pytest.mark.parametrize("category", ["may_giat", "tu_lanh"])
+def test_people_count_slot_is_a_nullable_integer(category: str) -> None:
+    properties = build_response_format(category)["json_schema"]["schema"]["properties"]
+    assert properties["slots_moi"]["properties"]["so_nguoi_dung"]["type"] == [
+        "integer",
+        "null",
+    ]
+
+
 # --- extract() happy path -----------------------------------------------------
 
 
@@ -204,13 +213,48 @@ def test_deterministic_fallback_keeps_category_budget_and_units() -> None:
     )
 
 
+@pytest.mark.parametrize("category_text,category", [("máy giặt", "may_giat"), ("tủ lạnh", "tu_lanh")])
+def test_explicit_people_count_is_recovered_without_llm(
+    category_text: str, category: str
+) -> None:
+    from src.pipeline.preprocess import run_s1
+
+    text = f"Tư vấn {category_text} tầm 10 triệu cho gia đình 4 người"
+    s1 = run_s1(text)
+
+    result = deterministic_fallback(text, s1, NeedProfile())
+
+    assert result.category == category
+    assert result.slots_moi["ngan_sach_max"] == 10_000_000
+    assert result.slots_moi["so_nguoi_dung"] == 4
+
+
+def test_rich_aircon_constraints_are_recovered_without_llm() -> None:
+    from src.pipeline.preprocess import run_s1
+
+    text = (
+        "Máy lạnh dưới 20 triệu cho phòng ngủ 18m2, không bị nắng trực tiếp, "
+        "ưu tiên tiết kiệm điện và chạy êm, không cần trả góp"
+    )
+    result = deterministic_fallback(text, run_s1(text), NeedProfile())
+
+    assert result.slots_moi["loai_phong"] == "phong_ngu"
+    assert result.slots_moi["nang_truc_tiep"] is False
+    assert result.slots_moi["uu_tien"] == ["tiet_kiem_dien", "em"]
+    assert result.slots_moi["tra_gop"] is False
+
+
 @pytest.mark.parametrize(
     ("text", "expected"),
     [
         ("kiểm tra đơn hàng 123", "ho_tro_giao_dich"),
+        ("đơn DEMO-001 đang giao tới đâu và đổi lịch nhận", "ho_tro_giao_dich"),
         ("chính sách bảo hành thế nào", "policy_faq"),
         ("so sánh hai mẫu này", "so_sanh_truc_tiep"),
         ("máy lạnh không trả góp", "tu_van"),
+        ("máy lạnh không cần trả góp", "tu_van"),
+        ("máy lạnh không muốn trả góp", "tu_van"),
+        ("viết chương trình giao dịch tiền mã hóa", "ngoai_pham_vi"),
     ],
 )
 def test_deterministic_fallback_routes_only_high_signal_intents(

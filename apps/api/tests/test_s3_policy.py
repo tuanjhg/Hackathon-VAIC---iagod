@@ -80,6 +80,19 @@ def test_thap_low_candidate_count_proceeds_without_question() -> None:
     assert profile.clarify_rounds == 0
 
 
+def test_rich_profile_proceeds_without_asking_for_more_optionals() -> None:
+    profile = NeedProfile(
+        category=CATEGORY,
+        slots={**_filled_required(), "loai_phong": "phong_ngu", "uu_tien": ["em"]},
+    )
+
+    decision = decide_policy(profile, candidate_count=40)
+
+    assert decision.level == "thap"
+    assert decision.action == "proceed"
+    assert profile.clarify_rounds == 0
+
+
 def test_thap_quota_exhausted_adds_assumptions_for_missing_required() -> None:
     profile = NeedProfile(category=CATEGORY, clarify_rounds=MAX_CLARIFY_ROUNDS)
     decision = decide_policy(profile, candidate_count=50)  # would be Cao if quota left

@@ -11,6 +11,7 @@ database or network. Async is driven with ``asyncio.run`` per repo convention
 
 import asyncio
 import json
+import time
 from typing import Any
 
 import pytest
@@ -67,6 +68,12 @@ class FakeFactsTool:
     async def get_facts_many(self, skus: list[str]) -> dict[str, ProductFacts | None]:
         self.calls.append(list(skus))
         return {sku: self._facts.get(sku) for sku in skus}
+
+
+class SlowRouter:
+    async def complete(self, messages: list[dict[str, Any]], **kwargs: Any) -> dict[str, Any]:
+        await asyncio.sleep(2)
+        raise AssertionError("S2 timeout should cancel this request")
 
 
 # --------------------------------------------------------------------------- #
@@ -249,6 +256,26 @@ def test_s2_router_failure_degrades_to_s1_for_previously_uncovered_category() ->
     assert retriever.calls[0]["category_key"] == "may_giat"
 
 
+def test_s2_timeout_stays_within_stage_sla_and_uses_deterministic_slots() -> None:
+    profile = NeedProfile()
+    started = time.perf_counter()
+    result = asyncio.run(
+        run_turn(
+            "tư vấn máy giặt tầm 10 triệu cho gia đình 4 người",
+            profile,
+            router=SlowRouter(),
+            retriever=_full_retriever(total=50),
+            facts_tool=FakeFactsTool(FACTS),
+        )
+    )
+
+    assert result.kind == "ask"
+    assert result.degraded_stages == ["s2"]
+    assert result.timings_ms["s2"] <= 700
+    assert time.perf_counter() - started < 1.0
+    assert profile.slots["so_nguoi_dung"] == 4
+
+
 # --------------------------------------------------------------------------- #
 # Ask path (prefilter runs first, question is deterministic)                  #
 # --------------------------------------------------------------------------- #
@@ -332,7 +359,10 @@ def test_recommend_happy_path_runs_full_chain() -> None:
     assert res.verification is not None
     assert [c.verdict for c in res.verification.claims] == ["match"]
     assert res.verification.per_claim_error_rate == 0.0
-    assert res.message.startswith("[1] có độ ồn 29dB.")
+    assert res.output_verification is not None
+    assert res.output_verification.per_claim_error_rate == 0.0
+    assert "đã ghi nhận anh/chị cần máy lạnh" in res.message
+    assert "[1] có độ ồn 29dB." in res.message
     assert res.verifier_flags == [] and not res.regenerated
 
     # S8 side outputs: provenance panel + per-stage timings.
@@ -354,6 +384,8 @@ def test_s6_router_failure_returns_grounded_table_not_error() -> None:
     assert "số liệu trực tiếp từ hệ thống" in res.message
     assert "Panasonic Inverter 12000 BTU" in res.message
     assert res.ranking is not None
+    assert res.output_verification is not None
+    assert not any(c.verdict == "mismatch" for c in res.output_verification.claims)
 
 
 def test_recommend_corrects_mismatch_in_place() -> None:
@@ -361,7 +393,7 @@ def test_recommend_corrects_mismatch_in_place() -> None:
     router = QueuedRouter(_s2(), "[1] có độ ồn 25dB.")
     res = _run("chốt giúp em", _recommend_profile(), router, _full_retriever())
     assert res.kind == "recommend"
-    assert res.message.startswith("[1] có độ ồn 29dB.")
+    assert "[1] có độ ồn 29dB." in res.message
     assert [f.action for f in res.verifier_flags] == ["corrected"]
     assert not res.regenerated and not res.used_fallback_table
     assert len(router.calls) == 2  # no S6 retry
@@ -375,7 +407,7 @@ def test_escalation_regenerates_once_with_error_feedback() -> None:
     res = _run("chốt giúp em", _recommend_profile(), router, _full_retriever())
 
     assert res.regenerated and not res.used_fallback_table
-    assert res.message.startswith("[1] có độ ồn 29dB.")
+    assert "[1] có độ ồn 29dB." in res.message
     assert len(router.calls) == 3  # S2 + S6 + S6-retry
     retry_user_content = router.calls[2][0][1]["content"]
     assert "PHẢI SỬA" in retry_user_content  # specific error feedback was injected

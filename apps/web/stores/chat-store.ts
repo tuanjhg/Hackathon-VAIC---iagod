@@ -3,8 +3,10 @@ import type {
   AdvisorAntiPick,
   AdvisorCard,
   ChatContext,
+  GuardrailMeta,
   ChatResponseType,
   Recommendation,
+  ResponseAction,
   SourcePanelEntry,
   VerifierFlag,
 } from "@/types";
@@ -13,6 +15,7 @@ export interface ChatEntry {
   role: "user" | "assistant"; 
   content: string; 
   quickReplies?: string[]; 
+  actions?: ResponseAction[];
   recommendations?: Recommendation[];
   cards?: AdvisorCard[];
   responseType?: ChatResponseType;
@@ -20,6 +23,7 @@ export interface ChatEntry {
   antiPick?: AdvisorAntiPick | null;
   sourcePanel?: SourcePanelEntry[];
   verifierFlags?: VerifierFlag[];
+  guardrail?: GuardrailMeta;
 }
 
 interface ChatState { 
