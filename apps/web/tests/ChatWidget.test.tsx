@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ChatWidget } from "@/components/ChatWidget";
 import { useChatStore } from "@/stores/chat-store";
@@ -6,7 +6,7 @@ import { useChatStore } from "@/stores/chat-store";
 describe("ChatWidget", () => {
   beforeEach(() => useChatStore.setState({ isOpen: false }));
 
-  it("opens, updates messages and closes without treating scroll result as cleanup", () => {
+  it("opens, updates messages and closes without treating scroll result as cleanup", async () => {
     const scrollIntoView = vi.fn(() => ({ cancel: vi.fn() }));
     Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
       configurable: true,
@@ -23,6 +23,9 @@ describe("ChatWidget", () => {
     expect(scrollIntoView).toHaveBeenCalled();
 
     fireEvent.click(screen.getByLabelText("Đóng chatbot"));
-    expect(screen.queryByLabelText("Chat tư vấn")).not.toBeInTheDocument();
+    // Panel unmounts after the AnimatePresence exit transition.
+    await waitFor(() =>
+      expect(screen.queryByLabelText("Chat tư vấn")).not.toBeInTheDocument(),
+    );
   });
 });

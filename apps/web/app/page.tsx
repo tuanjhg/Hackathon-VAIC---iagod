@@ -1,13 +1,66 @@
-import Link from "next/link";
-import { BrainCircuit, GitCompareArrows, ShieldCheck, Snowflake } from "lucide-react";
-import { HeroChatButton } from "@/components/HeroChatButton";
+import { HeroBanners } from "@/components/home/HeroBanners";
+import { TrustBar } from "@/components/home/TrustBar";
+import { PromoGrid } from "@/components/home/PromoGrid";
+import { FlashSale } from "@/components/home/FlashSale";
+import { ShopByNeed } from "@/components/home/ShopByNeed";
+import { AdvisorBand } from "@/components/home/AdvisorBand";
+import { SubBanners } from "@/components/home/SubBanners";
+import { SectionHeader } from "@/components/home/SectionHeader";
+import { PromoRail } from "@/components/home/PromoRail";
 import { ProductGrid } from "@/components/ProductGrid";
-import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
+import { Snowflake } from "lucide-react";
 
-export default function HomePage() { return <>
-  <section className="overflow-hidden bg-gradient-to-br from-brand-900 via-brand-700 to-brand-500 text-white"><div className="container grid items-center gap-10 py-20 lg:grid-cols-2 lg:py-28"><div><span className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold">Tư vấn minh bạch · Dựa trên catalog thật</span><h1 className="mt-6 text-4xl font-black leading-tight sm:text-5xl">Chọn máy lạnh phù hợp với nhu cầu thật của bạn</h1><p className="mt-5 max-w-xl text-lg leading-8 text-brand-100">Chỉ cần cho biết diện tích, ngân sách và ưu tiên. NeedWise giúp bạn thu hẹp lựa chọn và hiểu rõ từng đánh đổi.</p><div className="mt-8 flex flex-wrap gap-3"><HeroChatButton/><Button variant="outline" size="lg" asChild className="border-white/40 bg-white/10 text-white hover:bg-white/20"><Link href="/products">Xem sản phẩm</Link></Button></div></div><div className="relative mx-auto flex aspect-square w-full max-w-md items-center justify-center rounded-[3rem] bg-white/10"><div className="absolute inset-8 rounded-[2.5rem] border border-white/20"/><Snowflake className="h-40 w-40 text-cyan-200"/><span className="absolute bottom-12 rounded-full bg-white px-5 py-3 text-sm font-bold text-brand-700 shadow-xl">20 lựa chọn đã kiểm chứng dữ liệu</span></div></div></section>
-  <section className="container py-16"><div className="flex items-end justify-between gap-4"><div><p className="font-bold text-brand-600">ĐƯỢC QUAN TÂM</p><h2 className="mt-2 text-3xl font-black">Sản phẩm nổi bật</h2></div><Link href="/products" className="text-sm font-bold text-brand-600">Xem tất cả →</Link></div><div className="mt-8"><ProductGrid filters={{ sort: "featured" }} limit={6}/></div></section>
-  <section className="bg-white py-16"><div className="container"><div className="text-center"><p className="font-bold text-brand-600">VÌ SAO NEEDWISE?</p><h2 className="mt-2 text-3xl font-black">Một cách chọn dễ hiểu hơn</h2></div><div className="mt-10 grid gap-5 md:grid-cols-3"><Benefit icon={<BrainCircuit/>} title="Hiểu nhu cầu" text="Hỏi đúng diện tích, ngân sách và ưu tiên trước khi đề xuất."/><Benefit icon={<GitCompareArrows/>} title="So sánh dễ hiểu" text="Đặt thông số cạnh nhau và làm rõ lựa chọn tốt theo từng tiêu chí."/><Benefit icon={<ShieldCheck/>} title="Không bịa dữ liệu" text="Thông tin thiếu được ghi “Chưa có dữ liệu”, không tự suy đoán."/></div></div></section>
-  </>; }
-function Benefit({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) { return <div className="rounded-2xl border p-7 shadow-card"><span className="inline-flex rounded-xl bg-brand-50 p-3 text-brand-600">{icon}</span><h3 className="mt-5 text-xl font-bold">{title}</h3><p className="mt-2 leading-7 text-slate-600">{text}</p></div>; }
+export default function HomePage() {
+  return (
+    <div className="pb-4">
+      <HeroBanners />
 
+      <Reveal>
+        <TrustBar />
+      </Reveal>
+
+      <Reveal>
+        <PromoGrid />
+      </Reveal>
+
+      <FlashSale />
+
+      <Reveal>
+        <ShopByNeed />
+      </Reveal>
+
+      <Reveal>
+        <section className="container pt-12">
+          <SectionHeader eyebrow="ĐƯỢC QUAN TÂM" title="Sản phẩm nổi bật" href="/products" />
+          <div className="mt-6">
+            <ProductGrid filters={{ sort: "featured" }} limit={6} />
+          </div>
+        </section>
+      </Reveal>
+
+      <AdvisorBand />
+
+      <Reveal>
+        <SubBanners />
+      </Reveal>
+
+      <Reveal>
+        <PromoRail
+          icon={<Snowflake className="h-5 w-5 text-brand-100" />}
+          title="Trạm giá tốt trong tuần"
+          viewAllHref="/products?sort=price_asc"
+          filters={{ sort: "price_asc" }}
+          limit={10}
+          banner={{
+            title: "Sale mạnh giải nhiệt",
+            subtitle: "Trả chậm 0% · miễn phí công lắp · voucher đến 1 triệu",
+            cta: "XEM NGAY",
+            href: "/products?sort=price_asc",
+            tone: "from-brand-800 via-brand-600 to-accent",
+          }}
+        />
+      </Reveal>
+    </div>
+  );
+}
