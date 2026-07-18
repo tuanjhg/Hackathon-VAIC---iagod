@@ -314,6 +314,23 @@ def test_tampered_selected_action_cannot_inject_a_slot(db: Session) -> None:
     assert "loai_phong" not in saved.slots
 
 
+def test_simple_greeting_returns_follow_up_instead_of_out_of_scope(db: Session) -> None:
+    router = QueuedRouter(_s2(intent="ngoai_pham_vi", category=None))
+
+    response = asyncio.run(_service(db, router).reply(_request("hi")))
+
+    assert response.response_type == "follow_up"
+    assert response.intent == "giao_tiep_co_ban"
+    assert "chào anh/chị" in response.message
+    assert response.guardrail.status == "not_applicable"
+    assert [action.label for action in response.actions] == [
+        "Tư vấn máy lạnh",
+        "Tư vấn tủ lạnh",
+        "Xem chính sách trả góp",
+    ]
+    assert router.calls == []
+
+
 # --------------------------------------------------------------------------- #
 # SSE wire format (endpoint level, mock pipeline — no LLM needed)             #
 # --------------------------------------------------------------------------- #

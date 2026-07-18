@@ -46,12 +46,14 @@ the facts tool does not know keeps ``price=None`` (absence is not a price).
 from __future__ import annotations
 
 import asyncio
+import re
 import time
 from pathlib import Path
 from typing import Any, Literal, Protocol
 
 from pydantic import BaseModel, Field
 
+from src.pipeline.humanize import fold_ascii
 from src.pipeline.need_profile import NeedProfile
 from src.pipeline.policy_answer import PolicySource, generate_policy_answer
 from src.pipeline.preprocess import run_s1
@@ -142,6 +144,50 @@ _PROFILE_VALUE_LABELS: dict[str, str] = {
     "gia_re": "giá dễ chịu",
 }
 
+_SOCIAL_QUICK_REPLIES = [
+    "Tư vấn máy lạnh",
+    "Tư vấn tủ lạnh",
+    "Xem chính sách trả góp",
+]
+
+
+def _basic_social_reply(text: str, *, has_category: bool) -> str | None:
+    """Answer short social turns before S2; product-bearing turns continue normally."""
+    if has_category:
+        return None
+    folded = fold_ascii(text).replace("_", " ")
+    tokens = re.findall(r"[a-z0-9]+", folded)
+    if not tokens or len(tokens) > 10:
+        return None
+    clean = " ".join(tokens)
+    token_set = set(tokens)
+    if (
+        token_set.intersection({"hi", "hello", "alo"})
+        or tokens[0] == "chao"
+        or clean.startswith("xin chao")
+        or clean in {"khoe khong", "em khoe khong", "ban khoe khong"}
+    ):
+        return (
+            "Dạ em chào anh/chị ạ! Em có thể tư vấn chọn sản phẩm, so sánh theo nhu cầu "
+            "và giải đáp chính sách từ nguồn hiện có. Anh/chị đang quan tâm sản phẩm nào ạ?"
+        )
+    if "cam on" in clean or token_set.intersection({"thanks", "thank"}):
+        return (
+            "Dạ em rất vui được hỗ trợ anh/chị ạ. Khi cần chọn sản phẩm hoặc hỏi chính sách, "
+            "anh/chị cứ nhắn nhu cầu cho em nhé."
+        )
+    if token_set.intersection({"bye", "goodbye"}) or clean.startswith("tam biet"):
+        return "Dạ em chào anh/chị ạ. Khi cần tư vấn điện máy, anh/chị quay lại nhắn em nhé!"
+    if any(
+        phrase in clean
+        for phrase in ("lam duoc gi", "ho tro gi", "giup duoc gi", "co the lam gi")
+    ):
+        return (
+            "Dạ em có thể giúp anh/chị chọn sản phẩm theo ngân sách và nhu cầu, so sánh các "
+            "lựa chọn có dữ liệu, và trả lời chính sách từ tài liệu hiện có ạ."
+        )
+    return None
+
 
 class LLMRouterLike(Protocol):
     """Structural type for anything with the router's ``complete`` coroutine
@@ -203,7 +249,7 @@ class TurnResult(BaseModel):
 
     kind: Literal[
         "ask_category", "ask", "recommend", "no_results", "handoff", "out_of_scope",
-        "unsupported", "policy"
+        "unsupported", "policy", "small_talk"
     ]
     message: str
     intent: str
@@ -418,6 +464,16 @@ async def run_turn(
     degraded_stages: list[str] = []
     s1 = run_s1(text)
     sw.lap("s1")
+    social_reply = _basic_social_reply(text, has_category=s1.category_hint is not None)
+    if social_reply is not None:
+        return TurnResult(
+            kind="small_talk",
+            message=social_reply,
+            intent="giao_tiep_co_ban",
+            profile=profile,
+            quick_replies=_SOCIAL_QUICK_REPLIES,
+            timings_ms=sw.timings,
+        )
     deterministic_s2 = deterministic_fallback(text, s1, profile)
     try:
         s2 = await asyncio.wait_for(

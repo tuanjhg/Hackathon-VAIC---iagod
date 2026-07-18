@@ -209,13 +209,48 @@ def test_transaction_request_gets_safe_handoff_without_retrieval() -> None:
     assert retriever.calls == []
 
 
+@pytest.mark.parametrize("text", ["hi", "Xin chào", "Alo em ơi", "Em khỏe không?"])
+def test_basic_greeting_is_answered_without_llm_or_scope_refusal(text: str) -> None:
+    router = QueuedRouter(_s2(intent="ngoai_pham_vi", category=None))
+    retriever = _full_retriever()
+
+    result = _run(text, NeedProfile(), router, retriever)
+
+    assert result.kind == "small_talk"
+    assert result.intent == "giao_tiep_co_ban"
+    assert "chào anh/chị" in result.message
+    assert "không trả lời" not in result.message
+    assert router.calls == []
+    assert retriever.calls == []
+    assert result.timings_ms["s1"] < 50
+
+
+@pytest.mark.parametrize("text", ["Cảm ơn em", "bye", "Bạn hỗ trợ gì?"])
+def test_other_basic_social_turns_stay_conversational(text: str) -> None:
+    result = _run(text, NeedProfile(), QueuedRouter(), _full_retriever())
+    assert result.kind == "small_talk"
+    assert result.message.startswith("Dạ")
+
+
+def test_greeting_with_product_need_continues_to_advisory_pipeline() -> None:
+    profile = NeedProfile()
+    result = _run(
+        "Chào em, tư vấn máy lạnh 20 triệu cho phòng 18m2",
+        profile,
+        QueuedRouter(_s2(slots={"ngan_sach_max": 20_000_000, "dien_tich_m2": 18.0})),
+        _full_retriever(total=50),
+    )
+    assert result.kind != "small_talk"
+    assert profile.category == "may_lanh"
+
+
 # --------------------------------------------------------------------------- #
 # Category resolution                                                         #
 # --------------------------------------------------------------------------- #
 def test_asks_category_when_none_detected() -> None:
     router = QueuedRouter(_s2(category=None))
     retriever = _full_retriever()
-    res = _run("chào em", NeedProfile(), router, retriever)
+    res = _run("tư vấn giúp anh", NeedProfile(), router, retriever)
     assert res.kind == "ask_category"
     assert "Máy lạnh" in res.quick_replies
     assert retriever.calls == []  # no category → nothing to prefilter

@@ -481,6 +481,7 @@ def _to_chat_response(result: TurnResult) -> ChatResponse:
         "handoff": "handoff",
         "out_of_scope": "out_of_scope",
         "unsupported": "unsupported",
+        "small_talk": "follow_up",
     }
     return ChatResponse(
         response_type=response_types[result.kind],
