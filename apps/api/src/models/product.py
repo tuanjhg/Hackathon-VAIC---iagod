@@ -1,18 +1,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
-from sqlalchemy import (
-    JSON,
-    BigInteger,
-    Boolean,
-    DateTime,
-    Float,
-    ForeignKey,
-    Integer,
-    String,
-    Text,
-    func,
-)
+from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -52,8 +41,20 @@ class Product(Base):
     featured: Mapped[bool] = mapped_column(Boolean, default=False)
     rating: Mapped[float] = mapped_column(Float, default=0)
     review_count: Mapped[int] = mapped_column(Integer, default=0)
-    specifications: Mapped[dict[str, Any]] = mapped_column(
-        JSON().with_variant(JSONB, "postgresql"), default=dict
+    # Multi-category catalog fields (nullable). Populated by the generalized ETL
+    # loader for the 14 real categories; the máy-lạnh demo flow leaves these NULL
+    # and continues to use the typed ``ProductSpec`` relationship below.
+    #
+    # NOTE: the JSON structured-spec column is named ``specs`` in the database
+    # (matching the ETL record key), but is exposed on the ORM as ``specs_json``
+    # because the attribute name ``specs`` is already taken by the ProductSpec
+    # relationship (see below), which the demo flow depends on.
+    category_key: Mapped[str | None] = mapped_column(String, nullable=True)
+    specs_json: Mapped[dict[str, Any] | None] = mapped_column(
+        "specs", JSON().with_variant(JSONB(), "postgresql"), nullable=True
+    )
+    specs_raw: Mapped[dict[str, Any] | None] = mapped_column(
+        JSON().with_variant(JSONB(), "postgresql"), nullable=True
     )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(

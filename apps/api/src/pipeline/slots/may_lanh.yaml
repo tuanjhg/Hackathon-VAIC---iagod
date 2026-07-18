@@ -1,0 +1,77 @@
+category_key: may_lanh
+category_label: "Máy lạnh"
+source_notes: >
+  Slot v0 viết tay từ brief H2 (docs/research/dmx-local-context-h2.md) +
+  facets thực tế trong data/realdata/processed/may_lanh.json. Required/optional
+  split và câu hỏi mẫu tham khảo bảng "Slot schema theo ngành hàng" của
+  docs/research/dmx-ai-workflow-v1.md §2.
+data_quality: >
+  99.4% sản phẩm có specs cấu trúc (structured parser sẵn có), 25.9% có giá
+  (n=1039). Ngành ưu tiên hàng đầu -- data tốt nhất trong 14 ngành.
+
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: dien_tich_m2
+    label: "Diện tích phòng"
+    type: area_m2
+    catalog_field: null
+    sample_question: "Phòng mình khoảng bao nhiêu mét vuông ạ?"
+
+optional_slots:
+  - name: loai_phong
+    label: "Loại phòng"
+    type: enum
+    values: [phong_ngu, phong_khach, van_phong, khac]
+    catalog_field: null
+    priority_rank: 1
+    sample_question: "Phòng mình là phòng ngủ, phòng khách hay không gian khác ạ?"
+    rationale: "Ảnh hưởng ngưỡng độ ồn chấp nhận được -- phòng ngủ cần êm hơn."
+  - name: nang_truc_tiep
+    label: "Có nắng chiếu trực tiếp"
+    type: boolean
+    catalog_field: null
+    priority_rank: 2
+    sample_question: "Phòng có bị nắng chiếu trực tiếp (ví dụ hướng Tây) không ạ?"
+    rationale: "Input cho luật quy đổi BTU (+30% nếu có nắng trực tiếp)."
+  - name: uu_tien
+    label: "Ưu tiên"
+    type: multi_enum
+    values: [tiet_kiem_dien, em, ben, gia_re]
+    catalog_field: [specs.inverter, specs.energy_efficiency, specs.noise_db_indoor]
+    priority_rank: 3
+    sample_question: "Anh/chị ưu tiên tiết kiệm điện hay hoạt động êm hơn ạ?"
+  - name: tra_gop
+    label: "Nhu cầu trả góp"
+    type: boolean
+    catalog_field: null
+    priority_rank: 4
+    sample_question: "Anh/chị có cần hỗ trợ trả góp không ạ?"
+
+derivation_rules:
+  - name: btu_can
+    description: >
+      BTU_cần = diện_tích_m2 × 600, cộng thêm 30% nếu nắng_truc_tiep = true.
+      Dùng để lọc/rank theo specs.capacity_btu. Nguồn: docs/pipelines.md §6.4.
+  - name: hp_to_btu_step_table
+    description: >
+      Quy đổi HP -> BTU theo bảng bước thường gặp khi marketing máy lạnh
+      (không tuyến tính): 1HP=9000, 1.5HP=12000, 2HP=18000, 2.5HP=21000,
+      3HP=24000 BTU. Xem apps/api/src/pipeline/preprocess.py::hp_to_btu.
+
+catalog_field_map:
+  capacity_btu: specs.capacity_btu
+  horsepower: specs.horsepower
+  recommended_area_min: specs.recommended_area_min
+  recommended_area_max: specs.recommended_area_max
+  inverter: specs.inverter
+  noise_db_indoor: specs.noise_db_indoor
+  noise_db_outdoor: specs.noise_db_outdoor
+  energy_stars: specs.energy_stars
+  energy_efficiency: specs.energy_efficiency
+  warranty_years_compressor: specs.warranty_years_compressor
+  gas_type: specs.gas_type
+  made_in: specs.made_in

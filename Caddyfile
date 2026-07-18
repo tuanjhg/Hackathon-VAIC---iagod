@@ -1,0 +1,22 @@
+# Caddyfile
+# Tự động cấp phát HTTPS bằng Let's Encrypt
+
+{$DOMAIN_NAME:localhost} {
+	# Proxy /api/v1/* vào backend API
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+	
+	# Swagger Docs
+	handle /docs* {
+		reverse_proxy api:8000
+	}
+	handle /openapi.json {
+		reverse_proxy api:8000
+	}
+
+	# Tất cả route còn lại trỏ vào Next.js Frontend
+	handle {
+		reverse_proxy web:3000
+	}
+}

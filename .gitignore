@@ -13,6 +13,7 @@ coverage/
 dist/
 *.log
 *.tsbuildinfo
+scripts/bench/results/*.json
 .DS_Store
 .agents
 .test-tmp/

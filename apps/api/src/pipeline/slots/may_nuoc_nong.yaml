@@ -1,0 +1,68 @@
+category_key: may_nuoc_nong
+category_label: "Máy nước nóng"
+source_notes: >
+  Slot v0 viết tay từ facets thực tế trong
+  data/realdata/processed/may_nuoc_nong.json (2 ngành mở rộng thay vì máy
+  giặt -- xem data_quality bên dưới cho lý do). Không có bảng "Slot schema
+  theo ngành hàng" sẵn có cho ngành này trong dmx-ai-workflow-v1.md §2 nên
+  slot được thiết kế trực tiếp từ phân bố specs_raw thật.
+data_quality: >
+  98.1% sản phẩm có specs_raw (không có parser cấu trúc riêng), 46.4% có giá
+  (n=319) -- giá coverage tốt thứ nhì trong 12 ngành chưa có parser, tốt hơn
+  nhiều máy giặt (15.3%) vốn được đề xuất ở task 48. Chọn ngành này thay máy
+  giặt vì tiêu chí gốc của task 48 là "null-rate thấp"; giữ đúng tiêu chí,
+  đổi ví dụ cụ thể theo số đo thật (profile_report.md).
+  CAVEAT: field map trỏ vào specs_raw (nhãn tiếng Việt thô) -- Category
+  Profile Compiler (ADR A7, task 37) sẽ cần parse thành specs có cấu trúc.
+
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: loai_may
+    label: "Loại máy nước nóng"
+    type: enum
+    values: [truc_tiep, gian_tiep, nang_luong_mat_troi]
+    catalog_field: "specs_raw.Loại máy"
+    sample_question: "Anh/chị muốn máy nước nóng trực tiếp (tức thời), gián tiếp (có bình chứa) hay năng lượng mặt trời ạ?"
+
+optional_slots:
+  - name: so_nguoi_dung
+    label: "Số người / số điểm dùng nước nóng"
+    type: text
+    catalog_field: null
+    priority_rank: 1
+    sample_question: "Nhà mình dùng nước nóng cho mấy phòng/mấy người cùng lúc ạ?"
+    rationale: "Ảnh hưởng công suất (trực tiếp) hoặc dung tích bình (gián tiếp) cần thiết."
+  - name: cong_suat_w
+    label: "Công suất mong muốn"
+    type: power_watt
+    catalog_field: "specs_raw.Công suất đầu ra"
+    priority_rank: 2
+    sample_question: "Anh/chị có yêu cầu cụ thể về công suất máy không ạ?"
+  - name: tinh_nang_an_toan
+    label: "Ưu tiên tính năng an toàn"
+    type: boolean
+    catalog_field: "specs_raw.Tính năng an toàn"
+    priority_rank: 3
+    sample_question: "Anh/chị có ưu tiên các tính năng an toàn (chống giật, chống quá nhiệt...) không ạ?"
+
+derivation_rules:
+  - name: cong_suat_heuristic
+    description: >
+      Chưa có công thức chuẩn hoá công khai (khác BTU/m² của máy lạnh) --
+      heuristic tạm thời: loại trực tiếp dùng 1 vòi sen cùng lúc thường
+      2500-4500W; dùng đồng thời nhiều điểm hoặc loại gián tiếp cần dung
+      tích bình lớn hơn thay vì công suất tức thời cao. Cần chuyên gia duyệt
+      hoặc Category Profile Compiler (ADR A7) thay thế.
+
+catalog_field_map:
+  loai_may: "specs_raw.Loại máy"
+  cong_suat_dau_ra: "specs_raw.Công suất đầu ra"
+  dung_luong_dung_tich: "specs_raw.Dung lượng dung tích"
+  tuy_chinh_nhiet_do: "specs_raw.Tùy chỉnh nhiệt độ"
+  ap_luc_nuoc_hoat_dong: "specs_raw.Áp lực nước hoạt động"
+  tinh_nang_an_toan: "specs_raw.Tính năng an toàn"
+  san_xuat_tai: "specs_raw.Sản xuất tại"
