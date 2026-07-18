@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ChatContext, Recommendation, AdvisorCard, AdvisorAntiPick } from "@/types";
+import type { ChatContext, Recommendation, AdvisorCard } from "@/types";
 
 export interface ChatEntry { 
   role: "user" | "assistant"; 
@@ -7,7 +7,6 @@ export interface ChatEntry {
   quickReplies?: string[]; 
   recommendations?: Recommendation[];
   cards?: AdvisorCard[];
-  antiPick?: AdvisorAntiPick | null;
 }
 
 interface ChatState { 

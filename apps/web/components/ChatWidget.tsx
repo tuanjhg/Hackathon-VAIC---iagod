@@ -55,7 +55,6 @@ export function ChatWidget() {
             quickReplies: response.quick_replies,
             recommendations: response.recommendations,
             cards: response.cards,
-            antiPick: response.anti_pick,
           });
         },
       });
@@ -69,7 +68,6 @@ export function ChatWidget() {
           quickReplies: response.quick_replies,
           recommendations: response.recommendations,
           cards: response.cards,
-          antiPick: response.anti_pick,
         });
       } catch (fallbackErr) {
         console.error("Fallback also failed:", fallbackErr);
