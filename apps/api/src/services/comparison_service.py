@@ -16,7 +16,8 @@ class ComparisonService:
         if len(products) != len(product_ids):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
         available_noise = [p for p in products if p.specs.noise_db is not None]
-        best_price = min(products, key=lambda p: p.price.sale_price)
+        priced_products = [p for p in products if p.price.sale_price > 0]
+        best_price = min(priced_products, key=lambda p: p.price.sale_price) if priced_products else None
         quietest = min(available_noise, key=lambda p: p.specs.noise_db or 999) if available_noise else None
         best_overall = max(
             products,
@@ -24,8 +25,7 @@ class ComparisonService:
         )
         return ComparisonResponse(
             products=[serialize_product(product) for product in products],
-            best_price_id=best_price.id,
+            best_price_id=best_price.id if best_price else None,
             quietest_id=quietest.id if quietest else None,
             best_overall_id=best_overall.id,
         )
-
