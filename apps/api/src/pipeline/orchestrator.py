@@ -54,10 +54,10 @@ from pydantic import BaseModel, Field
 from src.pipeline.need_profile import NeedProfile
 from src.pipeline.policy_answer import PolicySource, generate_policy_answer
 from src.pipeline.preprocess import run_s1
-from src.pipeline.s2_extract import S2Result, extract
+from src.pipeline.s2_extract import S2ExtractionError, S2Result, deterministic_fallback, extract
 from src.pipeline.s3_policy import PolicyDecision, decide_policy
 from src.pipeline.s5_ranking import BUDGET_SLOT_NAME, RankingResult, rank_candidates
-from src.pipeline.s6_generate import GeneratedAdvice, generate
+from src.pipeline.s6_generate import GeneratedAdvice, S6GenerationError, generate
 from src.pipeline.s8_respond import (
     MAX_INCIDENTS,
     SourceEntry,
@@ -68,6 +68,7 @@ from src.pipeline.s8_respond import (
 )
 from src.pipeline.slots import available_categories, load_slot_profile
 from src.rag.models import SearchResult
+from src.router.client import LLMRouterError
 from src.tools.price_promo_stock import ProductFacts
 from src.verifier import VerificationResult, verify
 
@@ -200,6 +201,7 @@ class TurnResult(BaseModel):
     source_panel: list[SourceEntry] = Field(default_factory=list)
     regenerated: bool = False
     used_fallback_table: bool = False
+    degraded_stages: list[str] = Field(default_factory=list)
     timings_ms: dict[str, float] = Field(default_factory=dict)
 
 
@@ -354,14 +356,19 @@ async def run_turn(
 
     Mutates ``profile`` (slot merge, asked-slot/clarify bookkeeping, category
     change, assumptions) and returns it on the result for the caller to
-    persist. Raises whatever the stages raise (``S2ExtractionError``,
-    ``S6GenerationError``, ``LLMRouterError``) — retry/fallback policy belongs
-    to the caller, not here, same as every stage module.
+    persist. Provider/extraction failures at S2 and S6 degrade to deterministic
+    output and are recorded in ``degraded_stages``; catalog/facts/programming
+    errors still surface instead of being silently hidden.
     """
     sw = _Stopwatch()
+    degraded_stages: list[str] = []
     s1 = run_s1(text)
     sw.lap("s1")
-    s2 = await extract(router, text, s1, profile)
+    try:
+        s2 = await extract(router, text, s1, profile)
+    except (LLMRouterError, S2ExtractionError):
+        s2 = deterministic_fallback(text, s1, profile)
+        degraded_stages.append("s2")
     sw.lap("s2")
     _merge_extraction(profile, s2)
 
@@ -371,6 +378,7 @@ async def run_turn(
             message=_OUT_OF_SCOPE_MESSAGE,
             intent=s2.intent,
             profile=profile,
+            degraded_stages=degraded_stages,
             timings_ms=sw.timings,
         )
     if s2.intent == "ho_tro_giao_dich":
@@ -380,18 +388,24 @@ async def run_turn(
             intent=s2.intent,
             profile=profile,
             quick_replies=["Tiếp tục tư vấn sản phẩm", "Xem chính sách giao hàng"],
+            degraded_stages=degraded_stages,
             timings_ms=sw.timings,
         )
     if s2.intent == "policy_faq" and policy_search is not None:
         results = policy_search.search(text, limit=5)
-        answer = await generate_policy_answer(router, text, results)
+        try:
+            answer = await generate_policy_answer(router, text, results)
+        except LLMRouterError:
+            degraded_stages.append("policy_faq")
+            answer = None
         sw.lap("policy_faq")
         return TurnResult(
             kind="policy",
-            message=answer.text,
+            message=answer.text if answer is not None else _UNSUPPORTED_MESSAGES["policy_faq"],
             intent=s2.intent,
             profile=profile,
-            source_panel=_policy_source_panel(answer.sources),
+            source_panel=_policy_source_panel(answer.sources) if answer is not None else [],
+            degraded_stages=degraded_stages,
             timings_ms=sw.timings,
         )
     if s2.intent != "tu_van":
@@ -403,6 +417,7 @@ async def run_turn(
             ),
             intent=s2.intent,
             profile=profile,
+            degraded_stages=degraded_stages,
             timings_ms=sw.timings,
         )
 
@@ -413,6 +428,7 @@ async def run_turn(
             intent=s2.intent,
             profile=profile,
             quick_replies=_category_quick_replies(),
+            degraded_stages=degraded_stages,
             timings_ms=sw.timings,
         )
 
@@ -441,6 +457,7 @@ async def run_turn(
             policy=decision,
             total_candidates=retrieval.total_count,
             candidates=retrieval.candidates,
+            degraded_stages=degraded_stages,
             timings_ms=sw.timings,
         )
 
@@ -452,6 +469,7 @@ async def run_turn(
             profile=profile,
             policy=decision,
             total_candidates=retrieval.total_count,
+            degraded_stages=degraded_stages,
             timings_ms=sw.timings,
         )
 
@@ -465,7 +483,28 @@ async def run_turn(
     ranking = rank_candidates(candidates, profile, slot_profile)
     sw.lap("s5_rank")
 
-    advice = await generate(router, ranking, candidates, profile)
+    try:
+        advice = await generate(router, ranking, candidates, profile)
+    except (LLMRouterError, S6GenerationError):
+        degraded_stages.append("s6")
+        sw.lap("s6_generate")
+        message = render_fallback_table(ranking, candidates) + _assumption_note(profile, decision)
+        return TurnResult(
+            kind="recommend",
+            message=message,
+            intent=s2.intent,
+            profile=profile,
+            policy=decision,
+            total_candidates=retrieval.total_count,
+            candidates=candidates,
+            ranking=ranking,
+            facts=s7_facts,
+            fetched_at=fetched_at,
+            source_panel=build_source_panel(s7_facts, facts_by_sku),
+            used_fallback_table=True,
+            degraded_stages=degraded_stages,
+            timings_ms=sw.timings,
+        )
     sw.lap("s6_generate")
     verification = verify(advice.text, advice.marker_map, s7_facts, fetched_at=fetched_at)
     enforcement = enforce(advice.text, verification)
@@ -476,14 +515,20 @@ async def run_turn(
     used_fallback = False
     if enforcement.incident_count > MAX_INCIDENTS:
         regenerated = True
-        advice = await generate(
-            router, ranking, candidates, profile,
-            corrective_note=_corrective_note(verification),
-        )
-        sw.lap("s6_regenerate")
-        verification = verify(advice.text, advice.marker_map, s7_facts, fetched_at=fetched_at)
-        enforcement = enforce(advice.text, verification)
-        used_fallback = enforcement.incident_count > MAX_INCIDENTS
+        try:
+            advice = await generate(
+                router, ranking, candidates, profile,
+                corrective_note=_corrective_note(verification),
+            )
+        except (LLMRouterError, S6GenerationError):
+            degraded_stages.append("s6_regenerate")
+            used_fallback = True
+            sw.lap("s6_regenerate")
+        else:
+            sw.lap("s6_regenerate")
+            verification = verify(advice.text, advice.marker_map, s7_facts, fetched_at=fetched_at)
+            enforcement = enforce(advice.text, verification)
+            used_fallback = enforcement.incident_count > MAX_INCIDENTS
 
     text_out = render_fallback_table(ranking, candidates) if used_fallback else enforcement.text
     sw.lap("s7_verify")
@@ -506,5 +551,6 @@ async def run_turn(
         source_panel=build_source_panel(s7_facts, facts_by_sku),
         regenerated=regenerated,
         used_fallback_table=used_fallback,
+        degraded_stages=degraded_stages,
         timings_ms=sw.timings,
     )

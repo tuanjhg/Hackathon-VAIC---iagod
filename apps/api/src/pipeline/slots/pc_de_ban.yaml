@@ -1,0 +1,40 @@
+category_key: pc_de_ban
+category_label: "Máy tính để bàn"
+source_notes: "Profile v0 từ facets thực tế trong data/realdata/processed/pc_de_ban.json."
+data_quality: "Catalog chủ yếu là specs_raw; profile tập trung vào workload và cấu hình chính."
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: muc_dich_su_dung
+    label: "Mục đích sử dụng"
+    type: enum
+    values: [van_phong, do_hoa, gaming]
+    catalog_field: null
+    sample_question: "Anh/chị dùng máy chủ yếu cho văn phòng, đồ hoạ hay chơi game ạ?"
+optional_slots:
+  - name: ram
+    label: "Dung lượng RAM"
+    type: text
+    catalog_field: "specs_raw.RAM"
+    priority_rank: 1
+    sample_question: "Anh/chị cần RAM khoảng bao nhiêu GB ạ?"
+  - name: dung_luong_luu_tru
+    label: "Dung lượng lưu trữ"
+    type: text
+    catalog_field: "specs_raw.Ổ cứng"
+    priority_rank: 2
+    sample_question: "Anh/chị cần ổ lưu trữ khoảng bao nhiêu GB hoặc TB ạ?"
+  - name: card_do_hoa_roi
+    label: "Card đồ hoạ rời"
+    type: boolean
+    catalog_field: "specs_raw.Thiết kế card"
+    priority_rank: 3
+    sample_question: "Anh/chị có cần card đồ hoạ rời không ạ?"
+catalog_field_map:
+  cpu: "specs_raw.Loại CPU"
+  ram: "specs_raw.RAM"
+  o_cung: "specs_raw.Ổ cứng"
+  card_do_hoa: "specs_raw.Thiết kế card"

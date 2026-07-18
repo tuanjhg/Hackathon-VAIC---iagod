@@ -21,6 +21,7 @@ from src.pipeline.orchestrator import (
     TurnResult,
     run_turn,
 )
+from src.router.client import LLMRouterError
 from src.tools.price_promo_stock import Fact, ProductFacts
 
 FETCHED_AT = "2026-07-18T09:00:00+00:00"
@@ -32,13 +33,15 @@ FETCHED_AT = "2026-07-18T09:00:00+00:00"
 class QueuedRouter:
     """LLM double returning queued contents in call order (S2 first, then S6)."""
 
-    def __init__(self, *contents: str) -> None:
+    def __init__(self, *contents: str | Exception) -> None:
         self._queue = list(contents)
         self.calls: list[tuple[list[dict[str, Any]], dict[str, Any]]] = []
 
     async def complete(self, messages: list[dict[str, Any]], **kwargs: Any) -> dict[str, Any]:
         self.calls.append((messages, kwargs))
         content = self._queue.pop(0)
+        if isinstance(content, Exception):
+            raise content
         return {"choices": [{"message": {"role": "assistant", "content": content}}]}
 
 
@@ -231,6 +234,21 @@ def test_none_and_empty_extraction_values_are_not_merged() -> None:
     assert "uu_tien" not in profile.slots
 
 
+def test_s2_router_failure_degrades_to_s1_for_previously_uncovered_category() -> None:
+    router = QueuedRouter(LLMRouterError("provider unavailable"))
+    profile = NeedProfile()
+    retriever = _full_retriever(total=50)
+
+    result = _run("tư vấn máy giặt tầm 10 triệu", profile, router, retriever)
+
+    assert result.kind == "ask"
+    assert result.intent == "tu_van"
+    assert result.degraded_stages == ["s2"]
+    assert profile.category == "may_giat"
+    assert profile.slots["ngan_sach_max"] == 10_000_000
+    assert retriever.calls[0]["category_key"] == "may_giat"
+
+
 # --------------------------------------------------------------------------- #
 # Ask path (prefilter runs first, question is deterministic)                  #
 # --------------------------------------------------------------------------- #
@@ -324,6 +342,18 @@ def test_recommend_happy_path_runs_full_chain() -> None:
     assert {"s1", "s2", "s4_prefilter", "s3_policy", "s5_rank", "s6_generate"} <= set(
         res.timings_ms
     )
+
+
+def test_s6_router_failure_returns_grounded_table_not_error() -> None:
+    router = QueuedRouter(_s2(), LLMRouterError("provider unavailable"))
+    res = _run("chốt giúp em", _recommend_profile(), router, _full_retriever())
+
+    assert res.kind == "recommend"
+    assert res.used_fallback_table
+    assert res.degraded_stages == ["s6"]
+    assert "số liệu trực tiếp từ hệ thống" in res.message
+    assert "Panasonic Inverter 12000 BTU" in res.message
+    assert res.ranking is not None
 
 
 def test_recommend_corrects_mismatch_in_place() -> None:

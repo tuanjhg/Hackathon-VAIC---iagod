@@ -23,6 +23,7 @@ from src.pipeline.s2_extract import (
     S2ExtractionError,
     S2Result,
     build_response_format,
+    deterministic_fallback,
     extract,
 )
 
@@ -179,6 +180,44 @@ def test_extract_unknown_category_from_llm_raises() -> None:
 
     with pytest.raises(S2ExtractionError):
         asyncio.run(extract(router, s1.raw, s1, NeedProfile()))
+
+
+def test_deterministic_fallback_keeps_category_budget_and_units() -> None:
+    s1 = S1Result(
+        raw="máy lạnh 15-20tr cho phòng 18m2",
+        normalized="máy lạnh 15-20tr cho phòng 18m2",
+        category_hint="may_lanh",
+        money=[],
+        units=[UnitMatch("area_m2", 18.0, "18m2", (29, 33))],
+    )
+    # Use the real S1 parser for the money range so the test pins its upper-edge
+    # ceiling contract without hand-constructing MoneyMatch internals.
+    from src.pipeline.preprocess import run_s1
+
+    s1 = run_s1(s1.raw)
+    result = deterministic_fallback(s1.raw, s1, NeedProfile())
+
+    assert result == S2Result(
+        intent="tu_van",
+        category="may_lanh",
+        slots_moi={"ngan_sach_max": 20_000_000, "dien_tich_m2": 18.0},
+    )
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("kiểm tra đơn hàng 123", "ho_tro_giao_dich"),
+        ("chính sách bảo hành thế nào", "policy_faq"),
+        ("so sánh hai mẫu này", "so_sanh_truc_tiep"),
+        ("máy lạnh không trả góp", "tu_van"),
+    ],
+)
+def test_deterministic_fallback_routes_only_high_signal_intents(
+    text: str, expected: str
+) -> None:
+    s1 = make_s1(text, text)
+    assert deterministic_fallback(text, s1, NeedProfile()).intent == expected
 
 
 # --- extract() slot reconciliation (schema not always provider-enforced) ------

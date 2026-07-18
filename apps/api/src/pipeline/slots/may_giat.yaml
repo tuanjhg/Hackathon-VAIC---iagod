@@ -1,0 +1,42 @@
+category_key: may_giat
+category_label: "Máy giặt"
+source_notes: "Profile v0 từ facets thực tế trong data/realdata/processed/may_giat.json."
+data_quality: "Catalog chủ yếu là specs_raw; chỉ dùng làm slot hội thoại cho tới khi compiler chuẩn hoá field."
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: quy_mo_gia_dinh
+    label: "Quy mô gia đình"
+    type: enum
+    values: [mot_hai_nguoi, ba_bon_nguoi, nam_nguoi_tro_len]
+    catalog_field: "specs_raw.Số người sử dụng"
+    sample_question: "Nhà mình có khoảng bao nhiêu người dùng máy giặt ạ?"
+optional_slots:
+  - name: loai_cua
+    label: "Kiểu cửa máy"
+    type: enum
+    values: [cua_tren, cua_truoc]
+    catalog_field: "specs_raw.Loại máy"
+    priority_rank: 1
+    sample_question: "Anh/chị thích máy cửa trên hay cửa trước ạ?"
+  - name: uu_tien
+    label: "Ưu tiên"
+    type: multi_enum
+    values: [tiet_kiem_dien, em, ben, gia_re]
+    catalog_field: ["specs_raw.Động cơ", "specs_raw.Tiện ích"]
+    priority_rank: 2
+    sample_question: "Anh/chị ưu tiên tiết kiệm điện, chạy êm hay giá dễ chịu hơn ạ?"
+  - name: tra_gop
+    label: "Nhu cầu trả góp"
+    type: boolean
+    catalog_field: null
+    priority_rank: 3
+    sample_question: "Anh/chị có cần hỗ trợ trả góp không ạ?"
+catalog_field_map:
+  quy_mo_gia_dinh: "specs_raw.Số người sử dụng"
+  loai_may: "specs_raw.Loại máy"
+  khoi_luong_giat: "specs_raw.Khối lượng giặt"
+  dong_co: "specs_raw.Động cơ"

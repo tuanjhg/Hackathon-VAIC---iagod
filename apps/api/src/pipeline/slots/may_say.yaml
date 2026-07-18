@@ -1,0 +1,40 @@
+category_key: may_say
+category_label: "Máy sấy quần áo"
+source_notes: "Profile v0 từ facets thực tế trong data/realdata/processed/may_say.json."
+data_quality: "Catalog chủ yếu là specs_raw; profile giữ câu hỏi đúng ngành và không giả định field đã chuẩn hoá."
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: khoi_luong_say
+    label: "Khối lượng sấy"
+    type: text
+    catalog_field: "specs_raw.Khối lượng tải chính"
+    sample_question: "Mỗi mẻ anh/chị thường cần sấy khoảng bao nhiêu kg quần áo ạ?"
+optional_slots:
+  - name: loai_say
+    label: "Công nghệ sấy"
+    type: enum
+    values: [thong_hoi, ngung_tu, bom_nhiet]
+    catalog_field: "specs_raw.Loại sản phẩm"
+    priority_rank: 1
+    sample_question: "Anh/chị ưu tiên sấy thông hơi, ngưng tụ hay bơm nhiệt ạ?"
+  - name: tiet_kiem_dien
+    label: "Ưu tiên tiết kiệm điện"
+    type: boolean
+    catalog_field: "specs_raw.Điện năng tiêu thụ"
+    priority_rank: 2
+    sample_question: "Anh/chị có ưu tiên tiết kiệm điện không ạ?"
+  - name: khong_gian_dat
+    label: "Không gian lắp đặt"
+    type: text
+    catalog_field: null
+    priority_rank: 3
+    sample_question: "Chỗ đặt máy có cần giới hạn kích thước hoặc xếp chồng không ạ?"
+catalog_field_map:
+  khoi_luong_say: "specs_raw.Khối lượng tải chính"
+  loai_say: "specs_raw.Loại sản phẩm"
+  dien_nang: "specs_raw.Điện năng tiêu thụ"
+  tien_ich: "specs_raw.Tiện ích"

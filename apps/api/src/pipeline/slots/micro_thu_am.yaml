@@ -1,0 +1,41 @@
+category_key: micro_thu_am
+category_label: "Micro thu âm điện thoại"
+source_notes: "Profile v0 từ facets thực tế trong data/realdata/processed/micro_thu_am.json."
+data_quality: "Catalog chủ yếu là specs_raw; tương thích thiết bị là slot bắt buộc để tránh gợi ý sai cổng."
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: thiet_bi_tuong_thich
+    label: "Thiết bị sử dụng"
+    type: enum
+    values: [ios, android, may_anh, may_tinh]
+    catalog_field: "specs_raw.Tương thích"
+    sample_question: "Anh/chị sẽ cắm micro vào iPhone, Android, máy ảnh hay máy tính ạ?"
+optional_slots:
+  - name: so_nguoi_thu
+    label: "Số người thu âm"
+    type: enum
+    values: [mot_nguoi, hai_nguoi]
+    catalog_field: "specs_raw.Phụ kiện đi kèm"
+    priority_rank: 1
+    sample_question: "Anh/chị thường thu một hay hai người cùng lúc ạ?"
+  - name: ket_noi_khong_day
+    label: "Kết nối không dây"
+    type: boolean
+    catalog_field: "specs_raw.Loại sản phẩm"
+    priority_rank: 2
+    sample_question: "Anh/chị có cần bộ micro không dây không ạ?"
+  - name: loc_tieng_on
+    label: "Lọc tiếng ồn"
+    type: boolean
+    catalog_field: "specs_raw.Tính năng cơ bản"
+    priority_rank: 3
+    sample_question: "Anh/chị có ưu tiên tính năng lọc tiếng ồn không ạ?"
+catalog_field_map:
+  tuong_thich: "specs_raw.Tương thích"
+  loai_san_pham: "specs_raw.Loại sản phẩm"
+  tinh_nang: "specs_raw.Tính năng cơ bản"
+  ket_noi: "specs_raw.Kết nối"

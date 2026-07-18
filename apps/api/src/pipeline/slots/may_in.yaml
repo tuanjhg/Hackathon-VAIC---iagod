@@ -1,0 +1,41 @@
+category_key: may_in
+category_label: "Máy in"
+source_notes: "Profile v0 từ facets thực tế trong data/realdata/processed/may_in.json."
+data_quality: "Catalog chủ yếu là specs_raw; slot tập trung vào nhu cầu sử dụng có thể hỏi chắc chắn."
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: nhu_cau_in
+    label: "Nhu cầu in"
+    type: enum
+    values: [gia_dinh, van_phong, in_anh]
+    catalog_field: "specs_raw.Loại sản phẩm"
+    sample_question: "Anh/chị mua máy để dùng gia đình, văn phòng hay in ảnh ạ?"
+optional_slots:
+  - name: in_mau
+    label: "Nhu cầu in màu"
+    type: boolean
+    catalog_field: "specs_raw.Loại sản phẩm"
+    priority_rank: 1
+    sample_question: "Anh/chị có cần in màu không ạ?"
+  - name: ket_noi
+    label: "Kết nối"
+    type: enum
+    values: [usb, wifi, lan]
+    catalog_field: "specs_raw.Kết nối"
+    priority_rank: 2
+    sample_question: "Anh/chị cần kết nối USB, Wi-Fi hay mạng LAN ạ?"
+  - name: tan_suat_in
+    label: "Tần suất in"
+    type: text
+    catalog_field: "specs_raw.Công suất theo nghiệp vụ"
+    priority_rank: 3
+    sample_question: "Mỗi tháng anh/chị dự kiến in khoảng bao nhiêu trang ạ?"
+catalog_field_map:
+  loai_san_pham: "specs_raw.Loại sản phẩm"
+  ket_noi: "specs_raw.Kết nối"
+  toc_do_in: "specs_raw.Tốc độ in"
+  cong_suat_thang: "specs_raw.Công suất theo nghiệp vụ"

@@ -1,0 +1,41 @@
+category_key: man_hinh
+category_label: "Màn hình máy tính"
+source_notes: "Profile v0 từ facets thực tế trong data/realdata/processed/man_hinh.json."
+data_quality: "Catalog chủ yếu là specs_raw; profile ưu tiên mục đích, kích thước và độ phân giải."
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: muc_dich_su_dung
+    label: "Mục đích sử dụng"
+    type: enum
+    values: [van_phong, do_hoa, gaming]
+    catalog_field: null
+    sample_question: "Anh/chị dùng màn hình chủ yếu cho văn phòng, đồ hoạ hay chơi game ạ?"
+optional_slots:
+  - name: kich_thuoc
+    label: "Kích thước màn hình"
+    type: text
+    catalog_field: "specs_raw.Kích thước màn hình"
+    priority_rank: 1
+    sample_question: "Anh/chị muốn màn hình khoảng bao nhiêu inch ạ?"
+  - name: do_phan_giai
+    label: "Độ phân giải"
+    type: enum
+    values: [full_hd, hai_k, bon_k]
+    catalog_field: "specs_raw.Độ phân giải"
+    priority_rank: 2
+    sample_question: "Anh/chị cần Full HD, 2K hay 4K ạ?"
+  - name: loa_tich_hop
+    label: "Loa tích hợp"
+    type: boolean
+    catalog_field: "specs_raw.Loa"
+    priority_rank: 3
+    sample_question: "Anh/chị có cần màn hình tích hợp loa không ạ?"
+catalog_field_map:
+  kich_thuoc: "specs_raw.Kích thước màn hình"
+  do_phan_giai: "specs_raw.Độ phân giải"
+  tam_nen: "specs_raw.Tấm nền"
+  thoi_gian_dap_ung: "specs_raw.Thời gian đáp ứng"

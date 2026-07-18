@@ -33,12 +33,14 @@ _GOLDEN_CATEGORY_KEYWORDS: list[tuple[str, str | None]] = [
     ("điều hòa", "may_lanh"),
     ("nước nóng", "may_nuoc_nong"),
     ("bình nóng", "may_nuoc_nong"),
-    ("màn hình", "computer_monitors"),
-    ("máy tính để bàn", "desktop_computers"),
-    ("máy tính bảng", "tablets"),
-    ("máy in", "printers"),
-    ("đồng hồ thông minh", "smartwatches"),
-    ("micro", "karaoke_microphones"),
+    ("màn hình", "man_hinh"),
+    ("máy tính để bàn", "pc_de_ban"),
+    ("máy tính bảng", "may_tinh_bang"),
+    ("máy in", "may_in"),
+    ("đồng hồ thông minh", "dong_ho_tm"),
+    ("micro thu âm", "micro_thu_am"),
+    ("micro karaoke", "micro_karaoke"),
+    ("micro", "micro_karaoke"),
     # families with no catalog coverage
     ("laptop", None),
     ("tivi", None),
@@ -58,6 +60,10 @@ def detect_golden_category(conversation_user_text: str) -> str | list[str] | Non
     text = conversation_user_text.lower()
     found: list[str | None] = []
     for keyword, category in _GOLDEN_CATEGORY_KEYWORDS:
+        if keyword == "micro" and any(
+            existing in {"micro_karaoke", "micro_thu_am"} for existing in found
+        ):
+            continue
         if keyword in text and category not in found:
             found.append(category)
     real = [c for c in found if c is not None]
@@ -78,6 +84,8 @@ class ConversationReport:
     recommended: bool
     turn_kinds: dict[str, int] = field(default_factory=dict)
     error_turns: int = 0
+    degraded_turns: int = 0
+    degraded_stages: dict[str, int] = field(default_factory=dict)
 
 
 def classify_conversation(replayed: ReplayedConversation) -> ConversationReport:
@@ -86,6 +94,12 @@ def classify_conversation(replayed: ReplayedConversation) -> ConversationReport:
     golden_cat = detect_golden_category(" ".join(convo.user_turns))
     engaged = replayed.category
     kinds = Counter(t.kind for t in replayed.turns)
+    degraded = Counter(
+        stage
+        for turn in replayed.turns
+        if turn.result is not None
+        for stage in turn.result.degraded_stages
+    )
 
     return ConversationReport(
         id=convo.id,
@@ -96,6 +110,11 @@ def classify_conversation(replayed: ReplayedConversation) -> ConversationReport:
         recommended=replayed.recommended,
         turn_kinds=dict(kinds),
         error_turns=kinds.get("error", 0),
+        degraded_turns=sum(
+            1 for turn in replayed.turns
+            if turn.result is not None and turn.result.degraded_stages
+        ),
+        degraded_stages=dict(degraded),
     )
 
 
@@ -111,6 +130,10 @@ def aggregate(reports: list[ConversationReport]) -> dict[str, Any]:
     recommended = sum(1 for r in reports if r.recommended)
     supported_engaged = sum(1 for r in reports if r.supported)
     any_error = sum(1 for r in reports if r.error_turns > 0)
+    any_degraded = sum(1 for r in reports if r.degraded_turns > 0)
+    degraded_stages: Counter[str] = Counter()
+    for report in reports:
+        degraded_stages.update(report.degraded_stages)
     handoff = sum(1 for r in reports if r.turn_kinds.get("handoff", 0) > 0)
     policy_answered = sum(1 for r in reports if r.turn_kinds.get("policy", 0) > 0)
 
@@ -139,6 +162,8 @@ def aggregate(reports: list[ConversationReport]) -> dict[str, Any]:
         "engaged_supported_category_convs": supported_engaged,
         "convs_with_error_turn": any_error,
         "error_free_pct": round(100 * (total - any_error) / total, 1),
+        "degraded_convs": any_degraded,
+        "degraded_stage_distribution": dict(degraded_stages.most_common()),
         "handoff_convs": handoff,
         "policy_answered_convs": policy_answered,
         "turn_kind_distribution": dict(turn_kinds.most_common()),

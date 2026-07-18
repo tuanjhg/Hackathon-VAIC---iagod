@@ -1,0 +1,40 @@
+category_key: may_tinh_bang
+category_label: "Máy tính bảng"
+source_notes: "Profile v0 từ facets thực tế trong data/realdata/processed/may_tinh_bang.json."
+data_quality: "Catalog chủ yếu là specs_raw; profile tập trung vào mục đích, màn hình, SIM và bộ nhớ."
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: muc_dich_su_dung
+    label: "Mục đích sử dụng"
+    type: enum
+    values: [hoc_tap, giai_tri, lam_viec]
+    catalog_field: null
+    sample_question: "Anh/chị dùng máy chủ yếu để học tập, giải trí hay làm việc ạ?"
+optional_slots:
+  - name: kich_thuoc
+    label: "Kích thước màn hình"
+    type: text
+    catalog_field: "specs_raw.Kích thước màn hình"
+    priority_rank: 1
+    sample_question: "Anh/chị thích máy nhỏ gọn hay màn hình lớn khoảng bao nhiêu inch ạ?"
+  - name: can_sim
+    label: "Kết nối SIM"
+    type: boolean
+    catalog_field: "specs_raw.SIM"
+    priority_rank: 2
+    sample_question: "Anh/chị có cần máy gắn SIM để dùng mạng di động không ạ?"
+  - name: dung_luong_luu_tru
+    label: "Dung lượng lưu trữ"
+    type: text
+    catalog_field: "specs_raw.Dung lượng lưu trữ"
+    priority_rank: 3
+    sample_question: "Anh/chị cần dung lượng lưu trữ khoảng bao nhiêu GB ạ?"
+catalog_field_map:
+  kich_thuoc: "specs_raw.Kích thước màn hình"
+  sim: "specs_raw.SIM"
+  ram: "specs_raw.RAM"
+  dung_luong_luu_tru: "specs_raw.Dung lượng lưu trữ"

@@ -251,14 +251,17 @@ def test_conversation_carries_profile_across_turns(db: Session) -> None:
     assert saved.clarify_rounds == 1  # first turn's ask round survived
 
 
-def test_llm_failure_degrades_to_explicit_error(db: Session) -> None:
+def test_llm_failure_degrades_to_grounded_recommendations(db: Session) -> None:
     response = asyncio.run(
         _service(db, RaisingRouter()).reply(_request("tư vấn máy lạnh", _ready_profile()))
     )
-    assert response.response_type == "error"
-    assert response.intent == "system_error"
-    assert "thử lại" in response.message
-    assert db.scalars(select(AuditLog)).first() is None  # failed turn, no audit row
+    assert response.response_type == "recommendations"
+    assert response.intent == "tu_van"
+    assert "số liệu trực tiếp từ hệ thống" in response.message
+    assert response.cards
+    audit = db.scalars(select(AuditLog)).one()
+    assert audit.response_kind == "recommend"
+    assert audit.used_fallback_table
 
 
 # --------------------------------------------------------------------------- #

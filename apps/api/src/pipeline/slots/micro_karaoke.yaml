@@ -1,0 +1,40 @@
+category_key: micro_karaoke
+category_label: "Micro karaoke"
+source_notes: "Profile v0 từ facets thực tế trong data/realdata/processed/micro_karaoke.json."
+data_quality: "Catalog chủ yếu là specs_raw và ít sản phẩm có giá; câu trả lời phải nêu rõ dữ liệu thiếu."
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: kieu_micro
+    label: "Kiểu micro"
+    type: enum
+    values: [co_day, khong_day]
+    catalog_field: "specs_raw.Loại sản phẩm"
+    sample_question: "Anh/chị cần micro có dây hay không dây ạ?"
+optional_slots:
+  - name: muc_dich_su_dung
+    label: "Mục đích sử dụng"
+    type: enum
+    values: [gia_dinh, phong_hat, su_kien]
+    catalog_field: null
+    priority_rank: 1
+    sample_question: "Anh/chị dùng tại nhà, phòng hát hay cho sự kiện ạ?"
+  - name: bang_tan
+    label: "Băng tần"
+    type: text
+    catalog_field: "specs_raw.Băng tần"
+    priority_rank: 2
+    sample_question: "Anh/chị có yêu cầu cụ thể về băng tần kết nối không ạ?"
+  - name: so_micro
+    label: "Số micro cần dùng"
+    type: text
+    catalog_field: null
+    priority_rank: 3
+    sample_question: "Anh/chị cần dùng một hay hai micro cùng lúc ạ?"
+catalog_field_map:
+  loai_san_pham: "specs_raw.Loại sản phẩm"
+  bang_tan: "specs_raw.Băng tần"
+  tan_so: "specs_raw.Tần số hoạt động"

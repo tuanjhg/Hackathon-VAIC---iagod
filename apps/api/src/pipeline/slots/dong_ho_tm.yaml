@@ -1,0 +1,41 @@
+category_key: dong_ho_tm
+category_label: "Đồng hồ thông minh"
+source_notes: "Profile v0 từ facets thực tế trong data/realdata/processed/dong_ho_tm.json."
+data_quality: "Catalog chủ yếu là specs_raw; profile phân biệt người lớn/trẻ em và hệ sinh thái điện thoại."
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: doi_tuong_su_dung
+    label: "Đối tượng sử dụng"
+    type: enum
+    values: [nguoi_lon, tre_em]
+    catalog_field: null
+    sample_question: "Đồng hồ này dành cho người lớn hay trẻ em ạ?"
+optional_slots:
+  - name: he_dieu_hanh_dien_thoai
+    label: "Điện thoại đang dùng"
+    type: enum
+    values: [ios, android]
+    catalog_field: "specs_raw.Tương thích"
+    priority_rank: 1
+    sample_question: "Anh/chị đang dùng điện thoại iPhone hay Android ạ?"
+  - name: can_nghe_goi
+    label: "Nhu cầu nghe gọi"
+    type: boolean
+    catalog_field: "specs_raw.Thực hiện cuộc gọi"
+    priority_rank: 2
+    sample_question: "Anh/chị có cần nghe gọi trực tiếp trên đồng hồ không ạ?"
+  - name: uu_tien_suc_khoe
+    label: "Theo dõi sức khoẻ"
+    type: boolean
+    catalog_field: "specs_raw.Theo dõi sức khoẻ"
+    priority_rank: 3
+    sample_question: "Anh/chị có ưu tiên các tính năng theo dõi sức khoẻ không ạ?"
+catalog_field_map:
+  tuong_thich: "specs_raw.Tương thích"
+  nghe_goi: "specs_raw.Thực hiện cuộc gọi"
+  theo_doi_suc_khoe: "specs_raw.Theo dõi sức khoẻ"
+  thoi_gian_su_dung: "specs_raw.Thời gian sử dụng"

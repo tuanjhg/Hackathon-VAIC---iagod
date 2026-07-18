@@ -295,6 +295,83 @@ def _parse_s2_payload(data: Any) -> S2Result:
     return S2Result(intent=intent, category=category, slots_moi=slots_moi)
 
 
+_TRANSACTION_TERMS: tuple[str, ...] = (
+    "don hang",
+    "ma don",
+    "dat hang",
+    "huy don",
+    "sua don",
+    "doi dia chi",
+    "giao den dau",
+    "lich giao",
+    "con hang tai",
+    "ton kho chi nhanh",
+)
+_POLICY_TERMS: tuple[str, ...] = (
+    "chinh sach",
+    "bao hanh",
+    "doi tra",
+    "hoan tien",
+    "tra gop",
+    "giao hang",
+    "lap dat",
+    "du lieu ca nhan",
+)
+
+
+def _fallback_intent(text: str) -> str:
+    """Conservative deterministic intent routing for a degraded S2 turn.
+
+    This is deliberately narrower than the LLM classifier: it only routes
+    high-signal transaction/policy/comparison/detail phrases. Everything else
+    stays on ``tu_van`` so a provider outage cannot turn an ordinary shopping
+    request into an out-of-scope refusal.
+    """
+    # ``fold_ascii`` canonicalises separators to underscores for enum matching;
+    # intent phrases are authored as readable words, so restore spaces here.
+    folded = fold_ascii(text).replace("_", " ")
+    if any(term in folded for term in _TRANSACTION_TERMS):
+        return "ho_tro_giao_dich"
+    if "so sanh" in folded:
+        return "so_sanh_truc_tiep"
+    if any(term in folded for term in ("thong so cua", "chi tiet mau", "chi tiet model")):
+        return "hoi_chi_tiet_sp"
+    # "không trả góp" is a shopping constraint, not a policy question.
+    if "khong tra gop" not in folded and any(term in folded for term in _POLICY_TERMS):
+        return "policy_faq"
+    return "tu_van"
+
+
+def deterministic_fallback(
+    text: str,
+    s1_result: S1Result,
+    profile: NeedProfile,
+) -> S2Result:
+    """Build a safe S2 result without an LLM.
+
+    S1's category, money and physical-unit parses are deterministic and remain
+    useful when the provider is unavailable or emits malformed JSON. Values
+    are reconciled through the active slot profile just like the normal path;
+    no unknown slot can enter the session state.
+    """
+    category = s1_result.category_hint or profile.category
+    slots_moi: dict[str, Any] = {}
+    if category is not None and category in available_categories():
+        slot_profile = load_slot_profile(category)
+        slots = [*slot_profile.required_slots, *slot_profile.optional_slots]
+        money_slot = next((slot for slot in slots if slot.type == "money"), None)
+        if money_slot is not None and s1_result.money:
+            # A range such as 15–20tr uses its upper edge as the safe ceiling.
+            slots_moi[money_slot.name] = max(match.max_vnd for match in s1_result.money)
+        _overlay_s1_units(slots_moi, slots, s1_result)
+
+    return S2Result(
+        intent=_fallback_intent(text),
+        category=category if category in available_categories() else None,
+        slots_moi=slots_moi,
+    )
+
+
 # --------------------------------------------------------------------------- #
 # Slot reconciliation — make the LLM's slots_moi trustworthy                   #
 #                                                                             #
@@ -452,7 +529,12 @@ async def extract(
         reasoning={"enabled": False},
     )
 
-    content = response["choices"][0]["message"]["content"]
+    try:
+        content = response["choices"][0]["message"]["content"]
+    except (KeyError, IndexError, TypeError) as exc:
+        raise S2ExtractionError(f"S2 LLM response shape unexpected: {response!r}") from exc
+    if not isinstance(content, str):
+        raise S2ExtractionError(f"S2 LLM response 'content' is not text: {content!r}")
     try:
         data = json.loads(content)
     except json.JSONDecodeError as exc:

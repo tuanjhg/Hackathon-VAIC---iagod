@@ -1,0 +1,41 @@
+category_key: may_rua_chen
+category_label: "Máy rửa chén"
+source_notes: "Profile v0 từ facets thực tế trong data/realdata/processed/may_rua_chen.json."
+data_quality: "Catalog chủ yếu là specs_raw; các field thô được ghi rõ để compiler chuẩn hoá sau."
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: suc_chua
+    label: "Sức chứa"
+    type: text
+    catalog_field: "specs_raw.Số lượng"
+    sample_question: "Nhà mình thường rửa chén cho khoảng mấy người hoặc mấy bữa ăn ạ?"
+optional_slots:
+  - name: kieu_lap_dat
+    label: "Kiểu lắp đặt"
+    type: enum
+    values: [doc_lap, am_tu, mini]
+    catalog_field: "specs_raw.Loại sản phẩm"
+    priority_rank: 1
+    sample_question: "Anh/chị cần máy độc lập, âm tủ hay loại nhỏ gọn ạ?"
+  - name: uu_tien
+    label: "Ưu tiên"
+    type: multi_enum
+    values: [tiet_kiem_dien, em, ben, gia_re]
+    catalog_field: ["specs_raw.Độ ồn", "specs_raw.Tiêu thụ nước", "specs_raw.Công nghệ sấy"]
+    priority_rank: 2
+    sample_question: "Anh/chị ưu tiên chạy êm, tiết kiệm hay khả năng sấy khô hơn ạ?"
+  - name: rua_noi_chao
+    label: "Nhu cầu rửa nồi chảo"
+    type: boolean
+    catalog_field: "specs_raw.Khay chén"
+    priority_rank: 3
+    sample_question: "Anh/chị có thường cần rửa cả nồi chảo lớn không ạ?"
+catalog_field_map:
+  suc_chua: "specs_raw.Số lượng"
+  loai_san_pham: "specs_raw.Loại sản phẩm"
+  do_on: "specs_raw.Độ ồn"
+  tieu_thu_nuoc: "specs_raw.Tiêu thụ nước"
