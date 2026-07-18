@@ -44,10 +44,10 @@ export const sideBanners: Banner[] = [
 ];
 
 export const promoBanners: Banner[] = [
-  { src: "/banners/promo-1.jpg", alt: "Deal Daikin", href: "/products?brand=Daikin", tone: "from-sky-600 to-brand-700" },
-  { src: "/banners/promo-2.jpg", alt: "Deal Panasonic", href: "/products?brand=Panasonic", tone: "from-rose-600 to-red-700" },
-  { src: "/banners/promo-3.jpg", alt: "Deal LG", href: "/products?brand=LG", tone: "from-fuchsia-600 to-purple-700" },
-  { src: "/banners/promo-4.jpg", alt: "Super sale online", href: "/products?sort=price_asc", tone: "from-amber-500 to-orange-600" },
+  { src: "/banners/promo-1.png", alt: "Deal Daikin", href: "/products?brand=Daikin", tone: "from-sky-600 to-brand-700" },
+  { src: "/banners/promo-2.png", alt: "Deal Panasonic", href: "/products?brand=Panasonic", tone: "from-rose-600 to-red-700" },
+  { src: "/banners/promo-3.png", alt: "Deal LG", href: "/products?brand=LG", tone: "from-fuchsia-600 to-purple-700" },
+  { src: "/banners/promo-4.png", alt: "Super sale online", href: "/products?sort=price_asc", tone: "from-amber-500 to-orange-600" },
 ];
 
 export const subBanners: Banner[] = [

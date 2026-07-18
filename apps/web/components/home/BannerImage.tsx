@@ -18,7 +18,6 @@ export function BannerImage({ banner, className }: { banner: Banner; className?:
       <img
         src={banner.src}
         alt={banner.alt}
-        loading="lazy"
         onLoad={() => setOk(true)}
         onError={() => setOk(false)}
         className={cn(

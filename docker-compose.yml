@@ -44,6 +44,11 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
     ports:
       - "3000:3000"
+    volumes:
+      # Serve static assets (banners, patterns, future product images) live from
+      # the host so dropping/replacing files in public/ shows up on refresh
+      # without rebuilding the image. Read-only; does not affect the build.
+      - ./apps/web/public:/app/public:ro
     depends_on:
       api:
         condition: service_healthy
