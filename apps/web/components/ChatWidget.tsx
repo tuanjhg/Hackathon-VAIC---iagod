@@ -1,6 +1,6 @@
 "use client";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Bot, Send, Sparkles, X } from "lucide-react";
+import { Bot, Send, Sparkles, X, RotateCcw } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { api } from "@/lib/api";
 import { useChatStore } from "@/stores/chat-store";
@@ -15,8 +15,10 @@ export function ChatWidget() {
     context,
     toggle,
     addMessage,
+    updateLastMessage,
     setLoading,
     setContext,
+    resetChat,
   } = useChatStore();
   const [input, setInput] = useState("");
   const bottom = useRef<HTMLDivElement>(null);
@@ -31,20 +33,48 @@ export function ChatWidget() {
     addMessage({ role: "user", content: value });
     setInput("");
     setLoading(true);
+
+    // Add an empty assistant message which we will fill during streaming
+    addMessage({ role: "assistant", content: "" });
+
+    let accumulatedText = "";
     try {
-      const response = await api.chat(sessionId, value, context);
-      setContext(response.context);
-      addMessage({
-        role: "assistant",
-        content: response.message,
-        quickReplies: response.quick_replies,
-        recommendations: response.recommendations,
+      await api.chatStream(sessionId, value, context, {
+        onDelta: (deltaText: string) => {
+          if (accumulatedText) {
+            accumulatedText += " " + deltaText;
+          } else {
+            accumulatedText = deltaText;
+          }
+          updateLastMessage({ content: accumulatedText });
+        },
+        onFinal: (response) => {
+          setContext(response.context);
+          updateLastMessage({
+            content: response.message,
+            quickReplies: response.quick_replies,
+            recommendations: response.recommendations,
+            cards: response.cards,
+          });
+        },
       });
-    } catch {
-      addMessage({
-        role: "assistant",
-        content: "Mình chưa kết nối được máy chủ. Bạn thử lại sau nhé.",
-      });
+    } catch (err) {
+      console.error("Streaming failed, falling back to unary:", err);
+      try {
+        const response = await api.chat(sessionId, value, context);
+        setContext(response.context);
+        updateLastMessage({
+          content: response.message,
+          quickReplies: response.quick_replies,
+          recommendations: response.recommendations,
+          cards: response.cards,
+        });
+      } catch (fallbackErr) {
+        console.error("Fallback also failed:", fallbackErr);
+        updateLastMessage({
+          content: "Mình chưa kết nối được máy chủ. Bạn thử lại sau nhé.",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -79,6 +109,14 @@ export function ChatWidget() {
                   Tư vấn theo nhu cầu thật
                 </p>
               </div>
+              <button
+                aria-label="Làm mới cuộc trò chuyện"
+                title="Làm mới cuộc trò chuyện"
+                className="grid h-8 w-8 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/15 mr-1"
+                onClick={resetChat}
+              >
+                <RotateCcw className="h-4.5 w-4.5" />
+              </button>
               <button
                 aria-label="Đóng chat"
                 className="grid h-8 w-8 place-items-center rounded-full text-white/90 transition-colors hover:bg-white/15"
