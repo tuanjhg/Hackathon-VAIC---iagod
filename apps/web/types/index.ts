@@ -18,7 +18,7 @@ export interface Product {
   noise_db: number | null;
   energy_rating: string;
   warranty_months: number;
-  stock_status: "in_stock" | "low_stock" | "out_of_stock";
+  stock_status: "in_stock" | "low_stock" | "out_of_stock" | "unknown";
   stock_quantity: number;
   promotion: Promotion | null;
   short_description: string;
@@ -34,4 +34,3 @@ export interface Comparison { products: Product[]; best_price_id: number | null;
 export interface ChatContext { budget_max: number | null; room_area_m2: number | null; priority: string | null }
 export interface Recommendation { product: Product; label: string; match_score: number; reason: string; strengths: string[]; trade_off: string }
 export interface ChatResponse { response_type: "follow_up" | "recommendations"; message: string; quick_replies: string[]; recommendations: Recommendation[]; context: ChatContext }
-

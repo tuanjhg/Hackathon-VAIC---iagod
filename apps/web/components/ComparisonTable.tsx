@@ -45,11 +45,11 @@ export function ComparisonTable() {
 
   const rows: [string, (p: Product) => string][] = [
     ["Giá", (p) => formatPrice(p.sale_price)],
-    ["Công suất", (p) => `${p.capacity_btu.toLocaleString("vi-VN")} BTU`],
-    ["Diện tích", (p) => `${p.recommended_area_min}–${p.recommended_area_max} m²`],
+    ["Công suất", (p) => p.capacity_btu > 0 ? `${p.capacity_btu.toLocaleString("vi-VN")} BTU` : "Chưa có dữ liệu"],
+    ["Diện tích", (p) => p.recommended_area_max > 0 ? `${p.recommended_area_min}–${p.recommended_area_max} m²` : "Chưa có dữ liệu"],
     ["Inverter", (p) => (p.inverter ? "Có" : "Không")],
     ["Độ ồn", (p) => (p.noise_db === null ? "Chưa có dữ liệu" : `${p.noise_db} dB`)],
-    ["Bảo hành", (p) => `${p.warranty_months} tháng`],
+    ["Bảo hành", (p) => p.warranty_months > 0 ? `${p.warranty_months} tháng` : "Chưa có dữ liệu"],
     ["Tồn kho", (p) => stockLabel(p.stock_status)],
     ["Khuyến mãi", (p) => p.promotion?.title ?? "Không có"],
   ];

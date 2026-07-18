@@ -6,7 +6,11 @@ import { Select } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import type { ProductFilters } from "@/types";
 
-const BRANDS = ["Daikin", "Panasonic", "LG", "Samsung", "Casper"];
+const BRANDS = [
+  "LG", "Panasonic", "Daikin", "Samsung", "Gree", "Toshiba", "Aqua",
+  "Sharp", "Casper", "Midea", "Comfee", "Tcl", "Nagakawa",
+  "Mitsubishi Heavy", "Funiki", "Electrolux", "Beko",
+];
 
 export function ProductFilter({
   filters,
