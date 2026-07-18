@@ -46,8 +46,9 @@ export function ProductImage({
         <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-muted to-border" />
       )}
       {status === "error" && (
-        <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-muted to-border text-muted-foreground">
-          <ImageOff className="h-8 w-8" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-muted to-border p-3 text-center text-muted-foreground">
+          <ImageOff className="h-7 w-7 opacity-70" />
+          <span className="line-clamp-2 text-[11px] font-medium leading-tight">{alt}</span>
         </div>
       )}
     </div>

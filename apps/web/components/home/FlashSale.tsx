@@ -153,13 +153,17 @@ function FlashCard({ product, discount }: { product: Product; discount: number }
         {product.name}
       </p>
       <p className="mt-1 text-base font-extrabold text-destructive">{formatPrice(product.sale_price)}</p>
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-amber-400 to-destructive transition-[width] duration-700"
-          style={{ width: `${sold}%` }}
-        />
-      </div>
-      <p className="mt-1 text-[11px] font-semibold text-muted-foreground">Còn {product.stock_quantity} suất</p>
+      {product.stock_quantity > 0 && (
+        <>
+          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-amber-400 to-destructive transition-[width] duration-700"
+              style={{ width: `${sold}%` }}
+            />
+          </div>
+          <p className="mt-1 text-[11px] font-semibold text-muted-foreground">Còn {product.stock_quantity} suất</p>
+        </>
+      )}
     </Link>
   );
 }
