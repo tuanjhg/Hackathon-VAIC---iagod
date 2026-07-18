@@ -5,8 +5,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-needwise}
       POSTGRES_USER: ${POSTGRES_USER:-needwise}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-needwise}
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -21,8 +21,18 @@ services:
       DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://needwise:needwise@postgres:5432/needwise}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
       PRODUCTS_DATA_PATH: /app/data/demo/products.json
-    ports:
-      - "8000:8000"
+      REALDATA_PROCESSED_PATH: /app/data/realdata/processed
+      # Router A6 (apps/api/src/router) -- vLLM chạy tách rời (docker-compose.vllm.yml),
+      # trỏ LLM_BASE_URL vào IP VM GPU khi cửa sổ mở, xem docs/pipelines.md §6.9.
+      LLM_BASE_URL: ${LLM_BASE_URL:-http://localhost:8001/v1}
+      LLM_MODEL: ${LLM_MODEL:-qwen3-32b-fp8}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_FALLBACK_ENABLED: ${LLM_FALLBACK_ENABLED:-false}
+      LLM_FALLBACK_BASE_URL: ${LLM_FALLBACK_BASE_URL:-https://api.openai.com/v1}
+      LLM_FALLBACK_API_KEY: ${LLM_FALLBACK_API_KEY:-}
+      LLM_FALLBACK_MODEL: ${LLM_FALLBACK_MODEL:-gpt-4o-mini}
+    expose:
+      - "8000"
     volumes:
       - ./data:/app/data:ro
     depends_on:
@@ -42,8 +52,8 @@ services:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     depends_on:
       api:
         condition: service_healthy
@@ -55,3 +65,21 @@ services:
 
 volumes:
   postgres_data:
+  caddy_data:
+  caddy_config:
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME:-localhost}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+      - api

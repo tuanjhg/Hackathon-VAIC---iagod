@@ -1,0 +1,89 @@
+# vLLM inference service -- chạy TRÊN VM GPU thuê (FPT AI Factory, H100 80GB),
+# KHÔNG nằm trong docker-compose.yml chính. Lý do: ngân sách chỉ 10h GPU
+# credit tổng (docs/research/dmx-phan-tich-ke-hoach-2026-07-17.md §5b) -- vLLM
+# bật theo cửa sổ tập trung rồi tắt ngay, không chạy nền cả ngày như
+# postgres/api/web. Xem quy trình vận hành đầy đủ ở docs/pipelines.md §6.9.
+#
+# Chạy trên VM (SSH vào FPT AI Factory instance trước, cần NVIDIA driver +
+# nvidia-container-toolkit đã cài sẵn trên VM -- ảnh GPU cloud thường có sẵn):
+#
+#   make vllm-up            # bật bản CÓ prefix-caching + chunked-prefill
+#   make vllm-up-baseline   # HOẶC bật bản KHÔNG có 2 flag đó (Gate 2 baseline)
+#   make vllm-logs          # chờ tới khi thấy "Application startup complete" (~10')
+#   make vllm-down          # TẮT NGAY khi xong cửa sổ GPU -- không để chạy thừa
+#
+# vllm và vllm-baseline dùng chung port 8001 -- KHÔNG chạy đồng thời (cùng
+# tranh 1 GPU H100 duy nhất). Chỉ dùng vllm-baseline khi đang đo Gate 2.
+#
+# XÁC NHẬN TRƯỚC KHI CHẠY THẬT: VLLM_MODEL_PATH bên dưới là placeholder cho
+# checkpoint FP8 của Qwen3-32B (ADR A2, dmx-tech-decisions.md) -- nếu chưa có
+# sẵn checkpoint FP8 trên HuggingFace, đổi sang checkpoint gốc (bf16) và thêm
+# `--quantization=fp8` vào command.
+
+services:
+  vllm:
+    image: vllm/vllm-openai:latest
+    command:
+      - --model=${VLLM_MODEL_PATH:-Qwen/Qwen3-32B-FP8}
+      - --served-model-name=${LLM_MODEL:-qwen3-32b-fp8}
+      - --port=8000
+      - --gpu-memory-utilization=${VLLM_GPU_MEMORY_UTILIZATION:-0.90}
+      - --max-model-len=${VLLM_MAX_MODEL_LEN:-8192}
+      - --enable-auto-tool-choice
+      - --tool-call-parser=hermes
+      - --enable-prefix-caching
+      - --enable-chunked-prefill
+    ports:
+      - "${VLLM_PORT:-8001}:8000"
+    environment:
+      HF_TOKEN: ${HF_TOKEN:-}
+    volumes:
+      - vllm_hf_cache:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 300s
+
+  # Bản baseline cho Gate 2 (scripts/bench/gate2_vllm_flags.py --label flags-off)
+  # -- giống hệt "vllm" ở trên, chỉ KHÔNG có 2 flag prefix-caching/chunked-prefill.
+  vllm-baseline:
+    image: vllm/vllm-openai:latest
+    command:
+      - --model=${VLLM_MODEL_PATH:-Qwen/Qwen3-32B-FP8}
+      - --served-model-name=${LLM_MODEL:-qwen3-32b-fp8}
+      - --port=8000
+      - --gpu-memory-utilization=${VLLM_GPU_MEMORY_UTILIZATION:-0.90}
+      - --max-model-len=${VLLM_MAX_MODEL_LEN:-8192}
+      - --enable-auto-tool-choice
+      - --tool-call-parser=hermes
+    ports:
+      - "${VLLM_PORT:-8001}:8000"
+    environment:
+      HF_TOKEN: ${HF_TOKEN:-}
+    volumes:
+      - vllm_hf_cache:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 300s
+
+volumes:
+  vllm_hf_cache:
