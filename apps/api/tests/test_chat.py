@@ -1,4 +1,14 @@
+import pytest
 from fastapi.testclient import TestClient
+
+from src.core.config import settings
+
+
+@pytest.fixture(autouse=True)
+def _mock_pipeline(monkeypatch: pytest.MonkeyPatch) -> None:
+    """These tests pin the legacy rule-based flow; the AI pipeline (default)
+    has its own coverage in tests/test_chat_advisor.py."""
+    monkeypatch.setattr(settings, "chat_pipeline", "mock")
 
 
 def test_chat_follow_up(client: TestClient) -> None:

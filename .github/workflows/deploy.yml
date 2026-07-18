@@ -1,0 +1,36 @@
+name: Deploy to Google Compute Engine
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  # Thiết lập các Secrets này trong GitHub Settings
+  # HOST: IP của con VM Compute Engine
+  # USERNAME: Tên user SSH
+  # SSH_KEY: Private key (nội dung file ~/.ssh/id_rsa)
+  DEPLOY_PATH: /home/ubuntu/VAIC # Thư mục chứa code trên VM
+
+jobs:
+  deploy:
+    name: Deploy via SSH
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy to Compute Engine VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            cd ${{ env.DEPLOY_PATH }}
+            git pull origin main
+            
+            # Khởi động lại Docker Compose
+            docker compose up --build -d
+            
+            # Xóa các image cũ để giải phóng dung lượng VM
+            docker image prune -f

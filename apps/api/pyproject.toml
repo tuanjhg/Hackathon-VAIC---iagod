@@ -12,15 +12,17 @@ dependencies = [
   "python-dotenv>=1.0,<2",
   "pydantic-settings>=2.7,<3",
   "pandas>=2.2,<3",
+  "httpx>=0.28,<1",
+  "pyyaml>=6,<7",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "httpx>=0.28,<1",
   "pytest>=8.3,<9",
   "pytest-cov>=6,<7",
   "ruff>=0.9,<1",
   "mypy>=1.14,<2",
+  "types-PyYAML>=6,<7",
 ]
 
 [tool.pytest.ini_options]

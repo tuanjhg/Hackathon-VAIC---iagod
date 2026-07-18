@@ -1,0 +1,41 @@
+{
+  "cong_suat_w": {
+    "entropy": 2.4146,
+    "n_samples": 319,
+    "priority_rank": 2,
+    "fields": {
+      "specs_raw.Công suất đầu ra": {
+        "path": "specs_raw.Công suất đầu ra",
+        "entropy": 2.4146,
+        "n_buckets": 16,
+        "n_missing": 12
+      }
+    }
+  },
+  "tinh_nang_an_toan": {
+    "entropy": 5.6696,
+    "n_samples": 319,
+    "priority_rank": 3,
+    "fields": {
+      "specs_raw.Tính năng an toàn": {
+        "path": "specs_raw.Tính năng an toàn",
+        "entropy": 5.6696,
+        "n_buckets": 100,
+        "n_missing": 45
+      }
+    }
+  },
+  "ranked_slots": [
+    "tinh_nang_an_toan",
+    "cong_suat_w"
+  ],
+  "_meta": {
+    "category_key": "may_nuoc_nong",
+    "category_label": "Máy nước nóng",
+    "n_records": 319,
+    "unscored_slots": [
+      "so_nguoi_dung"
+    ],
+    "generated_by": "scripts/compute_information_gain.py"
+  }
+}

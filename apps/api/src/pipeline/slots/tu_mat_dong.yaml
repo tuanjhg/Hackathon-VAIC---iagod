@@ -1,0 +1,71 @@
+category_key: tu_mat_dong
+category_label: "Tủ mát, tủ đông"
+source_notes: >
+  Slot v0 viết tay từ facets thực tế trong
+  data/realdata/processed/tu_mat_dong.json (2 ngành mở rộng thay vì máy giặt
+  -- xem data_quality bên dưới cho lý do). Không có bảng "Slot schema theo
+  ngành hàng" sẵn có cho ngành này trong dmx-ai-workflow-v1.md §2 nên slot
+  được thiết kế trực tiếp từ phân bố specs_raw thật (thay cho "facets
+  dienmayxanh.com" -- cùng nguồn, đã ETL sẵn vào processed/).
+data_quality: >
+  99.5% sản phẩm có specs_raw (không có parser cấu trúc riêng -- field map
+  bên dưới trỏ vào specs_raw, không phải specs), 59.5% có giá (n=222) -- giá
+  coverage TỐT NHẤT trong 12 ngành chưa có parser, tốt hơn máy giặt (15.3%)
+  vốn được đề xuất ở task 48. Chọn ngành này thay máy giặt vì tiêu chí gốc
+  của task 48 là "null-rate thấp"; giữ đúng tiêu chí, đổi ví dụ cụ thể theo
+  số đo thật (profile_report.md).
+  CAVEAT: field map trỏ vào specs_raw (nhãn tiếng Việt thô, chưa parse đơn
+  vị/kiểu dữ liệu) -- Category Profile Compiler (ADR A7, task 37) sẽ cần
+  parse các field này thành specs có cấu trúc.
+
+required_slots:
+  - name: ngan_sach_max
+    label: "Ngân sách tối đa"
+    type: money
+    catalog_field: price.sale_price
+    sample_question: "Anh/chị dự tính ngân sách khoảng bao nhiêu ạ?"
+  - name: loai_tu
+    label: "Loại tủ"
+    type: enum
+    values: [tu_mat, tu_dong]
+    catalog_field: "specs_raw.Loại sản phẩm"
+    sample_question: "Anh/chị cần tủ mát (trưng bày, làm lạnh) hay tủ đông (bảo quản đông lạnh) ạ?"
+
+optional_slots:
+  - name: dung_tich_l
+    label: "Dung tích"
+    type: volume_liter
+    catalog_field: "specs_raw.Dung tích tổng"
+    priority_rank: 1
+    sample_question: "Anh/chị cần tủ dung tích khoảng bao nhiêu lít ạ?"
+    rationale: "Không có công thức chuẩn hoá theo số người như tủ lạnh -- phụ thuộc mục đích (gia đình nhỏ ~100-300L, kinh doanh/cửa hàng ~300L+)."
+  - name: so_cua
+    label: "Số cửa/ngăn"
+    type: text
+    catalog_field: ["specs_raw.Số cửa", "specs_raw.Số ngăn"]
+    priority_rank: 2
+    sample_question: "Anh/chị cần tủ mấy cửa/ngăn ạ?"
+  - name: tiet_kiem_dien
+    label: "Ưu tiên tiết kiệm điện"
+    type: boolean
+    catalog_field: "specs_raw.Công nghệ tiết kiệm điện"
+    priority_rank: 3
+    sample_question: "Anh/chị có ưu tiên tủ tiết kiệm điện không ạ?"
+
+derivation_rules:
+  - name: dung_tich_heuristic
+    description: >
+      Chưa có công thức chuẩn hoá (khác tủ lạnh/máy lạnh) -- heuristic tạm
+      thời: gia đình nhỏ ~100-300 lít, kinh doanh/cửa hàng ~300 lít trở lên.
+      Cần chuyên gia duyệt hoặc Category Profile Compiler (ADR A7) thay thế.
+
+catalog_field_map:
+  loai_san_pham: "specs_raw.Loại sản phẩm"
+  dung_tich_tong: "specs_raw.Dung tích tổng"
+  so_cua: "specs_raw.Số cửa"
+  so_ngan: "specs_raw.Số ngăn"
+  do_on: "specs_raw.Độ ồn"
+  loai_gas: "specs_raw.Loại Gas"
+  cong_nghe_tiet_kiem_dien: "specs_raw.Công nghệ tiết kiệm điện"
+  nhiet_do_ngan_dong: "specs_raw.Nhiệt độ ngăn đông (độ C)"
+  san_xuat_tai: "specs_raw.Sản xuất tại"

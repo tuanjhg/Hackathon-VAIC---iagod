@@ -993,16 +993,22 @@ S7 kỹ thuật: regex claim extraction (mỗi số/giá/khuyến mãi/tồn kho
 
 Middleware đo timing từng stage S1–S8 → ghi Postgres `audit_log` mỗi turn: slots, tool calls, rows dùng, claims, verifier verdict, latency (mask PII, không log giá vốn). Một bảng, ba người dùng: dev debug, eval harness (`make eval`), dashboard nhu-cầu-thị-trường (tính năng 2.1) — ADR D4.
 
-## 6.9. Latency budget & hạ tầng vLLM
+## 6.9. Latency budget & hạ tầng LLM
 
 | Luồng | Stage | Tổng dự kiến | Yêu cầu |
 |---|---|---|---|
 | Hỏi ngược | S1+S2+S3+S6-câu-hỏi (stream) | ~1.2s tới token đầu | <3s ✓ |
 | Top-3 so sánh | S1+S2+S3+S4+S5+S6 (TTFT)+S7 song song | ~1.7s TTFT, ~4s trọn | <5s ✓ |
 
-Đo thật bằng `vllm bench serve` + eval harness ở Phase 0/Phase 4. Nếu S2 (32B) vượt 700ms p95 → tách model nhỏ 4–8B cho extraction (router 2 tầng, ADR A3).
+Nếu S2 vượt 700ms p95 → tách model nhỏ 4–8B cho extraction (router 2 tầng, ADR A3) — vẫn đúng bất kể model chính host ở đâu.
 
-**Hạ tầng vLLM:** 1× H100 80GB, Qwen3-32B FP8 (`enable_thinking=False`), prefix-caching + chunked-prefill 🧪 (phải benchmark ở Phase 0 — cặp flag từng có bug). Chỉ **10h GPU credit tổng** — vLLM không chạy thường trực, bật theo cửa sổ tập trung (lịch chi tiết: `dmx-phan-tich-ke-hoach-2026-07-17.md` §5b); mọi dev logic ngoài cửa sổ chạy qua router (§6.5) trỏ cloud/model nhỏ.
+**Hạ tầng LLM (revised 18/07, ADR A2'' — supersedes A2'/self-host vLLM):** model chính **Qwen3.6-27B qua API key OpenRouter** (OpenAI-compatible qua router A6, `base_url=https://openrouter.ai/api/v1`) — không tự thuê/vận hành VM GPU, không dùng FPT AI Factory. Chưa chọn provider fallback thứ 2 — `LLM_FALLBACK_ENABLED=false` mặc định.
+
+**Vận hành:** lấy API key từ OpenRouter → set `LLM_API_KEY` trong `.env` thật (không commit); `LLM_BASE_URL`/`LLM_MODEL` đã có default OpenRouter/`qwen/qwen3.6-27b` trong `.env.example` → chạy ngay, không cần cửa sổ boot như tự host. Benchmark Gate 1 (p95 S2) và Gate 4 (guided_json + tool-call sạch) vẫn chạy bằng `scripts/bench/`, chỉ trỏ `VLLM_BASE_URL`/`VLLM_MODEL` sang OpenRouter. **Gate 2 (cặp flag prefix-caching/chunked-prefill) không còn áp dụng** — không có server tự host để chỉnh flag.
+
+**Cần xác nhận trước khi code phụ thuộc vào guided_json/tool-call:** (1) `qwen/qwen3.6-27b` là slug dự kiến, kiểm tra đúng tên thật trong catalog OpenRouter trước khi set key thật; (2) chưa chắc route model này qua OpenRouter hỗ trợ đúng `response_format` json_schema + hermes-style tool-calling như vLLM — chạy Gate 4 trước để xác nhận; nếu shape khác, `apps/api/src/router/client.py` cần sửa thêm chứ không chỉ đổi `.env`.
+
+**Archived:** self-host vLLM trên VM H100 thuê (`docker-compose.vllm.yml`, `make vllm-up/-down/-logs`) không còn dùng trong kế hoạch hiện tại — giữ nguyên trạng phòng khi roadmap pilot (ADR A8) cần quay lại self-host lúc traffic đủ lớn để amortize chi phí GPU rental.
 
 ## 6.10. Interface cần giữ ổn định
 
