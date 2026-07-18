@@ -116,9 +116,16 @@
 ### D1. API: FastAPI + SSE (POST → text/event-stream)
 - **Thay vì** WebSocket: chat là streaming một chiều, SSE đơn giản hơn (không quản lý connection state), proxy/firewall thân thiện hơn cho demo venue
 
-### D2. Frontend: Vite + React + Tailwind (SPA, không SSR)
+### D2. Frontend: Vite + React + Tailwind (SPA, không SSR) — ⚠️ SUPERSEDED (18/07, xem D2')
+- **Chọn (gốc)**: SPA Vite + React + Tailwind
 - **Vì**: slider re-rank (1.2) + card nhu-cầu-làm-hàng (1.4) + panel nguồn dữ liệu cần control UI thật
 - **Thay vì**: Streamlit/Gradio — không đủ control cho các tính năng Tier 1, và nhìn "notebook demo" thay vì "sản phẩm" (ảnh hưởng Startup Potential); Next.js — SSR không cần cho demo local, thêm phức tạp
+- **Ghi chú superseded**: skeleton thực tế đã build bằng Next.js 15 App Router trước khi ADR này được đọc/áp dụng (xem `git log`: commit data/research đi trước commit skeleton). Giữ nguyên lý luận gốc để tham khảo khi pilot có thời gian đánh giá lại framework.
+
+### D2'. Frontend (revised 18/07): giữ Next.js 15 App Router, dùng như SPA-nặng cho phần cần control UI thật
+- **Chọn**: giữ nguyên `apps/web` (Next.js 15 + React 19) đã build; các khu vực cần control tương tác cao và không được lẫn cache SSR (chat widget, slider re-rank 1.2, bảng nhu-cầu-làm-hàng 1.4, source panel) dùng Client Component (`"use client"`) + TanStack Query, không dùng Server Component data-fetching cho các phần này
+- **Vì**: skeleton đã chạy, có test, có Docker build; viết lại sang Vite tốn thời gian không có trong ngân sách 48h (xem `dmx-phan-tich-ke-hoach-2026-07-17.md` §5) và không đổi điểm rubric (Deployment/Feasibility không chấm framework cụ thể)
+- **Điểm cần cẩn thận**: SSE streaming (D1) từ FastAPI phải được đọc bằng `fetch` + `ReadableStream` ngay trong Client Component, KHÔNG proxy qua Next.js Route Handler — proxy thêm 1 hop làm chậm TTFT, đúng rủi ro mà ADR D2 gốc từng lo ngại về SSR/streaming. Chi tiết implementation xem `docs/pipelines.md` §3.10 và §6.10
 
 ### D3. Đóng gói: docker-compose 4 service, 1 lệnh
 ```

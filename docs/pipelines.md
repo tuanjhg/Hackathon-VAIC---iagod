@@ -4,6 +4,8 @@ Tài liệu này mô tả cách dữ liệu và request đi xuyên suốt hệ t
 
 ## 1. Tổng quan hệ thống
 
+> **Trạng thái (18/07):** Sơ đồ dưới mô tả hệ thống skeleton hiện tại (đang chạy). Pipeline AI-Native đã **chốt kiến trúc** ở §6 — khi build xong sẽ thêm service `vllm` và chuyển `/chat/messages` sang SSE, không đổi `/products`/`/compare`.
+
 ```text
 Browser
   │
@@ -29,6 +31,7 @@ Các nguyên tắc chính:
 - Business rule nằm trong service; SQL query nằm trong repository.
 - Recommendation chỉ sử dụng product tồn tại trong database.
 - Trường dữ liệu không có giá trị được giữ là `null`; frontend hiển thị “Chưa có dữ liệu”.
+- **(Kế hoạch, §6)** Chat endpoint chuyển sang SSE streaming; mọi LLM call đi qua router nội bộ trỏ vLLM tự host, không gọi thẳng API ngoài (ADR A6).
 
 ---
 
@@ -254,6 +257,8 @@ Các nhãn hiện tại:
 - `best_overall_id`: rule deterministic dựa trên rating, inverter và featured.
 
 ## 2.8. Pipeline chatbot rule-based
+
+> **Hiện tại vs kế hoạch:** mục này mô tả `MockChatService` đang chạy (rule-based, 3 bước hỏi cố định). Pipeline thay thế — 8 stage S1–S8, streaming, guardrail — đã chốt kiến trúc ở §6 nhưng **chưa build**. Khi triển khai, endpoint giữ nguyên path nhưng đổi sang SSE và Need Profile schema mới (§6.2).
 
 Endpoint:
 
@@ -685,6 +690,10 @@ Hướng mở rộng:
 - Persist session/chat history ở backend.
 - Sinh UUID session thay vì fixed demo session.
 
+### Kế hoạch chuyển sang SSE (§6, ADR D1/D2')
+
+Khi backend chuyển sang pipeline AI-Native, `api.chat` đổi từ fetch JSON một lần sang đọc `ReadableStream` trực tiếp từ FastAPI SSE endpoint trong Client Component (`"use client"`) — không proxy qua Next.js Route Handler, để không thêm hop làm chậm TTFT. `chatStore` cần thêm state cho streaming: `partialMessage` (token đang stream), `sourcePanel` (source log per-turn từ S8), `verifierFlags` (claim bị S7 sửa/cắt, nếu có). Chi tiết interface xem §6.10.
+
 ## 3.11. Frontend state ownership
 
 | Dữ liệu | Công cụ | Lý do |
@@ -756,6 +765,8 @@ HTTP healthcheck
 ---
 
 # 4. Pipeline Docker Compose end-to-end
+
+> **Kế hoạch (§6.9):** khi pipeline AI-Native lên, compose thêm service `vllm` (image chính thức, `--model Qwen3-32B-FP8`, prefix-caching + chunked-prefill). Vì mỗi lần bật vLLM tốn ~10' load model và ngân sách chỉ 10h GPU credit tổng (`dmx-phan-tich-ke-hoach-2026-07-17.md` §5b), service này **không** nằm trong `docker compose up` mặc định lúc dev — bật riêng trong cửa sổ tập trung; `api` gọi qua router (ADR A6) có fallback cloud/model nhỏ khi vLLM tắt.
 
 ```text
 docker compose up --build
@@ -874,60 +885,142 @@ End-to-end verification
 
 ---
 
-# 6. Pipeline AI-Native dự kiến
+# 6. Pipeline AI-Native (kiến trúc đã chốt — xem docs/research/)
 
-Trong phase hiện tại, `MockChatService` là strategy rule-based. Pipeline tương lai có thể được thay bằng:
+> **Trạng thái (18/07):** kiến trúc dưới đây đã **chốt** sau vòng research 17/07 (bản đồ tài liệu: `dmx-phan-tich-ke-hoach-2026-07-17.md` §1) nhưng **chưa build** — `MockChatService` (§2.8) vẫn là code đang chạy. Mục này là bản tóm tắt để code theo hằng ngày; rationale đầy đủ, ví dụ cụ thể và 4 benchmark gate phải chạy ở Phase 0 nằm ở `dmx-ai-workflow-v1.md`, `dmx-tech-decisions.md`, `dmx-guardrail-design.md` — đọc file tương ứng trước khi code stage đó.
+
+## 6.1. Tổng quan 8 stage
 
 ```text
-User message + conversation context
-  ▼
-Need extraction
-  ├─ room area
-  ├─ budget
-  ├─ priority
-  ├─ constraints
-  └─ missing/ambiguous fields
-  ▼
-Conversation policy
-  ├─ hỏi follow-up
-  └─ tiếp tục recommendation
-  ▼
-Catalog retrieval / RAG
-  ├─ structured product database
-  ├─ manufacturer documents
-  ├─ warranty/promotion policies
-  └─ review evidence
-  ▼
-Hard filters
-  ├─ room compatibility
-  ├─ budget
-  ├─ stock
-  └─ mandatory constraints
-  ▼
-Ranking engine
-  ├─ feature scoring
-  ├─ priority weights
-  ├─ trade-off calculation
-  └─ diversity
-  ▼
-LLM response composer
-  ▼
-Guardrail/evidence validation
-  ├─ product tồn tại
-  ├─ giá/tồn kho đúng snapshot
-  ├─ không bịa thông số
-  └─ citation/provenance
-  ▼
-Structured Recommendation response
-  ▼
-Frontend RecommendationCard
+User message ──▶ S1 (chuẩn hóa) ──▶ S2 (intent + slot) ──┬─▶ [policy_faq] RAG chính sách ──────▶ S7
+                                                           ├─▶ [ngoài_phạm_vi] từ chối lịch sự ──▶ S8
+                                                           ├─▶ [so_sánh_trực_tiếp A vs B] ───────▶ S4
+                                                           └─▶ [tư_vấn / hỏi_chi_tiết] ──▶ S3
+S3 (đủ thông tin?) ─┬─ CAO/VỪA: hỏi ngược (S3a/S3b) ──▶ khách trả lời ──▶ quay lại S1 (merge slot)
+                    └─ THẤP: đủ rồi
+                         ▼
+                        S4 (retrieval) ──▶ S5 (fit-score) ──▶ S6 (generation, streaming) ──▶ S7 (verify song song) ──▶ S8 (respond + source log)
 ```
 
-Các interface nên được giữ ổn định:
+| Stage | Việc | Latency | Tech | LLM? |
+|---|---|---|---|---|
+| S1 | NFC normalize, dict ngành hàng, parse tiền/đơn vị, giữ code-switching | ~50ms | regex + dict Python thuần | Không |
+| S2 | Intent (5 loại) + slot extraction, merge vào Need Profile | ~400ms | Qwen3-32B FP8, `guided_json` (xgrammar), prefix caching | Có |
+| S3 | Dialogue policy — 3 mức ambiguity (Cao/Vừa/Thấp) | ~110ms | rule + SQL `COUNT` pre-filter + information gain precompute | Không (câu hỏi S3a/b cần LLM ngắn) |
+| S4 | Structured-first hybrid retrieval | ~250ms, song song | SQL filter (luật ngành) → pgvector+BM25/RRF rerank soft-pref → `asyncio.gather` Price/Promo/Stock | Không |
+| S5 | Fit-score ranking tường minh + top-3 + anti-pick + trade-off extraction | ~50ms | Python thuần | Không |
+| S6 | Sinh tư vấn từ statement templates, streaming | TTFT <1s | Qwen3-32B FP8; **card render thẳng từ S5, không qua LLM** | Có |
+| S7 | Per-claim verification, song song với stream | ~200ms | regex claim extraction + numeric/enum match vào facts JSON, không NLI | Không |
+| S8 | Respond + source panel + audit log | — | SSE + Postgres `audit_log` | Không |
 
-- `ChatMessageRequest` và `ChatContext`.
-- `ChatResponse` với `follow_up` hoặc `recommendations`.
-- `Recommendation` gồm product, score, reason, strengths và trade-off.
-- Product retrieval qua repository/service, không để LLM tự sinh catalog.
+**Quyết định kiến trúc quan trọng nhất (ADR A1):** workflow S1→S8 **cố định**, LLM chỉ quyết định tại 2 nút (S2 intent routing, S6 nội dung lời tư vấn) — không phải agent loop tự do. Lý do: SLA <3s/<5s cần số lần LLM call đoán được; demo cần deterministic (cùng câu hỏi → cùng hành vi).
 
-Nhờ giữ contract này, frontend có thể tiếp tục hoạt động khi backend chuyển từ rule-based sang AI orchestration thực sự.
+## 6.2. Trạng thái hội thoại — Need Profile
+
+Mỗi session giữ một Need Profile (JSON), quyết định mọi nhánh rẽ:
+
+```json
+{
+  "category": "máy_lạnh",
+  "slots": { "ngân_sách_max": 20000000, "diện_tích_m2": 18, "loại_phòng": null, "nắng_trực_tiếp": null, "ưu_tiên": ["tiết_kiệm_điện", "êm"], "trả_góp": null },
+  "asked_slots": ["loại_phòng", "nắng_trực_tiếp"],
+  "clarify_rounds": 1,
+  "assumptions": []
+}
+```
+
+- Ràng buộc cứng: tối đa **2 lượt hỏi**/hội thoại; không hỏi lại slot đã có/đã hỏi; mỗi lượt ≤3 câu gom 1 tin nhắn.
+- Slot bắt buộc theo ngành hàng (máy lạnh: ngân sách + diện tích; tủ lạnh: ngân sách + số người; ...) đến từ **Category Profile** do compiler sinh (§6.6), không hardcode trong code.
+- Đổi ngành giữa chừng → reset slot ngành cũ, giữ ngân sách, hỏi xác nhận nhẹ. Hết quota hỏi → đề xuất kèm giả định nêu rõ.
+- Lưu trữ: in-memory `dict` + TTL, interface `SessionStore` tách riêng để đổi sang Redis khi pilot (ADR C7) — **không phải bảng Postgres**; Postgres chỉ giữ `need_profile_log` (snapshot mỗi turn, cho audit/eval).
+
+## 6.3. S3 — Dialogue policy (10% điểm "hỏi ngược thông minh")
+
+| Mức | Điều kiện | Hành động |
+|---|---|---|
+| Cao | Thiếu slot bắt buộc, hoặc pre-filter >20 SP tản mát | Hỏi theo slot: 2–3 slot information-gain cao nhất, gom 1 tin, kèm lý do |
+| Vừa | Đủ slot bắt buộc, còn 6–20 candidates | Hỏi dựa trên dữ liệu đã lọc (thuộc tính phân tán nhất trong candidates) |
+| Thấp | ≤5 candidates rõ, hoặc `clarify_rounds ≥ 2` | Bỏ qua hỏi → S4, nêu giả định nếu có |
+
+Không để LLM tự quyết hỏi-hay-không — quyết định phải giải thích được trước giám khảo bằng rule + số, không phải hộp đen (ADR C3).
+
+## 6.4. S4 — Structured-first hybrid retrieval (Postgres duy nhất)
+
+1. **SQL filter cứng** trước tiên: category + giá ≤ ngân sách×1.05 + công suất theo luật ngành (`BTU_cần = diện_tích × 600 (+30% nếu nắng trực tiếp)`, `lít_tủ_lạnh ≈ 40–50/người + 100`, ...) + tồn kho.
+2. **Hybrid rerank** trong tập đã lọc, chỉ cho sở thích mềm ("êm", "sang trọng"): dense = pgvector HNSW; lexical = BM25 (Postgres FTS `pg_textsearch`, fallback `tsvector` + `unaccent`); fusion = **RRF trên rank trong SQL** (không blend điểm — BM25 unbounded, cosine [-1,1] không tương thích thang đo).
+3. Tên sản phẩm/mã model: `pg_trgm` + rapidfuzz (fuzzy), **không dùng embedding** — chuỗi ký hiệu biểu diễn kém trong vector.
+4. Gọi song song (`asyncio.gather`) Price/Promo/Stock cho candidates → `facts JSON` với `source_id` + `fetched_at` per field — nguồn sự thật duy nhất cho S5–S8; field thiếu → `null`, không bao giờ điền mặc định.
+5. **Adoption gate:** hybrid chỉ bật nếu ablation (`dmx-data-eval-roi-plan.md` §B1b) cho Hit@3/Recall@3 ≥ dense-only và lexical-only ở mọi slice — quyết định bằng số ở Phase 2, không mặc định bật.
+
+## 6.5. Tools & Router
+
+- **5 tool MCP-compatible** (hàm Python + JSON schema chuẩn MCP), pipeline gọi trực tiếp ở S4; chỉ nhánh `hỏi_chi_tiết_SP` cho LLM tự chọn tool (hermes tool parser): `catalog_search`, `price_promo_stock`, `policy_faq`, `review_summary`, `need_profile`.
+- **Router (ADR A6):** mọi LLM call qua client OpenAI-compatible tự viết (~50 dòng) trỏ vLLM local; timeout/5xx → retry 1 lần → fallback cloud API. Cờ fallback **tắt khi demo** (thuần on-prem), bật khi dev vì vLLM không chạy suốt (ngân sách 10h GPU, §6.9).
+
+## 6.6. Category Profile Compiler (ADR A7) — AI sinh, người duyệt, runtime đọc
+
+Logic tư vấn theo ngành hàng (slot bắt buộc, luật quy đổi, câu hỏi mẫu) **không phải config dev viết tay** — pipeline offline chạy lúc ingest:
+
+```text
+catalog fields + phân bố giá trị + guide corpus (bài hướng dẫn chọn mua)
+  ▼ LLM suy ra slot ứng viên + luật quy đổi (có citation) + câu hỏi mẫu + information gain
+  ▼ auto-check "actionable" (loại slot không map field/luật nào)
+  ▼ chuyên gia duyệt (human-in-the-loop)
+  ▼ category_profile.json — AI sinh, người duyệt, runtime đọc
+```
+
+- **Lưới an toàn runtime:** dynamic aspect discovery (S3b) — khi candidates còn nhiều, chọn attribute phân tách tốt nhất từ entropy trên chính tập candidates hiện tại, hoạt động cả khi category chưa có profile.
+- **Scoping 48h:** YAML v0 viết tay ở Phase 0 (bootstrap + fallback) → compiler v0 ở Phase 3, so với bản tay trên 4 ngành làm validation → demo "thêm ngành live" ở Phase 4 nếu xanh.
+- Luật tư vấn ("phòng nắng cần +0.5HP") lấy từ guide corpus qua RAG có citation, không hardcode — nhất quán với guardrail Tầng 0 (§6.7).
+
+## 6.7. S7 + Guardrail — chống hallucination (10% điểm)
+
+Verifier (S7) chỉ là 1 trong 7 tầng guardrail (`dmx-guardrail-design.md`):
+
+| Tầng | Cơ chế |
+|---|---|
+| 0. Data | Giá vốn không vào DB; fact nào cũng mang provenance; null là null |
+| 1. Generation | LLM chỉ thấy `<facts>`; số liệu đến từ template điền sẵn; diễn đạt, không sáng tác |
+| 2. Verifier | Tách atomic claims sau sinh, đối chiếu ngược facts JSON; lệch → sửa/cắt + log `hallucination_incident` |
+| 3. Honesty | Thiếu data → nói thiếu; data cũ → ghi thời điểm (`fetched_at` >24h); nguồn mâu thuẫn có luật ưu tiên |
+| 4. Tone | Không ép mua, không tuyệt đối hóa; mọi card bắt buộc có trade-off (ép bằng schema) |
+| 5. Audit | Source panel mỗi câu trả lời (SP nào, field nào, từ đâu, lúc nào); mask PII; không lưu hội thoại thật |
+| 6. Eval | Metric **per-claim rate** (% claim sai/tổng claim) + red-team set — chứng minh bằng số |
+
+S7 kỹ thuật: regex claim extraction (mỗi số/giá/khuyến mãi/tồn kho = 1 claim) + so khớp facts JSON; **không dùng NLI model trong 48h** — 4 loại fact bắt buộc theo đề đều là số/enum, numeric matching phủ đủ (ADR C6). Product card (S6) render thẳng từ JSON của S5, **không đi qua LLM** — xác suất hallucination = 0 tuyệt đối về mặt cấu trúc cho phần chứa nhiều fact nhất (ADR C5); LLM chỉ viết lời dẫn + trade-off narrative, verifier chỉ cần soi phần prose.
+
+## 6.8. Observability & audit log
+
+Middleware đo timing từng stage S1–S8 → ghi Postgres `audit_log` mỗi turn: slots, tool calls, rows dùng, claims, verifier verdict, latency (mask PII, không log giá vốn). Một bảng, ba người dùng: dev debug, eval harness (`make eval`), dashboard nhu-cầu-thị-trường (tính năng 2.1) — ADR D4.
+
+## 6.9. Latency budget & hạ tầng vLLM
+
+| Luồng | Stage | Tổng dự kiến | Yêu cầu |
+|---|---|---|---|
+| Hỏi ngược | S1+S2+S3+S6-câu-hỏi (stream) | ~1.2s tới token đầu | <3s ✓ |
+| Top-3 so sánh | S1+S2+S3+S4+S5+S6 (TTFT)+S7 song song | ~1.7s TTFT, ~4s trọn | <5s ✓ |
+
+Đo thật bằng `vllm bench serve` + eval harness ở Phase 0/Phase 4. Nếu S2 (32B) vượt 700ms p95 → tách model nhỏ 4–8B cho extraction (router 2 tầng, ADR A3).
+
+**Hạ tầng vLLM:** 1× H100 80GB, Qwen3-32B FP8 (`enable_thinking=False`), prefix-caching + chunked-prefill 🧪 (phải benchmark ở Phase 0 — cặp flag từng có bug). Chỉ **10h GPU credit tổng** — vLLM không chạy thường trực, bật theo cửa sổ tập trung (lịch chi tiết: `dmx-phan-tich-ke-hoach-2026-07-17.md` §5b); mọi dev logic ngoài cửa sổ chạy qua router (§6.5) trỏ cloud/model nhỏ.
+
+## 6.10. Interface cần giữ ổn định
+
+- `ChatMessageRequest` / `ChatContext` — mở rộng `ChatContext` với `need_profile` (thay vì 3 field rời `budget_max`/`room_area_m2`/`priority` như bản rule-based) để chứa toàn bộ Need Profile (§6.2).
+- `ChatResponse` — thêm `source_panel` (list field→nguồn→thời điểm), `verifier_flags` (claim nào bị sửa/cắt), giữ `follow_up`/`recommendations`.
+- `Recommendation` — thêm `anti_pick` (SP không nên chọn + lý do), `trade_off` (theo công thức §6.1 S5), giữ `score`/`reason`/`strengths`.
+- Product retrieval luôn qua repository/service (§6.4) — LLM không tự sinh catalog.
+- Endpoint `POST /api/v1/chat/messages` giữ nguyên path, đổi response sang SSE (`text/event-stream`) — xem ghi chú frontend ở §3.10.
+
+Giữ các contract này để `apps/web` tiếp tục chạy khi `apps/api` chuyển từ `MockChatService` sang pipeline S1–S8 thật.
+
+## 6.11. Nhánh phụ & edge cases
+
+| Tình huống | Xử lý |
+|---|---|
+| Hỏi policy thuần ("trả góp 0% cần gì?") | Nhánh `policy_faq`: RAG trên Policy & FAQ docs, trích dẫn mục chính sách, không đi qua ranking |
+| Hỏi chi tiết SP đang xem ("con thứ 2 pin bao nhiêu?") | Resolve "con thứ 2" từ context đề xuất gần nhất → lookup field → trả lời + nguồn |
+| So sánh trực tiếp 2 SP khách tự nêu | Bỏ qua clarify → retrieve đúng 2 SP → so sánh theo template |
+| Ngoài phạm vi (hỏi thời tiết, chửi bậy...) | Từ chối nhẹ nhàng + kéo về tư vấn sản phẩm |
+| Catalog thiếu field hàng loạt (data bẩn) | Field null → guardrail honesty (Tầng 3), không suy diễn |
+| Khách im lặng/câu quá ngắn ("ok", "ừ") | Hiểu là đồng ý bước gợi ý gần nhất, không hỏi lại từ đầu |
