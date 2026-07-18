@@ -1,6 +1,16 @@
 from decimal import Decimal
 
-from src.seed.sync_catalog_products import _mapped_values
+from sqlalchemy import create_engine, func, select, text
+from sqlalchemy.orm import Session
+
+from src.core.database import Base
+from src.models import Category, Product
+from src.seed.sync_catalog_products import (
+    CATALOG_CATEGORIES,
+    _map_row,
+    _mapped_values,
+    sync_catalog_products,
+)
 
 
 def test_maps_real_air_conditioner_fields_without_inventing_missing_data() -> None:
@@ -55,3 +65,68 @@ def test_missing_price_and_specs_remain_explicitly_unknown() -> None:
     assert values["warranty_months"] == 0
     assert values["image_url"] == ""
     assert values["rating"] == 0
+
+
+def test_maps_generic_category_and_preserves_specific_attributes() -> None:
+    values = _map_row(
+        {
+            "id": 9,
+            "sku": "TABLET-9",
+            "model_code": "TAB-X",
+            "brand": "Samsung",
+            "gia_goc": Decimal("12000000"),
+            "gia_khuyen_mai": Decimal("11000000"),
+            "ram": "8 GB",
+            "dung_luong_luu_tru": "256 GB",
+        },
+        CATALOG_CATEGORIES[-1],
+    )
+
+    assert values["name"] == "Máy tính bảng Samsung TAB-X"
+    assert values["slug"] == "may-tinh-bang-samsung-tab-x-tablet-9"
+    assert values["specifications"] == {"ram": "8 GB", "dung_luong_luu_tru": "256 GB"}
+    assert values["capacity_btu"] == 0
+    assert values["recommended_area_max"] == 0
+
+
+def test_sync_multiple_raw_categories_into_api_read_model() -> None:
+    engine = create_engine("sqlite://")
+    Base.metadata.create_all(engine)
+    with engine.begin() as connection:
+        connection.execute(
+            text(
+                "CREATE TABLE refrigerators ("
+                "id INTEGER PRIMARY KEY, sku TEXT, model_code TEXT, brand TEXT, "
+                "gia_goc NUMERIC, gia_khuyen_mai NUMERIC, dung_tich_tong TEXT)"
+            )
+        )
+        connection.execute(
+            text(
+                "INSERT INTO refrigerators VALUES "
+                "(1, 'FRIDGE-1', 'R100', 'LG', 10000000, 9000000, '500 lít')"
+            )
+        )
+        connection.execute(
+            text(
+                "CREATE TABLE air_conditioners ("
+                "id INTEGER PRIMARY KEY, sku TEXT, model_code TEXT, brand TEXT, "
+                "gia_goc NUMERIC, gia_khuyen_mai NUMERIC, cong_suat_dau_ra TEXT)"
+            )
+        )
+        connection.execute(
+            text(
+                "INSERT INTO air_conditioners VALUES "
+                "(1, 'AC-1', 'A100', 'Daikin', 12000000, 11000000, '9.000 BTU')"
+            )
+        )
+
+    with Session(engine) as db:
+        result = sync_catalog_products(db, CATALOG_CATEGORIES[:2])
+        assert result.source_rows == 2
+        assert result.categories == 2
+        assert db.scalar(select(func.count()).select_from(Category)) == 2
+        assert db.scalar(select(func.count()).select_from(Product)) == 2
+        refrigerator = db.scalar(select(Product).where(Product.sku == "FRIDGE-1"))
+        assert refrigerator is not None
+        assert refrigerator.category.slug == "tu-lanh"
+        assert refrigerator.specifications["dung_tich_tong"] == "500 lít"

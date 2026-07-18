@@ -14,5 +14,4 @@ class PaginatedResponse(BaseModel, Generic[T]):
 
 
 class CompareRequest(BaseModel):
-    product_ids: list[int] = Field(min_length=2, max_length=3)
-
+    product_ids: list[int] = Field(min_length=2, max_length=4)

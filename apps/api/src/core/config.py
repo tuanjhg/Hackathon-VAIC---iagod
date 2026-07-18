@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./needwise.db"
     cors_origins: list[str] | str = ["http://localhost:3000"]
     products_data_path: str = "../../data/demo/products.json"
+    policy_embedding_dimension: int = 384
     realdata_processed_path: str = "../../data/realdata/processed"
 
     # LLM router (ADR A6): primary = OpenRouter API, Qwen3.6-27B (ADR A2'',
@@ -28,7 +29,9 @@ class Settings(BaseSettings):
     # "mock" = legacy rule-based MockChatService (no LLM, demo-safe).
     chat_pipeline: str = "ai"
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    # Support both documented execution locations: repository root and apps/api.
+    # Explicit process environment variables still have higher priority.
+    model_config = SettingsConfigDict(env_file=("../../.env", ".env"), extra="ignore")
 
     @field_validator("cors_origins", mode="before")
     @classmethod
@@ -44,4 +47,3 @@ def get_settings() -> Settings:
 
 
 settings = get_settings()
-

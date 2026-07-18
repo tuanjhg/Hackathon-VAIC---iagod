@@ -6,6 +6,7 @@ from typing import Any
 import psycopg
 from psycopg import Connection
 from psycopg.rows import dict_row
+from psycopg.types.json import Jsonb
 
 from src.rag.models import PolicyChunk, SearchResult
 
@@ -53,9 +54,12 @@ class PgVectorStore:
         schema = self.schema
         with self._connection() as connection, connection.cursor() as cursor:
             cursor.execute("CREATE EXTENSION IF NOT EXISTS vector")
-            if force_reset:
-                cursor.execute(f"DROP SCHEMA IF EXISTS {schema} CASCADE")
+            cursor.execute("CREATE EXTENSION IF NOT EXISTS pgcrypto")
             cursor.execute(f"CREATE SCHEMA IF NOT EXISTS {schema}")
+            if force_reset:
+                cursor.execute(f"DROP TABLE IF EXISTS {schema}.policy_chunks")
+                cursor.execute(f"DROP TABLE IF EXISTS {schema}.policy_documents")
+                cursor.execute(f"DROP TABLE IF EXISTS {schema}.index_metadata")
             cursor.execute(
                 f"""CREATE TABLE IF NOT EXISTS {schema}.index_metadata (
                     singleton BOOLEAN PRIMARY KEY DEFAULT TRUE CHECK (singleton),
@@ -64,42 +68,47 @@ class PgVectorStore:
                 )"""
             )
             cursor.execute(
-                f"""CREATE TABLE IF NOT EXISTS {schema}.documents (
-                    source_path TEXT PRIMARY KEY,
-                    checksum TEXT NOT NULL,
-                    title TEXT NOT NULL,
-                    indexed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                f"""CREATE TABLE IF NOT EXISTS {schema}.policy_documents (
+                    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                    source_path TEXT NOT NULL UNIQUE,
+                    title TEXT,
+                    checksum VARCHAR(128) NOT NULL UNIQUE,
+                    document_type VARCHAR(100),
+                    metadata JSONB NOT NULL DEFAULT '{{}}'::jsonb,
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
                 )"""
             )
             cursor.execute(
-                f"""CREATE TABLE IF NOT EXISTS {schema}.chunks (
-                    id TEXT PRIMARY KEY,
-                    source_path TEXT NOT NULL REFERENCES {schema}.documents(source_path)
+                f"""CREATE TABLE IF NOT EXISTS {schema}.policy_chunks (
+                    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                    document_id UUID NOT NULL REFERENCES {schema}.policy_documents(id)
                         ON DELETE CASCADE,
-                    document_checksum TEXT NOT NULL,
-                    title TEXT NOT NULL,
-                    heading TEXT,
-                    content TEXT NOT NULL,
                     chunk_index INTEGER NOT NULL,
-                    line_start INTEGER NOT NULL,
-                    line_end INTEGER NOT NULL,
-                    embedding vector({self.dimension}) NOT NULL,
-                    UNIQUE(source_path, chunk_index)
+                    content TEXT NOT NULL,
+                    token_count INTEGER,
+                    metadata JSONB NOT NULL DEFAULT '{{}}'::jsonb,
+                    embedding vector({self.dimension}),
+                    embedding_model VARCHAR(150),
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    UNIQUE(document_id, chunk_index)
                 )"""
             )
             cursor.execute(
-                f"CREATE INDEX IF NOT EXISTS chunks_source_idx ON {schema}.chunks(source_path)"
+                f"CREATE INDEX IF NOT EXISTS idx_policy_chunks_document_id "
+                f"ON {schema}.policy_chunks(document_id)"
             )
             cursor.execute(
-                f"""CREATE INDEX IF NOT EXISTS chunks_embedding_hnsw_idx
-                ON {schema}.chunks USING hnsw (embedding vector_cosine_ops)"""
+                f"""CREATE INDEX IF NOT EXISTS idx_policy_chunks_embedding_hnsw
+                ON {schema}.policy_chunks USING hnsw (embedding vector_cosine_ops)"""
             )
             cursor.execute(
                 """SELECT format_type(attribute.atttypid, attribute.atttypmod) AS vector_type
                 FROM pg_attribute AS attribute
                 JOIN pg_class AS relation ON relation.oid = attribute.attrelid
                 JOIN pg_namespace AS namespace ON namespace.oid = relation.relnamespace
-                WHERE namespace.nspname = %s AND relation.relname = 'chunks'
+                WHERE namespace.nspname = %s AND relation.relname = 'policy_chunks'
                   AND attribute.attname = 'embedding'""",
                 (schema,),
             )
@@ -127,7 +136,7 @@ class PgVectorStore:
 
     def checksums(self) -> dict[str, str]:
         with self._connection() as connection, connection.cursor() as cursor:
-            cursor.execute(f"SELECT source_path, checksum FROM {self.schema}.documents")
+            cursor.execute(f"SELECT source_path, checksum FROM {self.schema}.policy_documents")
             return {str(row["source_path"]): str(row["checksum"]) for row in cursor.fetchall()}
 
     def replace_document(
@@ -142,32 +151,42 @@ class PgVectorStore:
             raise ValueError("chunks and embeddings must have the same length")
         schema = self.schema
         with self._connection() as connection, connection.cursor() as cursor:
-            cursor.execute(f"DELETE FROM {schema}.documents WHERE source_path = %s", (source_path,))
             cursor.execute(
-                f"""INSERT INTO {schema}.documents(source_path, checksum, title)
-                VALUES (%s, %s, %s)""",
+                f"DELETE FROM {schema}.policy_documents WHERE source_path = %s", (source_path,)
+            )
+            cursor.execute(
+                f"""INSERT INTO {schema}.policy_documents(
+                    source_path, checksum, title, document_type)
+                VALUES (%s, %s, %s, 'markdown') RETURNING id""",
                 (source_path, checksum, title),
             )
+            document = cursor.fetchone()
+            if document is None:
+                raise RuntimeError("Unable to create policy document")
             rows = [
                 (
-                    chunk.id,
-                    chunk.source_path,
-                    chunk.document_checksum,
-                    chunk.title,
-                    chunk.heading,
-                    chunk.content,
+                    document["id"],
                     chunk.chunk_index,
-                    chunk.line_start,
-                    chunk.line_end,
+                    chunk.content,
+                    len(chunk.content.split()),
+                    Jsonb({
+                        "legacy_id": chunk.id,
+                        "source_path": chunk.source_path,
+                        "document_checksum": chunk.document_checksum,
+                        "title": chunk.title,
+                        "heading": chunk.heading,
+                        "line_start": chunk.line_start,
+                        "line_end": chunk.line_end,
+                    }),
                     vector_literal(embedding, self.dimension),
+                    self.embedding_model,
                 )
                 for chunk, embedding in zip(chunks, embeddings, strict=True)
             ]
             cursor.executemany(
-                f"""INSERT INTO {schema}.chunks
-                (id, source_path, document_checksum, title, heading, content, chunk_index,
-                 line_start, line_end, embedding)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s::vector)""",
+                f"""INSERT INTO {schema}.policy_chunks
+                (document_id, chunk_index, content, token_count, metadata, embedding, embedding_model)
+                VALUES (%s, %s, %s, %s, %s::jsonb, %s::vector, %s)""",
                 rows,
             )
 
@@ -176,7 +195,7 @@ class PgVectorStore:
         if removed:
             with self._connection() as connection, connection.cursor() as cursor:
                 cursor.execute(
-                    f"DELETE FROM {self.schema}.documents WHERE source_path = ANY(%s)",
+                    f"DELETE FROM {self.schema}.policy_documents WHERE source_path = ANY(%s)",
                     (list(removed),),
                 )
         return len(removed)
@@ -187,11 +206,16 @@ class PgVectorStore:
         vector = vector_literal(query_embedding, self.dimension)
         with self._connection() as connection, connection.cursor() as cursor:
             cursor.execute(
-                f"""SELECT id, source_path, document_checksum, title, heading, content,
-                    chunk_index, line_start, line_end,
-                    1 - (embedding <=> %s::vector) AS score
-                FROM {self.schema}.chunks
-                ORDER BY embedding <=> %s::vector, id
+                f"""SELECT c.id, d.source_path, d.checksum AS document_checksum,
+                    d.title, c.metadata->>'heading' AS heading, c.content,
+                    c.chunk_index,
+                    COALESCE((c.metadata->>'line_start')::integer, 0) AS line_start,
+                    COALESCE((c.metadata->>'line_end')::integer, 0) AS line_end,
+                    1 - (c.embedding <=> %s::vector) AS score
+                FROM {self.schema}.policy_chunks c
+                JOIN {self.schema}.policy_documents d ON d.id = c.document_id
+                WHERE c.embedding IS NOT NULL
+                ORDER BY c.embedding <=> %s::vector, c.id
                 LIMIT %s""",
                 (vector, vector, limit),
             )
@@ -215,12 +239,12 @@ class PgVectorStore:
 
     def stats(self) -> dict[str, int | str]:
         with self._connection() as connection, connection.cursor() as cursor:
-            cursor.execute(f"SELECT COUNT(*) AS count FROM {self.schema}.documents")
+            cursor.execute(f"SELECT COUNT(*) AS count FROM {self.schema}.policy_documents")
             document_row = cursor.fetchone()
             if document_row is None:
                 raise RuntimeError("Unable to read document count")
             documents = int(document_row["count"])
-            cursor.execute(f"SELECT COUNT(*) AS count FROM {self.schema}.chunks")
+            cursor.execute(f"SELECT COUNT(*) AS count FROM {self.schema}.policy_chunks")
             chunk_row = cursor.fetchone()
             if chunk_row is None:
                 raise RuntimeError("Unable to read chunk count")

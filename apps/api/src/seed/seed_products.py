@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def seed_products(db: Session, data: list[dict[str, Any]]) -> int:
     category = db.scalar(select(Category).where(Category.slug == "may-lanh"))
     if category is None:
-        category = Category(name="Máy lạnh", slug="may-lanh")
+        category = Category(code="air_conditioners", name="Máy lạnh", slug="may-lanh")
         db.add(category)
         db.flush()
     created = 0
@@ -27,9 +27,10 @@ def seed_products(db: Session, data: list[dict[str, Any]]) -> int:
             id=item["id"], sku=item["sku"], slug=item["slug"], name=item["name"],
             brand=item["brand"], category=category, short_description=item["short_description"],
             image_url=item["image_url"], featured=item["featured"], rating=item["rating"],
-            review_count=item["review_count"],
+            review_count=item["review_count"], display_name=item["name"], source_data={},
         )
         product.specs = ProductSpec(
+            raw_specs={}, normalized_specs={},
             capacity_btu=item["capacity_btu"], horsepower=item["horsepower"],
             recommended_area_min=item["recommended_area_min"],
             recommended_area_max=item["recommended_area_max"], inverter=item["inverter"],
@@ -57,4 +58,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

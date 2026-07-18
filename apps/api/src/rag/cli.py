@@ -24,7 +24,9 @@ def _parser() -> argparse.ArgumentParser:
         default=os.getenv("POLICY_DATABASE_URL", os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)),
     )
     parser.add_argument("--schema", default=os.getenv("POLICY_VECTOR_SCHEMA", "policy_rag"))
-    parser.add_argument("--dimension", type=int, default=384)
+    parser.add_argument(
+        "--dimension", type=int, default=int(os.getenv("POLICY_EMBEDDING_DIMENSION", "384"))
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     build = subparsers.add_parser("build", help="Synchronize Markdown policies into the index")

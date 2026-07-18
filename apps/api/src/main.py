@@ -18,7 +18,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 app = FastAPI(
     title=settings.app_name,
     version="0.1.0",
-    description="API e-commerce và tư vấn máy lạnh rule-based.",
+    description="API tư vấn và so sánh sản phẩm đa ngành trên hybrid catalog.",
     lifespan=lifespan,
 )
 app.add_middleware(
