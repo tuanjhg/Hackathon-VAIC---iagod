@@ -19,10 +19,12 @@ from __future__ import annotations
 
 import re
 from logging import getLogger
+from pathlib import Path
 from typing import Any
 
 from sqlalchemy.orm import Session
 
+from src.core.config import settings
 from src.pipeline.need_profile import NeedProfile
 from src.pipeline.orchestrator import RetrievalResult, TurnResult, run_turn
 from src.pipeline.s2_extract import S2ExtractionError
@@ -30,6 +32,9 @@ from src.pipeline.s5_ranking import RankingResult, ScoreBreakdown
 from src.pipeline.s6_generate import S6GenerationError, render_spec
 from src.pipeline.s8_respond import field_label
 from src.pipeline.session_store import InMemorySessionStore, SessionStore
+from src.rag.embeddings import HashingEmbedding
+from src.rag.memory_store import MemoryVectorStore
+from src.rag.pipeline import PolicyIndexPipeline
 from src.router.client import LLMRouter, LLMRouterError
 from src.schemas.chat import (
     AdvisorAntiPick,
@@ -45,6 +50,31 @@ from src.tools.price_promo_stock import PricePromoStockTool
 logger = getLogger(__name__)
 
 _session_store = InMemorySessionStore()
+
+_policy_pipeline: PolicyIndexPipeline | None = None
+_policy_pipeline_ready = False
+
+
+def _get_policy_pipeline() -> PolicyIndexPipeline | None:
+    """Build the in-process policy RAG index once (HashingEmbedding — no model
+    load, no I/O beyond reading the Markdown files), cached for the process.
+
+    Returns ``None`` if the policy directory is absent, so the policy_faq branch
+    degrades to the honest "chưa hỗ trợ" stub rather than crashing.
+    """
+    global _policy_pipeline, _policy_pipeline_ready
+    if not _policy_pipeline_ready:
+        _policy_pipeline_ready = True
+        policy_dir = (Path(__file__).resolve().parents[2] / settings.policy_data_path).resolve()
+        if policy_dir.exists():
+            dim = settings.policy_embedding_dimension
+            pipeline = PolicyIndexPipeline(MemoryVectorStore(dim, "hashing"), HashingEmbedding(dim))
+            pipeline.build(policy_dir)
+            _policy_pipeline = pipeline
+            logger.info("policy RAG index built from %s", policy_dir)
+        else:
+            logger.warning("policy dir %s missing; policy_faq will stub", policy_dir)
+    return _policy_pipeline
 
 _FALLBACK_MESSAGE = (
     "Dạ hệ thống tư vấn đang bận một chút, anh/chị thử lại giúp em sau ít phút nhé. "
@@ -79,11 +109,13 @@ class AdvisorChatService:
         router: Any | None = None,
         facts_tool: Any | None = None,
         store: SessionStore | None = None,
+        policy_search: Any | None = None,
     ) -> None:
         self._db = db
         self._router = router or LLMRouter()
         self._facts_tool = facts_tool or PricePromoStockTool()
         self._store = store or _session_store
+        self._policy = policy_search if policy_search is not None else _get_policy_pipeline()
 
     async def reply(self, request: ChatMessageRequest) -> ChatResponse:
         profile = (
@@ -99,6 +131,7 @@ class AdvisorChatService:
                 router=self._router,
                 retriever=self._make_retriever(),
                 facts_tool=self._facts_tool,
+                policy_search=self._policy,
             )
         except (LLMRouterError, S2ExtractionError, S6GenerationError):
             logger.exception("advisory turn failed for session %s", request.session_id)
@@ -264,5 +297,6 @@ def _to_chat_response(result: TurnResult) -> ChatResponse:
         response_type="follow_up",
         message=result.message,
         quick_replies=_quick_reply_labels(result.quick_replies),
+        source_panel=result.source_panel,
         context=context,
     )

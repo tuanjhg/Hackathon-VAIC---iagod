@@ -46,11 +46,13 @@ the facts tool does not know keeps ``price=None`` (absence is not a price).
 from __future__ import annotations
 
 import time
+from pathlib import Path
 from typing import Any, Literal, Protocol
 
 from pydantic import BaseModel, Field
 
 from src.pipeline.need_profile import NeedProfile
+from src.pipeline.policy_answer import PolicySource, generate_policy_answer
 from src.pipeline.preprocess import run_s1
 from src.pipeline.s2_extract import S2Result, extract
 from src.pipeline.s3_policy import PolicyDecision, decide_policy
@@ -65,6 +67,7 @@ from src.pipeline.s8_respond import (
     render_fallback_table,
 )
 from src.pipeline.slots import available_categories, load_slot_profile
+from src.rag.models import SearchResult
 from src.tools.price_promo_stock import ProductFacts
 from src.verifier import VerificationResult, verify
 
@@ -143,6 +146,12 @@ class FactsToolLike(Protocol):
     async def get_facts_many(self, skus: list[str]) -> dict[str, ProductFacts | None]: ...
 
 
+class PolicySearchLike(Protocol):
+    """The policy RAG retriever by injection (``src.rag.pipeline.PolicyIndexPipeline``)."""
+
+    def search(self, query: str, limit: int = 5) -> list[SearchResult]: ...
+
+
 class TurnResult(BaseModel):
     """Everything one advisory turn produced, for the caller to render/persist.
 
@@ -151,7 +160,9 @@ class TurnResult(BaseModel):
     what S7 checked against — kept for the audit log (Tầng 5), not re-derived.
     """
 
-    kind: Literal["ask_category", "ask", "recommend", "no_results", "out_of_scope", "unsupported"]
+    kind: Literal[
+        "ask_category", "ask", "recommend", "no_results", "out_of_scope", "unsupported", "policy"
+    ]
     message: str
     intent: str
     profile: NeedProfile
@@ -233,6 +244,19 @@ def _category_quick_replies() -> list[str]:
     return [load_slot_profile(key).category_label for key in available_categories()]
 
 
+def _policy_source_panel(sources: list[PolicySource]) -> list[SourceEntry]:
+    """Cite the policy documents/sections an answer was grounded in, reusing the
+    same "Nguồn dữ liệu" panel the recommendation path fills."""
+    return [
+        SourceEntry(
+            sku=Path(source.source_path).stem,
+            field=source.heading or "(toàn văn)",
+            dataset="policy",
+        )
+        for source in sources
+    ]
+
+
 def _build_question(decision: PolicyDecision) -> tuple[str, list[str]]:
     """One message from the selected slots' hand-authored ``sample_question``s
     ("mỗi lượt ≤3 câu gom 1 tin nhắn"). Quick replies come from the first asked
@@ -299,6 +323,7 @@ async def run_turn(
     router: LLMRouterLike,
     retriever: CandidateRetriever,
     facts_tool: FactsToolLike,
+    policy_search: PolicySearchLike | None = None,
     retrieve_limit: int = DEFAULT_RETRIEVE_LIMIT,
 ) -> TurnResult:
     """Run one advisory turn over ``text`` against the session's ``profile``.
@@ -322,6 +347,18 @@ async def run_turn(
             message=_OUT_OF_SCOPE_MESSAGE,
             intent=s2.intent,
             profile=profile,
+            timings_ms=sw.timings,
+        )
+    if s2.intent == "policy_faq" and policy_search is not None:
+        results = policy_search.search(text, limit=5)
+        answer = await generate_policy_answer(router, text, results)
+        sw.lap("policy_faq")
+        return TurnResult(
+            kind="policy",
+            message=answer.text,
+            intent=s2.intent,
+            profile=profile,
+            source_panel=_policy_source_panel(answer.sources),
             timings_ms=sw.timings,
         )
     if s2.intent != "tu_van":

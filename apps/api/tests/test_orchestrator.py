@@ -370,3 +370,68 @@ def test_no_results_is_honest_and_skips_generation() -> None:
     assert "chưa tìm được" in res.message
     assert len(router.calls) == 1  # no S6 call on an empty candidate set
     assert res.ranking is None and res.advice is None
+
+
+# --------------------------------------------------------------------------- #
+# policy_faq branch (RAG-grounded answer, intent != tu_van)                   #
+# --------------------------------------------------------------------------- #
+class FakePolicySearch:
+    def __init__(self, results: list[Any]) -> None:
+        self._results = results
+        self.queries: list[str] = []
+
+    def search(self, query: str, limit: int = 5) -> list[Any]:
+        self.queries.append(query)
+        return self._results
+
+
+def _policy_result(title: str, heading: str, content: str, score: float = 0.9) -> Any:
+    from src.rag.models import PolicyChunk, SearchResult
+
+    chunk = PolicyChunk(
+        id=f"{title}-{heading}", source_path=f"data/policy/{title}.md", document_checksum="x",
+        title=title, heading=heading, content=content, chunk_index=0, line_start=1, line_end=5,
+    )
+    return SearchResult(chunk=chunk, score=score)
+
+
+def test_policy_faq_answers_from_rag_with_source_panel() -> None:
+    router = QueuedRouter(
+        json.dumps({"intent": "policy_faq", "category": None, "slots_moi": {}}, ensure_ascii=False),
+        "Dạ trả góp 0% áp dụng cho đơn hàng từ 3 triệu ạ.",
+    )
+    policy = FakePolicySearch([_policy_result("chinh_sach_tra_gop", "Trả góp 0%", "Đơn từ 3 triệu.")])
+    empty_retriever = FakeRetriever(RetrievalResult(candidates=[], total_count=0))
+
+    result = asyncio.run(
+        run_turn(
+            "trả góp 0% cần điều kiện gì?", NeedProfile(),
+            router=router, retriever=empty_retriever, facts_tool=FakeFactsTool({}),
+            policy_search=policy,
+        )
+    )
+
+    assert result.kind == "policy"
+    assert result.intent == "policy_faq"
+    assert "trả góp" in result.message.lower()
+    assert policy.queries == ["trả góp 0% cần điều kiện gì?"]
+    assert [e.dataset for e in result.source_panel] == ["policy"]
+    assert result.source_panel[0].sku == "chinh_sach_tra_gop"
+    # No catalog retrieval on the policy branch.
+    assert empty_retriever.calls == []
+
+
+def test_policy_faq_without_index_falls_back_to_unsupported() -> None:
+    # policy_search not injected (e.g. policy dir missing) -> honest stub, no crash.
+    router = QueuedRouter(
+        json.dumps({"intent": "policy_faq", "category": None, "slots_moi": {}}, ensure_ascii=False)
+    )
+    result = asyncio.run(
+        run_turn(
+            "bảo hành mấy năm?", NeedProfile(),
+            router=router, retriever=FakeRetriever(RetrievalResult(candidates=[], total_count=0)),
+            facts_tool=FakeFactsTool({}),
+        )
+    )
+
+    assert result.kind == "unsupported"

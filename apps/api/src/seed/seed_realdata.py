@@ -75,6 +75,27 @@ def _short_description(record: dict[str, Any]) -> str:
     return f"{label} {brand}, mã {model_code}".strip()
 
 
+def _find_existing_category(
+    db: Session, *, category_key: str, category_label: str, category_slug: str
+) -> Category | None:
+    """Reuse categories created by either catalog synchronization or this seed.
+
+    The normalized catalog uses English table names as codes and human-readable
+    Vietnamese slugs, while processed AI data uses short Vietnamese keys.  The
+    display name is therefore the final stable identity across both sources.
+    Keep the lookups ordered so an exact slug/code match wins when available.
+    """
+    for criterion in (
+        Category.slug == category_slug,
+        Category.code == category_key,
+        Category.name == category_label,
+    ):
+        category = db.scalar(select(Category).where(criterion).limit(1))
+        if category is not None:
+            return category
+    return None
+
+
 def seed_realdata(db: Session, categories_dir: Path) -> int:
     _resync_postgres_id_sequence(db)
     created = 0
@@ -88,22 +109,38 @@ def seed_realdata(db: Session, categories_dir: Path) -> int:
         category_key = records[0]["category_key"]
         category_label = records[0]["category_label"]
         category_slug = _slugify(category_key)
-        category = db.scalar(select(Category).where(Category.slug == category_slug))
+        category = _find_existing_category(
+            db,
+            category_key=category_key,
+            category_label=category_label,
+            category_slug=category_slug,
+        )
         if category is None:
-            category = Category(name=category_label, slug=category_slug)
+            category = Category(code=category_key, name=category_label, slug=category_slug)
             db.add(category)
             db.flush()
 
         for record in records:
             sku = record["sku"]
-            if db.scalar(select(Product).where(Product.sku == sku)):
-                continue
+            existing = db.scalar(select(Product).where(Product.sku == sku))
             specs = record.get("specs") or {}
+            if existing is not None:
+                # The normalized catalog sync may have created this SKU first.
+                # Enrich it with the processed AI-search fields instead of
+                # treating existence as proof that the record is complete.
+                existing.category = category
+                existing.category_key = category_key
+                existing.specs_json = specs
+                existing.specs_raw = record.get("specs_raw") or {}
+                continue
+            product_name = specs.get("display_name") or (
+                f"{record.get('brand', '')} {category_label}".strip()
+            )
             product = Product(
                 sku=sku,
                 slug=_slugify(sku),
-                name=specs.get("display_name")
-                or f"{record.get('brand', '')} {category_label}".strip(),
+                name=product_name,
+                display_name=product_name,
                 brand=record.get("brand") or "",
                 category=category,
                 short_description=_short_description(record),

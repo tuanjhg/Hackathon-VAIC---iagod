@@ -41,10 +41,10 @@ def session() -> Generator[Session, None, None]:
 
 
 def _seed(db: Session) -> None:
-    ml = Category(name="Máy lạnh", slug="may-lanh")
-    tl = Category(name="Tủ lạnh", slug="tu-lanh")
-    misc = Category(name="Quạt điều hòa", slug="quat-dieu-hoa")
-    demo = Category(name="Demo", slug="demo")
+    ml = Category(code="may_lanh", name="Máy lạnh", slug="may-lanh")
+    tl = Category(code="tu_lanh", name="Tủ lạnh", slug="tu-lanh")
+    misc = Category(code="quat_dieu_hoa", name="Quạt điều hòa", slug="quat-dieu-hoa")
+    demo = Category(code="demo", name="Demo", slug="demo")
     db.add_all([ml, tl, misc, demo])
 
     products = [
@@ -141,6 +141,7 @@ def _seed(db: Session) -> None:
             sku="demo_legacy",
             slug="demo-legacy",
             name="Legacy Demo Aircon Daikin",
+            display_name="Legacy Demo Aircon Daikin",
             brand="Daikin",
             category=demo,
             category_key=None,
@@ -166,6 +167,7 @@ def _product(
         sku=sku,
         slug=sku.replace("_", "-"),
         name=name,
+        display_name=name,
         brand=brand,
         category=category,
         category_key=category_key,

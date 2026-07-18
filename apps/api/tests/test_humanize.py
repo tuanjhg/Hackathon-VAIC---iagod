@@ -2,7 +2,20 @@
 confidence-tiered misspelling correction.
 """
 
-from src.pipeline.humanize import normalize
+from src.pipeline.humanize import fold_ascii, normalize
+
+
+def test_fold_ascii_strips_diacritics_and_normalizes_separators() -> None:
+    # Accent-, case- and separator-insensitive canonical key (ViSoLex-style
+    # accent removal) so surface variants collapse to one comparison token.
+    assert fold_ascii("Phòng ngủ") == "phong_ngu"
+    assert fold_ascii("phong ngu") == "phong_ngu"
+    assert fold_ascii("phong_ngu") == "phong_ngu"
+
+
+def test_fold_ascii_handles_d_stroke_and_multiword() -> None:
+    assert fold_ascii("Tủ Đông") == "tu_dong"
+    assert fold_ascii("tiết kiệm điện") == "tiet_kiem_dien"
 
 
 def test_teencode_expands_unconditionally() -> None:

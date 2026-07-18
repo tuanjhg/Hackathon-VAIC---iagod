@@ -62,7 +62,7 @@ def serialize_product(product: Product) -> ProductRead:
         rating=product.rating,
         review_count=product.review_count,
         featured=product.featured,
-        specifications=product.specs.raw_specs or product.specifications,
+        specifications=product.specs.raw_specs or product.specs_json or {},
     )
 
 

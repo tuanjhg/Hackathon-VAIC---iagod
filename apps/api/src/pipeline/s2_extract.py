@@ -29,9 +29,10 @@ import json
 from dataclasses import dataclass
 from typing import Any, Protocol
 
+from src.pipeline.humanize import fold_ascii
 from src.pipeline.need_profile import NeedProfile
 from src.pipeline.preprocess import S1Result
-from src.pipeline.slots import SlotDef, available_categories, load_slot_profile
+from src.pipeline.slots import SlotDef, SlotProfile, available_categories, load_slot_profile
 
 # Five intent literals, ASCII (no diacritics) to match the slot-name convention
 # already used in this codebase (``ngan_sach_max`` etc.).
@@ -269,6 +270,129 @@ def _parse_s2_payload(data: Any) -> S2Result:
     return S2Result(intent=intent, category=category, slots_moi=slots_moi)
 
 
+# --------------------------------------------------------------------------- #
+# Slot reconciliation — make the LLM's slots_moi trustworthy                   #
+#                                                                             #
+# The OpenRouter route for the primary model does not always enforce the      #
+# guided-JSON ``response_format`` (docs/pipelines.md §6.9, Gate 4), so the     #
+# model can emit slot KEYS or VALUES outside the category schema. Rather than  #
+# trust the schema was applied, S2 reconciles the raw output against the       #
+# canonical SlotProfile and overlays S1's deterministic parses.               #
+# --------------------------------------------------------------------------- #
+_UNIT_SLOT_TYPES: frozenset[str] = frozenset({"area_m2", "volume_liter", "power_watt"})
+
+
+def _match_enum(value: Any, allowed: list[str]) -> str | None:
+    """Return the canonical ``allowed`` token whose ASCII-fold equals ``value``'s.
+
+    Accent-, case- and separator-insensitive (via :func:`fold_ascii`), so the LLM
+    emitting an enum in a non-canonical surface form ("Phòng ngủ" for the
+    ascii token "phong_ngu") still resolves. ``None`` if nothing matches.
+    """
+    if not isinstance(value, str):
+        return None
+    key = fold_ascii(value)
+    if not key:
+        return None
+    return next((token for token in allowed if fold_ascii(token) == key), None)
+
+
+def _coerce_slot_value(slot: SlotDef, value: Any) -> Any | None:
+    """Validate/coerce one LLM value against a slot's declared type.
+
+    Returns the clean value, or ``None`` to drop it — an out-of-enum string, a
+    wrong JSON type, or an empty selection all mean "no usable value here".
+    """
+    if value is None:
+        return None
+    slot_type = slot.type
+    if slot_type == "money":
+        return int(value) if isinstance(value, int | float) and not isinstance(value, bool) else None
+    if slot_type in _UNIT_SLOT_TYPES:
+        return float(value) if isinstance(value, int | float) and not isinstance(value, bool) else None
+    if slot_type == "boolean":
+        return value if isinstance(value, bool) else None
+    if slot_type == "enum":
+        return _match_enum(value, slot.values or [])
+    if slot_type == "multi_enum":
+        if not isinstance(value, list):
+            return None
+        chosen = [m for v in value if (m := _match_enum(v, slot.values or [])) is not None]
+        return chosen or None
+    # "text" and any future type: a non-empty string only.
+    return value if isinstance(value, str) and value.strip() else None
+
+
+def _recover_enums_by_value(
+    result: dict[str, Any], slots: list[SlotDef], raw: dict[str, Any]
+) -> None:
+    """Fill still-empty enum/multi_enum slots by matching VALUES the LLM emitted
+    under *any* key — recovers a slot whose value is valid but whose key the
+    model got wrong (schema not always provider-enforced, §6.9).
+    """
+    emitted: list[Any] = []
+    for value in raw.values():
+        emitted.extend(value if isinstance(value, list) else [value])
+    for slot in slots:
+        if slot.name in result or not slot.values:
+            continue
+        if slot.type == "enum":
+            match = next(
+                (m for v in emitted if (m := _match_enum(v, slot.values)) is not None), None
+            )
+            if match is not None:
+                result[slot.name] = match
+        elif slot.type == "multi_enum":
+            chosen = [
+                token
+                for token in slot.values
+                if any(_match_enum(v, [token]) is not None for v in emitted)
+            ]
+            if chosen:
+                result[slot.name] = chosen
+
+
+def _overlay_s1_units(
+    result: dict[str, Any], slots: list[SlotDef], s1_result: S1Result
+) -> None:
+    """Overlay S1's deterministic unit parses onto their matching-type slot.
+
+    Regex-precise numeric parses (area m², lít, W) are authoritative for those
+    facts — they overwrite the LLM's value for the same slot. Money is left to
+    the LLM: S1 reads the amount but not directional context ("dưới"/"trên"),
+    which a ceiling slot needs. ``power_btu`` maps to no slot (BTU is derived).
+    """
+    by_type: dict[str, SlotDef] = {}
+    for slot in slots:
+        by_type.setdefault(slot.type, slot)
+    for unit in s1_result.units:
+        matched = by_type.get(unit.kind)
+        if matched is not None:
+            result[matched.name] = float(unit.value)
+
+
+def _reconcile_slots(
+    raw: dict[str, Any], profile: SlotProfile, s1_result: S1Result
+) -> dict[str, Any]:
+    """Reconcile the LLM's ``slots_moi`` against the canonical slot schema.
+
+    Three passes: (1) keep canonical keys, coercing/validating by type and
+    dropping anything invalid or unknown; (2) recover enum slots by value when
+    the key was wrong; (3) overlay S1's deterministic unit parses. This is where
+    S2 turns best-effort LLM output into a trustworthy Need-Profile delta.
+    """
+    slots = [*profile.required_slots, *profile.optional_slots]
+    result: dict[str, Any] = {}
+    for slot in slots:
+        if slot.name in raw:
+            coerced = _coerce_slot_value(slot, raw[slot.name])
+            if coerced is not None:
+                result[slot.name] = coerced
+    _recover_enums_by_value(result, slots, raw)
+    _overlay_s1_units(result, slots, s1_result)
+    return result
+
+
 async def extract(
     router: LLMRouterLike,
     text: str,
@@ -309,4 +433,18 @@ async def extract(
     except json.JSONDecodeError as exc:
         raise S2ExtractionError(f"S2 LLM output was not valid JSON: {content!r}") from exc
 
-    return _parse_s2_payload(data)
+    result = _parse_s2_payload(data)
+
+    # Reconcile against the canonical schema (the provider does not always
+    # enforce it, §6.9). Prefer the LLM's own category when it named one — a
+    # mid-chat switch means the slots belong to the *new* category — else the
+    # schema category. When neither is known, extraction stays best-effort.
+    reconcile_category = result.category or category_key
+    if reconcile_category is not None:
+        slot_profile = load_slot_profile(reconcile_category)
+        result = S2Result(
+            intent=result.intent,
+            category=result.category,
+            slots_moi=_reconcile_slots(result.slots_moi, slot_profile, s1_result),
+        )
+    return result

@@ -247,7 +247,6 @@ def _apply_values(product: Product, values: Mapping[str, Any], category: Categor
     product.featured = values["featured"]
     product.rating = values["rating"]
     product.review_count = values["review_count"]
-    product.specifications = values["specifications"]
     product.source_data = {"source_category": category.code}
 
     if product.specs is None:

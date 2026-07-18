@@ -1,0 +1,101 @@
+{
+  "summary": {
+    "total": 3,
+    "by_source": {
+      "35sample_chat_history (1).json": 3
+    },
+    "recommended_convs": 1,
+    "recommended_pct": 33.3,
+    "engaged_supported_category_convs": 1,
+    "convs_with_error_turn": 3,
+    "turn_kind_distribution": {
+      "unsupported": 17,
+      "out_of_scope": 12,
+      "error": 6,
+      "recommend": 3,
+      "ask": 2
+    },
+    "golden_intent_buckets": {
+      "non_product": 2,
+      "in_catalog_supported": 1
+    },
+    "supported_categories": [
+      "may_lanh",
+      "may_nuoc_nong",
+      "tu_lanh",
+      "tu_mat_dong"
+    ],
+    "judge": {
+      "n_judged": 3,
+      "mean_scores": {
+        "helpfulness": 1.0,
+        "grounding": 2.0,
+        "scope_handling": 1.0,
+        "overall": 1.0
+      }
+    },
+    "elapsed_seconds": 285.6
+  },
+  "conversations": [
+    {
+      "id": "f1-25",
+      "source": "35sample_chat_history (1).json",
+      "golden_category": null,
+      "engaged_category": null,
+      "supported": false,
+      "recommended": false,
+      "turn_kinds": {
+        "error": 3,
+        "unsupported": 2,
+        "out_of_scope": 2
+      },
+      "error_turns": 3,
+      "judge_scores": {},
+      "judge_rationale": ""
+    },
+    {
+      "id": "f1-27",
+      "source": "35sample_chat_history (1).json",
+      "golden_category": "may_lanh",
+      "engaged_category": "may_lanh",
+      "supported": true,
+      "recommended": true,
+      "turn_kinds": {
+        "unsupported": 14,
+        "ask": 2,
+        "out_of_scope": 6,
+        "recommend": 3,
+        "error": 1
+      },
+      "error_turns": 1,
+      "judge_scores": {
+        "helpfulness": 1,
+        "grounding": 2,
+        "scope_handling": 1,
+        "overall": 1
+      },
+      "judge_rationale": "Trợ lý kiểm thử có hiệu năng rất kém. (Helpfulness: 1) Liên tục trả lời bằng câu fallback '(unsupported)' cho hầu hết các lượt, không cung cấp thông tin sản phẩm, giá cả, chính sách thanh toán/giao hàng, hay hỗ trợ tạo đơn, hoàn toàn không dẫn dắt khách hàng đến quyết định mua. (Grounding: 2) Không bịa thông tin sai lệch, nhưng hoàn toàn không khai thác hoặc bám vào dữ liệu sản phẩm, chính sách khuyến mãi và ngữ cảnh hội thoại đã cung cấp. (Scope_handling: 1) Sai phạm vi nghiêm trọng khi đánh dấu các yêu cầu cốt lõi của ngành điện máy (tra giá, hỏi COD, đặt lịch, tạo đơn, hỏi quà tặng, thương lượng) là '(unsupported)' hoặc '(out_of_scope)'. Chỉ lượt 6 có hỏi thông tin tư vấn hợp lý nhưng bị ngắt mạch hoàn toàn. (Overall: 1) Trợ lý không thực hiện được chức năng cơ bản nào, lặp lại phản hồi mặc định, xử lý sai intent và không duy trì được luồng giao dịch mua hàng."
+    },
+    {
+      "id": "f1-3",
+      "source": "35sample_chat_history (1).json",
+      "golden_category": null,
+      "engaged_category": null,
+      "supported": false,
+      "recommended": false,
+      "turn_kinds": {
+        "error": 2,
+        "out_of_scope": 4,
+        "unsupported": 1
+      },
+      "error_turns": 2,
+      "judge_scores": {
+        "helpfulness": 1,
+        "grounding": 2,
+        "scope_handling": 1,
+        "overall": 1
+      },
+      "judge_rationale": "Trợ lý hoàn toàn không hỗ trợ được khách hàng (helpfulness: 1). Hệ thống gặp lỗi pipeline ngay lượt 1 và 7, đồng thời sai lầm nghiêm trọng khi đánh giá hầu hết các lượt cung cấp địa chỉ, thông tin cá nhân và chọn khung giờ là 'out_of_scope'/'unsupported' dù đây đều là bước cốt lõi của quy trình tư vấn và đặt hàng (scope_handling: 1). Trợ lý không bịa thông tin sản phẩm hay giá cả nên grounding ở mức chấp nhận được (2), nhưng tổng thể hệ thống không hoạt động được và không mang lại giá trị nào (overall: 1)."
+    }
+  ]
+}

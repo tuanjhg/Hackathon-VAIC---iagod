@@ -117,8 +117,36 @@ def test_idempotent_on_rerun(db: Session, categories_dir: Path) -> None:
     assert db.scalar(select(Product).where(Product.sku == "SKU-ML-1")) is not None
 
 
+def test_enriches_existing_normalized_product_for_ai_search(
+    db: Session, categories_dir: Path
+) -> None:
+    category = Category(code="air_conditioners", name="Máy lạnh", slug="may-lanh")
+    db.add(category)
+    existing = Product(
+        sku="SKU-ML-1",
+        slug="existing-sku-ml-1",
+        name="Existing product",
+        display_name="Existing product",
+        brand="Daikin",
+        category=category,
+        short_description="Existing",
+        image_url="",
+        category_key=None,
+        specs_json=None,
+        specs_raw=None,
+    )
+    db.add(existing)
+    db.commit()
+
+    assert seed_realdata(db, categories_dir) == 2
+    db.refresh(existing)
+    assert existing.category_key == "may_lanh"
+    assert existing.specs_json == {"display_name": "Daikin Máy lạnh (mã M001)"}
+    assert existing.specs_raw == {"Công suất": "1 HP"}
+
+
 def test_reuses_existing_category_row_when_slug_matches(db: Session, categories_dir: Path) -> None:
-    existing = Category(name="Máy lạnh", slug="may-lanh")
+    existing = Category(code="air_conditioners", name="Máy lạnh", slug="may-lanh")
     db.add(existing)
     db.flush()
     existing_id = existing.id
@@ -128,6 +156,29 @@ def test_reuses_existing_category_row_when_slug_matches(db: Session, categories_
     categories = db.scalars(select(Category).where(Category.slug == "may-lanh")).all()
     assert len(categories) == 1
     product = db.scalar(select(Product).where(Product.sku == "SKU-ML-1"))
+    assert product is not None
+    assert product.category_id == existing_id
+
+
+def test_reuses_normalized_category_when_name_matches_but_slug_differs(
+    db: Session, categories_dir: Path
+) -> None:
+    existing = Category(
+        code="coolers_freezers",
+        name="Tủ mát, tủ đông",
+        slug="tu-mat-tu-dong",
+    )
+    db.add(existing)
+    db.flush()
+    existing_id = existing.id
+
+    seed_realdata(db, categories_dir)
+
+    categories = db.scalars(
+        select(Category).where(Category.name == "Tủ mát, tủ đông")
+    ).all()
+    assert len(categories) == 1
+    product = db.scalar(select(Product).where(Product.sku == "SKU-TM-1"))
     assert product is not None
     assert product.category_id == existing_id
 

@@ -129,4 +129,4 @@ def test_sync_multiple_raw_categories_into_api_read_model() -> None:
         refrigerator = db.scalar(select(Product).where(Product.sku == "FRIDGE-1"))
         assert refrigerator is not None
         assert refrigerator.category.slug == "tu-lanh"
-        assert refrigerator.specifications["dung_tich_tong"] == "500 lít"
+        assert refrigerator.specs.raw_specs["dung_tich_tong"] == "500 lít"

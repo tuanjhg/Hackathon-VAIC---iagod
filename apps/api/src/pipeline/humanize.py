@@ -116,6 +116,29 @@ def _nfc(text: str) -> str:
     return unicodedata.normalize("NFC", text)
 
 
+_FOLD_SEP_RE = re.compile(r"[\s_-]+")
+
+
+def fold_ascii(text: str) -> str:
+    """ASCII-fold Vietnamese text into a canonical, accent-insensitive key.
+
+    NFD-decompose and drop combining diacritics — mirroring ViSoLex's
+    ``--rm_accent_ratio`` accent-removal preprocessing (HaDung2002/visolex) —
+    then map ``đ``→``d`` (which NFD leaves intact), lowercase, and collapse runs
+    of whitespace/underscore/hyphen to a single ``_``. So ``"Phòng ngủ"``,
+    ``"phong ngu"`` and ``"phong_ngu"`` all fold to ``"phong_ngu"``.
+
+    Used to match enum tokens the LLM emits in a non-canonical surface form
+    against the ascii slot vocabulary, since the provider does not always
+    enforce the guided-JSON schema (docs/pipelines.md §6.9).
+    """
+    stripped = "".join(
+        ch for ch in unicodedata.normalize("NFD", text) if not unicodedata.combining(ch)
+    )
+    folded = stripped.lower().replace("đ", "d")
+    return _FOLD_SEP_RE.sub("_", folded.strip()).strip("_")
+
+
 def normalize(
     text: str,
     *,

@@ -17,7 +17,7 @@ from typing import Any
 import pytest
 
 from src.pipeline.need_profile import NeedProfile
-from src.pipeline.preprocess import S1Result
+from src.pipeline.preprocess import S1Result, UnitMatch
 from src.pipeline.s2_extract import (
     INTENTS,
     S2ExtractionError,
@@ -176,6 +176,130 @@ def test_extract_unknown_category_from_llm_raises() -> None:
 
     with pytest.raises(S2ExtractionError):
         asyncio.run(extract(router, s1.raw, s1, NeedProfile()))
+
+
+# --- extract() slot reconciliation (schema not always provider-enforced) ------
+#
+# The OpenRouter route for the primary model does not strictly enforce the
+# guided-JSON schema (docs/pipelines.md §6.9), so the LLM can emit slot KEYS or
+# VALUES outside the category schema. extract() must reconcile slots_moi against
+# the canonical SlotProfile before returning, and overlay S1's deterministic
+# numeric parses (regex-precise) which outrank the probabilistic LLM.
+
+
+def make_s1_units(
+    raw: str,
+    normalized: str,
+    category_hint: str | None,
+    units: list[UnitMatch],
+) -> S1Result:
+    return S1Result(
+        raw=raw, normalized=normalized, category_hint=category_hint, units=units
+    )
+
+
+def test_extract_drops_noncanonical_slot_keys() -> None:
+    # LLM emits a key that is NOT in the may_lanh schema, and no S1 unit backs it.
+    router = fake_with(
+        {"intent": "tu_van", "category": "may_lanh", "slots_moi": {"dien_tich_phong": 18.0}}
+    )
+    s1 = make_s1("phong nho", "phòng nhỏ", category_hint="may_lanh")
+
+    result = asyncio.run(extract(router, s1.raw, s1, NeedProfile(category="may_lanh")))
+
+    # The bogus key is dropped; the canonical area slot is not fabricated from it.
+    assert "dien_tich_phong" not in result.slots_moi
+    assert "dien_tich_m2" not in result.slots_moi
+
+
+def test_extract_recovers_area_from_s1_units_when_llm_misses_it() -> None:
+    # The bug: user said "18m2", S1 parsed it deterministically, but the LLM
+    # emitted no area slot (or a non-canonical one). S1's area must land in
+    # the canonical dien_tich_m2 slot so S3 does not re-ask it.
+    router = fake_with({"intent": "tu_van", "category": "may_lanh", "slots_moi": {}})
+    s1 = make_s1_units(
+        "phong 18m2", "phòng 18m2", "may_lanh", [UnitMatch("area_m2", 18.0, "18m2", (6, 10))]
+    )
+
+    result = asyncio.run(extract(router, s1.raw, s1, NeedProfile(category="may_lanh")))
+
+    assert result.slots_moi["dien_tich_m2"] == 18.0
+
+
+def test_extract_s1_area_overrides_llm_area_value() -> None:
+    # Deterministic S1 parse outranks the probabilistic LLM for the same slot.
+    router = fake_with(
+        {"intent": "tu_van", "category": "may_lanh", "slots_moi": {"dien_tich_m2": 25.0}}
+    )
+    s1 = make_s1_units(
+        "phong 18m2", "phòng 18m2", "may_lanh", [UnitMatch("area_m2", 18.0, "18m2", (6, 10))]
+    )
+
+    result = asyncio.run(extract(router, s1.raw, s1, NeedProfile(category="may_lanh")))
+
+    assert result.slots_moi["dien_tich_m2"] == 18.0
+
+
+def test_extract_recovers_enum_slot_by_value_when_key_is_wrong() -> None:
+    # LLM used a non-canonical KEY ("dia_diem_dat") but a VALID loai_phong VALUE.
+    router = fake_with(
+        {"intent": "tu_van", "category": "may_lanh", "slots_moi": {"dia_diem_dat": "phong_ngu"}}
+    )
+    s1 = make_s1("phong ngu", "phòng ngủ", category_hint="may_lanh")
+
+    result = asyncio.run(extract(router, s1.raw, s1, NeedProfile(category="may_lanh")))
+
+    assert result.slots_moi["loai_phong"] == "phong_ngu"
+    assert "dia_diem_dat" not in result.slots_moi
+
+
+def test_extract_drops_invalid_enum_value() -> None:
+    # Correct key, but a value outside the loai_phong enum -> dropped, not merged.
+    router = fake_with(
+        {"intent": "tu_van", "category": "may_lanh", "slots_moi": {"loai_phong": "garage"}}
+    )
+    s1 = make_s1("noi khac", "nơi khác", category_hint="may_lanh")
+
+    result = asyncio.run(extract(router, s1.raw, s1, NeedProfile(category="may_lanh")))
+
+    assert "loai_phong" not in result.slots_moi
+
+
+def test_extract_matches_accented_enum_value_to_canonical() -> None:
+    # Correct key, but the value carries diacritics/spacing (schema unenforced) —
+    # ViSoLex-style accent folding maps "Phòng ngủ" to canonical "phong_ngu".
+    router = fake_with(
+        {"intent": "tu_van", "category": "may_lanh", "slots_moi": {"loai_phong": "Phòng ngủ"}}
+    )
+    s1 = make_s1("phong ngu", "phòng ngủ", category_hint="may_lanh")
+
+    result = asyncio.run(extract(router, s1.raw, s1, NeedProfile(category="may_lanh")))
+
+    assert result.slots_moi["loai_phong"] == "phong_ngu"
+
+
+def test_extract_recovers_accented_enum_under_wrong_key() -> None:
+    # Wrong KEY *and* accented VALUE -> still recovered to canonical loai_phong.
+    router = fake_with(
+        {"intent": "tu_van", "category": "may_lanh", "slots_moi": {"dia_diem_dat": "phòng ngủ"}}
+    )
+    s1 = make_s1("phong ngu", "phòng ngủ", category_hint="may_lanh")
+
+    result = asyncio.run(extract(router, s1.raw, s1, NeedProfile(category="may_lanh")))
+
+    assert result.slots_moi["loai_phong"] == "phong_ngu"
+
+
+def test_extract_matches_accented_multi_enum_priority() -> None:
+    # multi_enum value with diacritics folds to the canonical priority token.
+    router = fake_with(
+        {"intent": "tu_van", "category": "may_lanh", "slots_moi": {"uu_tien": ["tiết kiệm điện"]}}
+    )
+    s1 = make_s1("tiet kiem dien", "tiết kiệm điện", category_hint="may_lanh")
+
+    result = asyncio.run(extract(router, s1.raw, s1, NeedProfile(category="may_lanh")))
+
+    assert result.slots_moi["uu_tien"] == ["tiet_kiem_dien"]
 
 
 # --- extract() generic fallback (no category known yet) -----------------------
