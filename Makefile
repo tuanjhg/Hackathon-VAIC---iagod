@@ -1,4 +1,4 @@
-.PHONY: up down build migrate seed test lint typecheck
+.PHONY: up down build migrate seed vector-build vector-search vector-test-integration test lint typecheck
 
 up:
 	docker compose up --build
@@ -14,6 +14,15 @@ migrate:
 
 seed:
 	docker compose run --rm api python -m src.seed.sync_catalog_products
+
+vector-build:
+	python scripts/build_policy_vector_db.py
+
+vector-search:
+	python scripts/search_policy_vector_db.py "$(QUERY)"
+
+vector-test-integration:
+	cd apps/api && pytest tests/test_policy_pgvector_integration.py -q
 
 test:
 	docker compose run --rm api pytest

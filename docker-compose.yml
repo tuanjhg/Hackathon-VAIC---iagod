@@ -1,6 +1,7 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: pgvector/pgvector:pg16
+    profiles: ["local-db"]
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-needwise}
       POSTGRES_USER: ${POSTGRES_USER:-needwise}
@@ -19,15 +20,13 @@ services:
     build: ./apps/api
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://needwise:needwise@postgres:5432/needwise}
+      POLICY_DATABASE_URL: ${POLICY_DATABASE_URL:-${DATABASE_URL:-postgresql+psycopg://needwise:needwise@postgres:5432/needwise}}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
     ports:
       - "8000:8000"
     volumes:
       - ./data:/app/data:ro
-    depends_on:
-      postgres:
-        condition: service_healthy
-    command: ["sh", "-c", "alembic upgrade head && python -m src.seed.sync_catalog_products && uvicorn src.main:app --host 0.0.0.0 --port 8000"]
+    command: ["sh", "-c", "alembic upgrade head && python -m src.seed.sync_catalog_products && python -m src.rag.cli build --source /app/data/policy && uvicorn src.main:app --host 0.0.0.0 --port 8000"]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
       interval: 10s
