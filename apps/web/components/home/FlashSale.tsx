@@ -12,8 +12,8 @@ import type { Product } from "@/types";
 
 export function FlashSale() {
   const { data, isLoading } = useQuery({
-    queryKey: ["products", { sort: "price_asc", page_size: 12, flash: true }],
-    queryFn: () => api.products({ sort: "price_asc", page_size: 12 }),
+    queryKey: ["products", { sort: "price_asc", page_size: 40, flash: true }],
+    queryFn: () => api.products({ sort: "price_asc", page_size: 40 }),
   });
 
   const items = (data?.items ?? [])
