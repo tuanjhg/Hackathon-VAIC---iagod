@@ -404,9 +404,19 @@ def _trade_off_text(sku: str, ranking: RankingResult, breakdown: ScoreBreakdown)
     }
     if criteria:
         weakest = min(criteria, key=lambda field: criteria[field])
+        strongest_score = max(criteria.values())
+        # Only frame a criterion as a weakness when it is genuinely low relative
+        # to the card's own strengths. A well-rounded, dominating pick has no real
+        # spec weakness — inventing one ("kém hơn về inverter" on the best inverter
+        # model) misleads; point to price as the honest remaining trade-off.
+        if strongest_score > 0 and criteria[weakest] <= 0.5 * strongest_score:
+            return (
+                f"Kém hơn về {field_label(weakest)} so với các ưu điểm còn lại; "
+                "anh/chị cân nhắc nếu đây là ưu tiên chính"
+            )
         return (
-            f"Mẫu này ít nổi bật hơn về {field_label(weakest)} so với các ưu điểm còn lại; "
-            "anh/chị nên cân nhắc nếu đây là ưu tiên chính"
+            "Là lựa chọn cân đối nhất theo các tiêu chí anh/chị nêu; "
+            "anh/chị cân nhắc thêm mức giá cho phù hợp ngân sách"
         )
     return (
         "Chưa đủ dữ liệu cấu trúc để nêu đánh đổi cụ thể; "

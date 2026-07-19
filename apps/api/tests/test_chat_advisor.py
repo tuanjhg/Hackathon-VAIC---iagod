@@ -520,3 +520,24 @@ def test_tu_lanh_energy_request_end_to_end(tu_lanh_db: Session) -> None:
     assert response.cards[0].reason != (
         "Phù hợp với nhu cầu đã nêu dựa trên thông tin sản phẩm hiện có."
     )
+
+
+def test_trade_off_balanced_card_points_to_price_not_a_fake_weakness() -> None:
+    # A dominating card (all criteria strong) must not claim a spec weakness.
+    ranking = RankingResult(top=[ScoreBreakdown(sku="A", total_score=6.0)], trade_offs=[])
+    bd = ScoreBreakdown(
+        sku="A", total_score=6.0, per_criterion={"inverter": 3.0, "capacity_total_l": 3.0}
+    )
+    text = _trade_off_text("A", ranking, bd)
+    assert "kém hơn" not in text.lower()
+    assert "mức giá" in text.lower()
+
+
+def test_trade_off_names_a_genuinely_weak_criterion() -> None:
+    ranking = RankingResult(top=[ScoreBreakdown(sku="A", total_score=3.0)], trade_offs=[])
+    bd = ScoreBreakdown(
+        sku="A", total_score=3.0, per_criterion={"inverter": 3.0, "warranty_years": 0.0}
+    )
+    text = _trade_off_text("A", ranking, bd)
+    assert text.startswith("Kém hơn về")
+    assert "bảo hành" in text
