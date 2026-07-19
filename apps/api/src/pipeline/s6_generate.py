@@ -135,6 +135,27 @@ GLOSSARY: dict[str, Callable[[Any], str]] = {
     # generic
     "warranty_years": lambda v: f"bảo hành {v} năm",
     "power_watt": lambda v: f"công suất {v}W",
+    # pc / máy tính bảng
+    "ram_gb": lambda v: f"RAM {v}GB",
+    "storage_gb": lambda v: f"bộ nhớ lưu trữ {v}GB",
+    "cpu_base_clock_ghz": lambda v: f"xung nhịp CPU {v}GHz",
+    "cpu_speed_ghz": lambda v: f"tốc độ CPU {v}GHz",
+    "battery_capacity_mah": lambda v: f"pin {v}mAh",
+    # màn hình
+    "resolution_width": lambda v: f"độ phân giải ngang {v}px",
+    "response_time_ms": lambda v: f"thời gian đáp ứng {v}ms",
+    "brightness_nit": lambda v: f"độ sáng {v} nit",
+    # máy in
+    "print_resolution_dpi": lambda v: f"độ phân giải in {v}dpi",
+    "monthly_duty_cycle": lambda v: f"công suất in {v} trang/tháng",
+    "print_speed_ppm": lambda v: f"tốc độ in {v} trang/phút",
+    # máy sấy / tủ mát / máy nước nóng
+    "energy_consumption_kwh": lambda v: f"điện năng tiêu thụ {v}kWh",
+    "drying_capacity_kg": lambda v: f"sấy được {v}kg mỗi mẻ",
+    "has_booster_pump": lambda v: "có bơm trợ lực tăng áp" if v else "không có bơm trợ lực",
+    # micro
+    "transmission_distance_meter": lambda v: f"khoảng cách truyền {v}m",
+    "distortion_percent": lambda v: f"độ méo tiếng {v}%",
 }
 
 # Short human noun per field, used only in the comparative trade-off statements
@@ -153,6 +174,22 @@ _FIELD_LABELS: dict[str, str] = {
     "warranty_years_compressor": "bảo hành máy nén",
     "warranty_years": "bảo hành",
     "power_watt": "công suất điện",
+    "ram_gb": "RAM",
+    "storage_gb": "bộ nhớ lưu trữ",
+    "cpu_base_clock_ghz": "xung nhịp CPU",
+    "cpu_speed_ghz": "tốc độ CPU",
+    "battery_capacity_mah": "dung lượng pin",
+    "resolution_width": "độ phân giải",
+    "response_time_ms": "thời gian đáp ứng",
+    "brightness_nit": "độ sáng",
+    "print_resolution_dpi": "độ phân giải in",
+    "monthly_duty_cycle": "công suất in",
+    "print_speed_ppm": "tốc độ in",
+    "energy_consumption_kwh": "điện năng tiêu thụ",
+    "drying_capacity_kg": "khối lượng sấy",
+    "has_booster_pump": "bơm trợ lực",
+    "transmission_distance_meter": "khoảng cách truyền",
+    "distortion_percent": "độ méo tiếng",
 }
 
 
