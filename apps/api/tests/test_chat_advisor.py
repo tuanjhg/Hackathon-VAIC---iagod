@@ -449,3 +449,74 @@ def test_reason_falls_back_when_no_positive_criterion() -> None:
     )
     text = _reason_text(bd, {})
     assert "Phù hợp với nhu cầu đã nêu" in text
+
+
+# --------------------------------------------------------------------------- #
+# End-to-end tu_lanh energy-saving scenario (spine: S2 bridge → S4 → S5 → cards)
+# --------------------------------------------------------------------------- #
+@pytest.fixture()
+def tu_lanh_db() -> Generator[Session, None, None]:
+    engine = create_engine(
+        "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
+    )
+    testing_session = sessionmaker(bind=engine, expire_on_commit=False)
+    Base.metadata.create_all(engine)
+    with testing_session() as session:
+        category = Category(code="tu_lanh", name="Tủ lạnh", slug="tu-lanh")
+        session.add(category)
+        session.flush()
+        rows = [
+            ("tl_inv", "Toshiba inverter 240L",
+             {"capacity_total_l": 240.0, "inverter": True, "style": "ngan_da_duoi"}),
+            ("tl_noninv", "Aqua thường 240L",
+             {"capacity_total_l": 240.0, "inverter": False, "style": "ngan_da_duoi"}),
+        ]
+        for sku, name, spec in rows:
+            session.add(
+                Product(
+                    sku=sku,
+                    slug=sku.replace("_", "-"),
+                    name=name,
+                    display_name=name,
+                    brand=name.split()[0],
+                    category_id=category.id,
+                    category_key="tu_lanh",
+                    specs_json=spec,
+                    short_description=name,
+                    image_url=f"https://img.example/{sku}.jpg",
+                )
+            )
+        session.commit()
+        yield session
+    Base.metadata.drop_all(engine)
+
+
+def _tu_lanh_ready_profile() -> NeedProfile:
+    return NeedProfile(
+        category="tu_lanh", slots={"ngan_sach_max": 15_000_000, "so_nguoi_dung": 3}
+    )
+
+
+def test_tu_lanh_energy_request_end_to_end(tu_lanh_db: Session) -> None:
+    # "cần tiết kiệm điện" (no word "inverter") must flow S2 bridge → S5 so the
+    # inverter model ranks first, the non-inverter is still shown, and no card
+    # advertises a negative as a strength.
+    router = QueuedRouter(
+        _s2(category="tu_lanh", slots={}), "[1] tiết kiệm điện nhờ inverter."
+    )
+    response = asyncio.run(
+        _service(tu_lanh_db, router).reply(
+            _request("nhà 3 người, cần tiết kiệm điện, ngăn đá dưới", _tu_lanh_ready_profile())
+        )
+    )
+
+    assert response.response_type == "recommendations"
+    skus = [c.sku for c in response.cards]
+    assert skus[0] == "tl_inv"            # inverter preferred to the top
+    assert "tl_noninv" in skus            # non-inverter NOT filtered out (soft)
+    for card in response.cards:
+        assert all("không phải inverter" not in s for s in card.strengths)
+    # top card benefit is a real, non-generic line
+    assert response.cards[0].reason != (
+        "Phù hợp với nhu cầu đã nêu dựa trên thông tin sản phẩm hiện có."
+    )
