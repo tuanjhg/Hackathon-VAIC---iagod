@@ -541,3 +541,48 @@ def test_trade_off_names_a_genuinely_weak_criterion() -> None:
     text = _trade_off_text("A", ranking, bd)
     assert text.startswith("Kém hơn về")
     assert "bảo hành" in text
+
+
+# --------------------------------------------------------------------------- #
+# Enriched raw category (pc_de_ban) — post-enrich specs_json ranks + renders. #
+# --------------------------------------------------------------------------- #
+@pytest.fixture()
+def pc_db() -> Generator[Session, None, None]:
+    engine = create_engine(
+        "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
+    )
+    testing_session = sessionmaker(bind=engine, expire_on_commit=False)
+    Base.metadata.create_all(engine)
+    with testing_session() as session:
+        category = Category(code="pc_de_ban", name="PC", slug="pc")
+        session.add(category)
+        session.flush()
+        rows = [
+            ("pc_hi", "Dell mạnh", {"ram_gb": 32, "storage_gb": 512, "cpu_base_clock_ghz": 3.0}),
+            ("pc_lo", "Acer phổ thông", {"ram_gb": 8, "storage_gb": 256, "cpu_base_clock_ghz": 2.0}),
+        ]
+        for sku, name, spec in rows:
+            session.add(
+                Product(
+                    sku=sku, slug=sku, name=name, display_name=name, brand=name.split()[0],
+                    category_id=category.id, category_key="pc_de_ban", specs_json=spec,
+                    short_description=name, image_url=f"https://img.example/{sku}.jpg",
+                )
+            )
+        session.commit()
+        yield session
+    Base.metadata.drop_all(engine)
+
+
+def test_pc_de_ban_enriched_cards_are_differentiated(pc_db: Session) -> None:
+    router = QueuedRouter(_s2(category="pc_de_ban", slots={}), "[1] cấu hình mạnh.")
+    profile = NeedProfile(category="pc_de_ban", slots={"ngan_sach_max": 20_000_000})
+    response = asyncio.run(_service(pc_db, router).reply(_request("cần PC văn phòng", profile)))
+
+    assert response.response_type == "recommendations"
+    assert response.cards[0].sku == "pc_hi"  # stronger config ranks first
+    assert "chưa đủ dữ liệu" not in response.cards[0].trade_off.lower()
+    assert response.cards[0].reason != (
+        "Phù hợp với nhu cầu đã nêu dựa trên thông tin sản phẩm hiện có."
+    )
+    assert any("RAM" in s or "GB" in s for s in response.cards[0].strengths)
