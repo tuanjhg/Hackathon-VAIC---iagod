@@ -381,3 +381,71 @@ def test_delete_session_endpoint_is_idempotent(client: TestClient) -> None:
 
     assert first.status_code == 204
     assert second.status_code == 204
+
+
+# --------------------------------------------------------------------------- #
+# Card copy honesty (unit-level on the deterministic helpers).               #
+# --------------------------------------------------------------------------- #
+from src.pipeline.s5_ranking import RankingResult, ScoreBreakdown  # noqa: E402
+from src.services.advisor_chat_service import (  # noqa: E402
+    _match_scores,
+    _reason_text,
+    _strengths,
+    _trade_off_text,
+)
+
+
+def test_strengths_drops_false_boolean_specs() -> None:
+    out = _strengths({"inverter": False, "capacity_total_l": 235})
+    assert all("không phải inverter" not in s for s in out)
+    assert any("235" in s for s in out)
+
+
+def test_strengths_keeps_true_boolean_specs() -> None:
+    out = _strengths({"inverter": True})
+    assert any("đỡ tốn điện" in s for s in out)
+
+
+def test_match_scores_tie_avoids_triple_hundred() -> None:
+    top = [
+        ScoreBreakdown(sku="A", total_score=1.0),
+        ScoreBreakdown(sku="B", total_score=1.0),
+        ScoreBreakdown(sku="C", total_score=1.0),
+    ]
+    assert _match_scores(top) == [75, 75, 75]
+
+
+def test_match_scores_keeps_spread_when_differentiated() -> None:
+    top = [
+        ScoreBreakdown(sku="A", total_score=1.0),
+        ScoreBreakdown(sku="B", total_score=0.5),
+    ]
+    assert _match_scores(top) == [100, 50]
+
+
+def test_trade_off_honest_when_no_criteria() -> None:
+    ranking = RankingResult(top=[ScoreBreakdown(sku="A", total_score=0.05)], trade_offs=[])
+    bd = ScoreBreakdown(
+        sku="A", total_score=0.05, per_criterion={"bonus:price_available": 0.05}
+    )
+    text = _trade_off_text("A", ranking, bd)
+    assert "bảo hành và chi phí lắp đặt" not in text
+    assert "chưa đủ dữ liệu" in text.lower()
+
+
+def test_reason_is_deterministic_from_strongest_criterion() -> None:
+    bd = ScoreBreakdown(
+        sku="A", total_score=3.05,
+        per_criterion={"inverter": 3.0, "bonus:price_available": 0.05},
+    )
+    text = _reason_text(bd, {"inverter": True})
+    assert "đỡ tốn điện" in text
+    assert "Phù hợp" in text
+
+
+def test_reason_falls_back_when_no_positive_criterion() -> None:
+    bd = ScoreBreakdown(
+        sku="A", total_score=0.05, per_criterion={"bonus:price_available": 0.05}
+    )
+    text = _reason_text(bd, {})
+    assert "Phù hợp với nhu cầu đã nêu" in text
