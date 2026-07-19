@@ -50,6 +50,21 @@ class DerivationRule(BaseModel):
     description: str
 
 
+class RankingCriterion(BaseModel):
+    """One S5 fit-score criterion with explicit ranking semantics.
+
+    ``direction`` fixes how the raw spec value maps to 0..1 goodness:
+    ``higher_better`` / ``lower_better`` (numeric, min-max across the set),
+    ``boolean_pref`` (True is the good pole), ``target`` (closeness to a derived
+    need — bigger-than-need is worse). ``target`` names a derivation rule S5
+    knows how to compute (e.g. ``dung_tich_can``).
+    """
+
+    field: str
+    direction: Literal["higher_better", "lower_better", "boolean_pref", "target"]
+    target: str | None = None
+
+
 class SlotProfile(BaseModel):
     category_key: str
     category_label: str
@@ -58,6 +73,7 @@ class SlotProfile(BaseModel):
     optional_slots: list[SlotDef]
     derivation_rules: list[DerivationRule] = []
     catalog_field_map: dict[str, str] = {}
+    ranking_criteria: list[RankingCriterion] = []
     data_quality: str = ""
 
 

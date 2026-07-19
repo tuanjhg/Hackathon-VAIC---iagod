@@ -54,6 +54,20 @@ def test_tu_lanh_required_slots_match_workflow_doc() -> None:
     assert required_names == {"ngan_sach_max", "so_nguoi_dung"}
 
 
+def test_tu_lanh_declares_ranking_criteria() -> None:
+    profile = load_slot_profile("tu_lanh")
+    by_field = {c.field: c for c in profile.ranking_criteria}
+    assert by_field["inverter"].direction == "boolean_pref"
+    cap = by_field["capacity_total_l"]
+    assert cap.direction == "target"
+    assert cap.target == "dung_tich_can"
+
+
+def test_may_lanh_has_no_ranking_criteria() -> None:
+    # uu_tien categories keep the legacy path; the field defaults to empty.
+    assert load_slot_profile("may_lanh").ranking_criteria == []
+
+
 def test_unknown_category_raises() -> None:
     with pytest.raises(FileNotFoundError):
         load_slot_profile("does_not_exist")

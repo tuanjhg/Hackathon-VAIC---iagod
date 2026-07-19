@@ -59,3 +59,10 @@ catalog_field_map:
   doors: specs.doors
   style: specs.style
   made_in: specs.made_in
+
+ranking_criteria:
+  - field: inverter
+    direction: boolean_pref
+  - field: capacity_total_l
+    direction: target
+    target: dung_tich_can
