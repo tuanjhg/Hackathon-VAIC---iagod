@@ -586,3 +586,14 @@ def test_pc_de_ban_enriched_cards_are_differentiated(pc_db: Session) -> None:
         "Phù hợp với nhu cầu đã nêu dựa trên thông tin sản phẩm hiện có."
     )
     assert any("RAM" in s or "GB" in s for s in response.cards[0].strengths)
+
+
+def test_trade_off_dominated_card_is_honest_not_balanced() -> None:
+    # Worst on every criterion (all scores 0): must not claim "cân đối nhất".
+    ranking = RankingResult(top=[ScoreBreakdown(sku="A", total_score=0.0)], trade_offs=[])
+    bd = ScoreBreakdown(
+        sku="A", total_score=0.0, per_criterion={"ram_gb": 0.0, "storage_gb": 0.0}
+    )
+    text = _trade_off_text("A", ranking, bd)
+    assert "cân đối nhất" not in text
+    assert "thấp hơn" in text.lower()

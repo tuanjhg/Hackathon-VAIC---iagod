@@ -76,11 +76,11 @@ def enrich_specs(db: Session, clean_csv_dir: Path) -> dict[str, dict[str, int]]:
             select(Product).where(Product.category_key == category_key)
         ).all()
         for product in products:
-            parsed = by_sku.get(str(product.sku))
-            if not parsed:
+            product_specs = by_sku.get(str(product.sku))
+            if not product_specs:
                 continue
             merged = dict(product.specs_json or {})
-            merged.update(parsed)
+            merged.update(product_specs)
             product.specs_json = merged  # reassign so SQLAlchemy detects the change
             enriched += 1
         db.flush()

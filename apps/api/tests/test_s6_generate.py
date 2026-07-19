@@ -307,11 +307,6 @@ def test_generate_malformed_response_raises() -> None:
         asyncio.run(generate(router, _ranking(), CANDIDATES, NeedProfile(category="may_lanh")))
 
 
-import pytest  # noqa: E402
-
-from src.pipeline.s6_generate import render_spec  # noqa: E402
-
-
 @pytest.mark.parametrize("field,value,needle", [
     ("ram_gb", 16, "RAM 16GB"),
     ("storage_gb", 512, "512GB"),
