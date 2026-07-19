@@ -150,6 +150,41 @@ _SOCIAL_QUICK_REPLIES = [
     "Xem chính sách trả góp",
 ]
 
+_NAMED_MODEL_RE = re.compile(
+    r"\b(?=[A-Z0-9-]{5,}\b)(?=[A-Z0-9-]*[A-Z])(?=[A-Z0-9-]*\d)"
+    r"[A-Z0-9]+(?:-[A-Z0-9]+)+\b",
+    re.IGNORECASE,
+)
+_UNVERIFIED_CLAIM_TERMS = (
+    "gia",
+    "giam",
+    "khuyen mai",
+    "xac nhan",
+    "con hang",
+)
+
+
+def _unverified_named_product_reply(text: str) -> str | None:
+    """Stop user-supplied product facts before they become shopping context.
+
+    Exact-model lookup is not part of the advisory retriever contract yet.  A
+    model-like token combined with a price/promotion/stock assertion must
+    therefore be rejected explicitly instead of being silently treated as a
+    generic advisory request (guardrail red-team: fabricated SKU + fake price).
+    """
+    model = _NAMED_MODEL_RE.search(text)
+    if model is None:
+        return None
+    folded = fold_ascii(text).replace("_", " ")
+    if not any(term in folded for term in _UNVERIFIED_CLAIM_TERMS):
+        return None
+    return (
+        f'Dạ hiện em chưa có dữ liệu đã xác minh cho mã "{model.group(0)}", nên em '
+        "không thể xác nhận mẫu này tồn tại, mức giảm, giá bán hoặc tồn kho anh/chị "
+        "nêu ạ. Em sẽ không dùng các thông tin đó để tư vấn. Anh/chị có thể gửi đường "
+        "dẫn sản phẩm chính thức, hoặc cho em biết nhu cầu để em gợi ý mẫu khác có dữ liệu."
+    )
+
 
 def _basic_social_reply(text: str, *, has_category: bool) -> str | None:
     """Answer short social turns before S2; product-bearing turns continue normally."""
@@ -464,6 +499,15 @@ async def run_turn(
     degraded_stages: list[str] = []
     s1 = run_s1(text)
     sw.lap("s1")
+    unverified_reply = _unverified_named_product_reply(text)
+    if unverified_reply is not None:
+        return TurnResult(
+            kind="unsupported",
+            message=unverified_reply,
+            intent="hoi_chi_tiet_sp",
+            profile=profile,
+            timings_ms=sw.timings,
+        )
     social_reply = _basic_social_reply(text, has_category=s1.category_hint is not None)
     if social_reply is not None:
         return TurnResult(
@@ -634,7 +678,13 @@ async def run_turn(
             ranking=ranking,
             facts=s7_facts,
             fetched_at=fetched_at,
-            source_panel=build_source_panel(s7_facts, facts_by_sku),
+            source_panel=build_source_panel(
+                s7_facts,
+                facts_by_sku,
+                skus=[item.sku for item in ranking.top]
+                + ([ranking.anti_pick.sku] if ranking.anti_pick is not None else []),
+                max_fields_per_sku=4,
+            ),
             output_verification=output_verification,
             used_fallback_table=True,
             degraded_stages=degraded_stages,
@@ -697,7 +747,13 @@ async def run_turn(
         facts=s7_facts,
         fetched_at=fetched_at,
         verifier_flags=enforcement.flags,
-        source_panel=build_source_panel(s7_facts, facts_by_sku),
+        source_panel=build_source_panel(
+            s7_facts,
+            facts_by_sku,
+            skus=[item.sku for item in ranking.top]
+            + ([ranking.anti_pick.sku] if ranking.anti_pick is not None else []),
+            max_fields_per_sku=4,
+        ),
         regenerated=regenerated,
         used_fallback_table=used_fallback,
         degraded_stages=degraded_stages,

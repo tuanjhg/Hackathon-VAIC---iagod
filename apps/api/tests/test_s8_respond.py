@@ -142,6 +142,24 @@ def test_source_panel_uses_tool_provenance_for_price_and_skips_nulls() -> None:
     assert ("sku_c", "price") not in by_key
 
 
+def test_source_panel_can_limit_recommendation_sources() -> None:
+    facts = {
+        "sku_a": {"capacity_btu": 12000, "inverter": True, "noise_db_indoor": 29,
+                  "energy_efficiency": 6.2, "made_in": "Vietnam", "price": 15_990_000},
+        "sku_b": {"capacity_btu": 9000, "price": 10_000_000},
+    }
+    panel = build_source_panel(
+        facts,
+        {"sku_a": _product_facts("sku_a", 15_990_000)},
+        skus=["sku_a"],
+        max_fields_per_sku=4,
+    )
+
+    assert len(panel) == 4
+    assert panel[0].field == "price"
+    assert {entry.sku for entry in panel} == {"sku_a"}
+
+
 # --------------------------------------------------------------------------- #
 # Fallback table                                                              #
 # --------------------------------------------------------------------------- #

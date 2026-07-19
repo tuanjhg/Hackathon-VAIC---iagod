@@ -381,3 +381,219 @@ def test_delete_session_endpoint_is_idempotent(client: TestClient) -> None:
 
     assert first.status_code == 204
     assert second.status_code == 204
+
+
+# --------------------------------------------------------------------------- #
+# Card copy honesty (unit-level on the deterministic helpers).               #
+# --------------------------------------------------------------------------- #
+from src.pipeline.s5_ranking import RankingResult, ScoreBreakdown  # noqa: E402
+from src.services.advisor_chat_service import (  # noqa: E402
+    _match_scores,
+    _reason_text,
+    _strengths,
+    _trade_off_text,
+)
+
+
+def test_strengths_drops_false_boolean_specs() -> None:
+    out = _strengths({"inverter": False, "capacity_total_l": 235})
+    assert all("không phải inverter" not in s for s in out)
+    assert any("235" in s for s in out)
+
+
+def test_strengths_keeps_true_boolean_specs() -> None:
+    out = _strengths({"inverter": True})
+    assert any("đỡ tốn điện" in s for s in out)
+
+
+def test_match_scores_tie_avoids_triple_hundred() -> None:
+    top = [
+        ScoreBreakdown(sku="A", total_score=1.0),
+        ScoreBreakdown(sku="B", total_score=1.0),
+        ScoreBreakdown(sku="C", total_score=1.0),
+    ]
+    assert _match_scores(top) == [75, 75, 75]
+
+
+def test_match_scores_keeps_spread_when_differentiated() -> None:
+    top = [
+        ScoreBreakdown(sku="A", total_score=1.0),
+        ScoreBreakdown(sku="B", total_score=0.5),
+    ]
+    assert _match_scores(top) == [100, 50]
+
+
+def test_trade_off_honest_when_no_criteria() -> None:
+    ranking = RankingResult(top=[ScoreBreakdown(sku="A", total_score=0.05)], trade_offs=[])
+    bd = ScoreBreakdown(
+        sku="A", total_score=0.05, per_criterion={"bonus:price_available": 0.05}
+    )
+    text = _trade_off_text("A", ranking, bd)
+    assert "bảo hành và chi phí lắp đặt" not in text
+    assert "chưa đủ dữ liệu" in text.lower()
+
+
+def test_reason_is_deterministic_from_strongest_criterion() -> None:
+    bd = ScoreBreakdown(
+        sku="A", total_score=3.05,
+        per_criterion={"inverter": 3.0, "bonus:price_available": 0.05},
+    )
+    text = _reason_text(bd, {"inverter": True})
+    assert "đỡ tốn điện" in text
+    assert "Phù hợp" in text
+
+
+def test_reason_falls_back_when_no_positive_criterion() -> None:
+    bd = ScoreBreakdown(
+        sku="A", total_score=0.05, per_criterion={"bonus:price_available": 0.05}
+    )
+    text = _reason_text(bd, {})
+    assert "Phù hợp với nhu cầu đã nêu" in text
+
+
+# --------------------------------------------------------------------------- #
+# End-to-end tu_lanh energy-saving scenario (spine: S2 bridge → S4 → S5 → cards)
+# --------------------------------------------------------------------------- #
+@pytest.fixture()
+def tu_lanh_db() -> Generator[Session, None, None]:
+    engine = create_engine(
+        "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
+    )
+    testing_session = sessionmaker(bind=engine, expire_on_commit=False)
+    Base.metadata.create_all(engine)
+    with testing_session() as session:
+        category = Category(code="tu_lanh", name="Tủ lạnh", slug="tu-lanh")
+        session.add(category)
+        session.flush()
+        rows = [
+            ("tl_inv", "Toshiba inverter 240L",
+             {"capacity_total_l": 240.0, "inverter": True, "style": "ngan_da_duoi"}),
+            ("tl_noninv", "Aqua thường 240L",
+             {"capacity_total_l": 240.0, "inverter": False, "style": "ngan_da_duoi"}),
+        ]
+        for sku, name, spec in rows:
+            session.add(
+                Product(
+                    sku=sku,
+                    slug=sku.replace("_", "-"),
+                    name=name,
+                    display_name=name,
+                    brand=name.split()[0],
+                    category_id=category.id,
+                    category_key="tu_lanh",
+                    specs_json=spec,
+                    short_description=name,
+                    image_url=f"https://img.example/{sku}.jpg",
+                )
+            )
+        session.commit()
+        yield session
+    Base.metadata.drop_all(engine)
+
+
+def _tu_lanh_ready_profile() -> NeedProfile:
+    return NeedProfile(
+        category="tu_lanh", slots={"ngan_sach_max": 15_000_000, "so_nguoi_dung": 3}
+    )
+
+
+def test_tu_lanh_energy_request_end_to_end(tu_lanh_db: Session) -> None:
+    # "cần tiết kiệm điện" (no word "inverter") must flow S2 bridge → S5 so the
+    # inverter model ranks first, the non-inverter is still shown, and no card
+    # advertises a negative as a strength.
+    router = QueuedRouter(
+        _s2(category="tu_lanh", slots={}), "[1] tiết kiệm điện nhờ inverter."
+    )
+    response = asyncio.run(
+        _service(tu_lanh_db, router).reply(
+            _request("nhà 3 người, cần tiết kiệm điện, ngăn đá dưới", _tu_lanh_ready_profile())
+        )
+    )
+
+    assert response.response_type == "recommendations"
+    skus = [c.sku for c in response.cards]
+    assert skus[0] == "tl_inv"            # inverter preferred to the top
+    assert "tl_noninv" in skus            # non-inverter NOT filtered out (soft)
+    for card in response.cards:
+        assert all("không phải inverter" not in s for s in card.strengths)
+    # top card benefit is a real, non-generic line
+    assert response.cards[0].reason != (
+        "Phù hợp với nhu cầu đã nêu dựa trên thông tin sản phẩm hiện có."
+    )
+
+
+def test_trade_off_balanced_card_points_to_price_not_a_fake_weakness() -> None:
+    # A dominating card (all criteria strong) must not claim a spec weakness.
+    ranking = RankingResult(top=[ScoreBreakdown(sku="A", total_score=6.0)], trade_offs=[])
+    bd = ScoreBreakdown(
+        sku="A", total_score=6.0, per_criterion={"inverter": 3.0, "capacity_total_l": 3.0}
+    )
+    text = _trade_off_text("A", ranking, bd)
+    assert "kém hơn" not in text.lower()
+    assert "mức giá" in text.lower()
+
+
+def test_trade_off_names_a_genuinely_weak_criterion() -> None:
+    ranking = RankingResult(top=[ScoreBreakdown(sku="A", total_score=3.0)], trade_offs=[])
+    bd = ScoreBreakdown(
+        sku="A", total_score=3.0, per_criterion={"inverter": 3.0, "warranty_years": 0.0}
+    )
+    text = _trade_off_text("A", ranking, bd)
+    assert text.startswith("Kém hơn về")
+    assert "bảo hành" in text
+
+
+# --------------------------------------------------------------------------- #
+# Enriched raw category (pc_de_ban) — post-enrich specs_json ranks + renders. #
+# --------------------------------------------------------------------------- #
+@pytest.fixture()
+def pc_db() -> Generator[Session, None, None]:
+    engine = create_engine(
+        "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
+    )
+    testing_session = sessionmaker(bind=engine, expire_on_commit=False)
+    Base.metadata.create_all(engine)
+    with testing_session() as session:
+        category = Category(code="pc_de_ban", name="PC", slug="pc")
+        session.add(category)
+        session.flush()
+        rows = [
+            ("pc_hi", "Dell mạnh", {"ram_gb": 32, "storage_gb": 512, "cpu_base_clock_ghz": 3.0}),
+            ("pc_lo", "Acer phổ thông", {"ram_gb": 8, "storage_gb": 256, "cpu_base_clock_ghz": 2.0}),
+        ]
+        for sku, name, spec in rows:
+            session.add(
+                Product(
+                    sku=sku, slug=sku, name=name, display_name=name, brand=name.split()[0],
+                    category_id=category.id, category_key="pc_de_ban", specs_json=spec,
+                    short_description=name, image_url=f"https://img.example/{sku}.jpg",
+                )
+            )
+        session.commit()
+        yield session
+    Base.metadata.drop_all(engine)
+
+
+def test_pc_de_ban_enriched_cards_are_differentiated(pc_db: Session) -> None:
+    router = QueuedRouter(_s2(category="pc_de_ban", slots={}), "[1] cấu hình mạnh.")
+    profile = NeedProfile(category="pc_de_ban", slots={"ngan_sach_max": 20_000_000})
+    response = asyncio.run(_service(pc_db, router).reply(_request("cần PC văn phòng", profile)))
+
+    assert response.response_type == "recommendations"
+    assert response.cards[0].sku == "pc_hi"  # stronger config ranks first
+    assert "chưa đủ dữ liệu" not in response.cards[0].trade_off.lower()
+    assert response.cards[0].reason != (
+        "Phù hợp với nhu cầu đã nêu dựa trên thông tin sản phẩm hiện có."
+    )
+    assert any("RAM" in s or "GB" in s for s in response.cards[0].strengths)
+
+
+def test_trade_off_dominated_card_is_honest_not_balanced() -> None:
+    # Worst on every criterion (all scores 0): must not claim "cân đối nhất".
+    ranking = RankingResult(top=[ScoreBreakdown(sku="A", total_score=0.0)], trade_offs=[])
+    bd = ScoreBreakdown(
+        sku="A", total_score=0.0, per_criterion={"ram_gb": 0.0, "storage_gb": 0.0}
+    )
+    text = _trade_off_text("A", ranking, bd)
+    assert "cân đối nhất" not in text
+    assert "thấp hơn" in text.lower()

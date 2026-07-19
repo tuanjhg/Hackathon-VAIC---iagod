@@ -38,3 +38,7 @@ catalog_field_map:
   loai_san_pham: "specs_raw.Loại sản phẩm"
   bang_tan: "specs_raw.Băng tần"
   tan_so: "specs_raw.Tần số hoạt động"
+
+ranking_criteria:
+  - field: distortion_percent
+    direction: lower_better

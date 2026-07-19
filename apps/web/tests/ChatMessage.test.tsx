@@ -39,8 +39,9 @@ describe("business response rendering", () => {
     expect(screen.getByText("Vượt ngân sách")).toBeInTheDocument();
     expect(screen.getByText("Đã đối chiếu dữ liệu nguồn")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText("Nguồn dữ liệu (1)"));
+    fireEvent.click(screen.getByText("Nguồn dữ liệu · 1 sản phẩm"));
     expect(screen.getByText(/sku-good/)).toBeInTheDocument();
+    expect(screen.getByText(/Giá bán/)).toBeInTheDocument();
   });
 
   it("renders canonical action labels and sends the structured action", () => {

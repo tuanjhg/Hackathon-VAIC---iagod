@@ -267,11 +267,13 @@ def test_may_lanh_btu_fallback_and_direct_sun_multiplier(session: Session) -> No
     )
 
 
-def test_direct_inverter_slot_filter(session: Session) -> None:
-    # inverter maps through catalog_field_map (specs.inverter) for tủ lạnh.
-    inv = _skus(catalog_search(session, category_key="tu_lanh", slots={"inverter": True}))
-    assert inv == {"tl_big", "tl_priced_over"}
-    assert "tl_small" not in inv
+def test_inverter_preference_is_soft_not_a_hard_filter(session: Session) -> None:
+    # Product decision: "tiết kiệm điện" is a soft ranking preference (S5), not a
+    # hard filter — a cheaper/right-sized non-inverter must still be shown (with
+    # an honest trade-off), so it is NOT excluded here.
+    result = _skus(catalog_search(session, category_key="tu_lanh", slots={"inverter": True}))
+    assert {"tl_big", "tl_priced_over"} <= result  # inverter models still present
+    assert "tl_small" in result  # non-inverter is NOT filtered out anymore
 
 
 # --------------------------------------------------------------------------- #

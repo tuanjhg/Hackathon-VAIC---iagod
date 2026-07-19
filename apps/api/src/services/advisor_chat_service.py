@@ -18,7 +18,6 @@ The thin production shell around :func:`src.pipeline.orchestrator.run_turn`:
 
 from __future__ import annotations
 
-import re
 from logging import getLogger
 from pathlib import Path
 from typing import Any
@@ -89,6 +88,12 @@ _FALLBACK_MESSAGE = (
 
 _CARD_LABELS = ("Phù hợp nhất với nhu cầu", "Lựa chọn cân bằng", "Đáng cân nhắc")
 
+# When the top scores are within _TIE_RATIO of the best, nothing meaningfully
+# separates them (e.g. a raw category with no ranking criteria) — show an equal,
+# honest _TIE_SCORE rather than a misleading string of 100%s.
+_TIE_RATIO = 0.02
+_TIE_SCORE = 75
+
 # Display labels for slot enum tokens offered as quick replies. S2's guided
 # schema maps the tapped label back to the enum value, so round-tripping works.
 _QUICK_REPLY_LABELS: dict[str, str] = {
@@ -107,9 +112,6 @@ _QUICK_REPLY_LABELS: dict[str, str] = {
     "cua_tren": "Cửa trên",
     "cua_truoc": "Cửa trước",
 }
-
-_MARKER_PREFIX_RE = re.compile(r"^\[[^\]]+\]\s*")
-
 
 class AdvisorChatService:
     """One request-scoped facade over the advisory pipeline."""
@@ -365,14 +367,19 @@ def _match_scores(top: list[ScoreBreakdown]) -> list[int]:
     """Relative fit percent of the best score (explainable: 'x% điểm của top-1').
 
     When every score is non-positive (all-penalty edge case) fall back to a
-    fixed descending ladder rather than dividing by a non-positive max.
+    fixed descending ladder rather than dividing by a non-positive max. When the
+    top scores are within ``_TIE_RATIO`` of each other (nothing separates them)
+    return an equal, honest ``_TIE_SCORE`` instead of a misleading 100/100/100.
     """
     if not top:
         return []
-    best = max(b.total_score for b in top)
+    scores = [b.total_score for b in top]
+    best = max(scores)
     if best <= 0:
         return [max(50, 90 - 10 * i) for i in range(len(top))]
-    return [max(50, min(100, round(100 * b.total_score / best))) for b in top]
+    if (best - min(scores)) / best <= _TIE_RATIO:
+        return [_TIE_SCORE for _ in top]
+    return [max(50, min(100, round(100 * s / best))) for s in scores]
 
 
 def _trade_off_text(sku: str, ranking: RankingResult, breakdown: ScoreBreakdown) -> str:
@@ -397,34 +404,72 @@ def _trade_off_text(sku: str, ranking: RankingResult, breakdown: ScoreBreakdown)
     }
     if criteria:
         weakest = min(criteria, key=lambda field: criteria[field])
+        strongest_score = max(criteria.values())
+        # Worst on every ranked criterion (all scores 0) — don't claim it's the
+        # "most balanced" pick; be honest that it trails and its draw is price.
+        if strongest_score <= 0:
+            return (
+                "Thông số kỹ thuật thấp hơn các lựa chọn trên; "
+                "cân nhắc nếu anh/chị ưu tiên mức giá"
+            )
+        # Only frame a criterion as a weakness when it is genuinely low relative
+        # to the card's own strengths. A well-rounded, dominating pick has no real
+        # spec weakness — inventing one ("kém hơn về inverter" on the best inverter
+        # model) misleads; point to price as the honest remaining trade-off.
+        if criteria[weakest] <= 0.5 * strongest_score:
+            return (
+                f"Kém hơn về {field_label(weakest)} so với các ưu điểm còn lại; "
+                "anh/chị cân nhắc nếu đây là ưu tiên chính"
+            )
         return (
-            f"Mẫu này ít nổi bật hơn về {field_label(weakest)} so với các ưu điểm còn lại; "
-            "anh/chị nên cân nhắc nếu đây là ưu tiên chính"
+            "Là lựa chọn cân đối nhất theo các tiêu chí anh/chị nêu; "
+            "anh/chị cân nhắc thêm mức giá cho phù hợp ngân sách"
         )
-    return "Nên đối chiếu thêm bảo hành và chi phí lắp đặt trước khi quyết định"
+    return (
+        "Chưa đủ dữ liệu cấu trúc để nêu đánh đổi cụ thể; "
+        "anh/chị nên xem chi tiết sản phẩm để so sánh thêm"
+    )
 
 
 def _strengths(specs: dict[str, Any]) -> list[str]:
+    """Positive, plain-language highlights. A ``False`` boolean spec (e.g.
+    ``inverter=False``) is never a strength — it belongs in the trade-off, not
+    the pros list, so it is dropped here."""
     phrases = [
         rendered
-        for field in specs
-        if (rendered := render_spec(field, specs.get(field))) is not None
+        for field, value in specs.items()
+        if value is not False and (rendered := render_spec(field, value)) is not None
     ]
     return phrases[:3]
+
+
+def _reason_text(breakdown: ScoreBreakdown, specs: dict[str, Any]) -> str:
+    """Deterministic per-card benefit: render the card's strongest positive
+    criterion via the glossary. Independent of the LLM prose (which the verifier
+    may drop), so the benefit never collapses to a generic line when real data
+    exists for the card."""
+    positives = {
+        field: score
+        for field, score in breakdown.per_criterion.items()
+        if ":" not in field and score > 0
+    }
+    if positives:
+        best = max(positives, key=lambda field: (positives[field], field))
+        phrase = render_spec(best, specs.get(best))
+        if phrase is not None:
+            return "Phù hợp vì " + phrase
+    return "Phù hợp với nhu cầu đã nêu dựa trên thông tin sản phẩm hiện có."
 
 
 def _build_cards(result: TurnResult) -> list[AdvisorCard]:
     assert result.ranking is not None
     by_sku = {str(c.get("sku")): c for c in result.candidates}
-    statements = result.advice.statements if result.advice is not None else []
     scores = _match_scores(result.ranking.top)
 
     cards: list[AdvisorCard] = []
     for index, breakdown in enumerate(result.ranking.top):
         cand = by_sku.get(breakdown.sku, {})
-        reason = "Phù hợp với nhu cầu đã nêu dựa trên thông tin sản phẩm hiện có."
-        if index < len(statements):
-            reason = _MARKER_PREFIX_RE.sub("", statements[index])
+        specs = cand.get("specs") or {}
         cards.append(
             AdvisorCard(
                 sku=breakdown.sku,
@@ -434,9 +479,9 @@ def _build_cards(result: TurnResult) -> list[AdvisorCard]:
                 match_score=scores[index],
                 price=cand.get("price"),
                 image_url=cand.get("image_url"),
-                specs=cand.get("specs") or {},
-                reason=reason,
-                strengths=_strengths(cand.get("specs") or {}),
+                specs=specs,
+                reason=_reason_text(breakdown, specs),
+                strengths=_strengths(specs),
                 trade_off=_trade_off_text(breakdown.sku, result.ranking, breakdown),
                 missing_fields=[field_label(field) for field in breakdown.missing_fields],
             )

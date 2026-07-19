@@ -1,0 +1,104 @@
+"""Enrich Product.specs_json for the 9 specs_raw-only categories by reusing the
+importer parser (src/importers), so the advisory spine (S5 ranking_criteria) has
+real numeric/boolean fields to rank on.
+
+No new parser, no schema change: only the chat's ``specs_json`` column is touched,
+and only for these 9 categories. The 5 already-parsed categories (máy lạnh, tủ
+lạnh + the 3 uu_tien ones) are left alone.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Any
+
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from src.importers.category_registry import CATEGORY_REGISTRY, CategoryConfig
+from src.importers.csv_importer import _json_value, normalize_product_row, read_csv
+from src.models import Product
+
+# chat category_key -> (importer registry code, clean CSV filename)
+_RAW_CATEGORIES: dict[str, tuple[str, str]] = {
+    "tu_mat_dong": ("coolers_freezers", "tu_mat_dong.csv"),
+    "man_hinh": ("computer_monitors", "man_hinh.csv"),
+    "may_in": ("printers", "may_in.csv"),
+    "may_nuoc_nong": ("water_heaters", "may_nuoc_nong.csv"),
+    "may_say": ("clothes_dryers", "may_say.csv"),
+    "may_tinh_bang": ("tablets", "may_tinh_bang.csv"),
+    "micro_karaoke": ("karaoke_microphones", "micro_karaoke.csv"),
+    "micro_thu_am": ("phone_recording_microphones", "micro_thu_am.csv"),
+    "pc_de_ban": ("desktop_computers", "pc_de_ban.csv"),
+}
+
+
+def parsed_numeric_specs(row: dict[str, Any], config: CategoryConfig) -> dict[str, Any]:
+    """Flat ``{key: int|float|bool}`` for numeric/boolean typed attributes only.
+
+    Reuses the importer's :func:`normalize_product_row` (which applies the
+    registry's per-column parsers and drops empties/"Không có"), keeps only
+    number/boolean attributes, and coerces ``Decimal`` → int/float via
+    :func:`_json_value` so S5's ``_numeric`` accepts the value.
+    """
+    normalized = normalize_product_row(row, config)
+    out: dict[str, Any] = {}
+    for key, (attribute, parsed, _raw) in normalized.typed_values.items():
+        if attribute.data_type in ("number", "boolean"):
+            out[key] = _json_value(parsed)
+    return out
+
+
+def enrich_specs(db: Session, clean_csv_dir: Path) -> dict[str, dict[str, int]]:
+    """Merge parsed numeric/boolean specs into ``Product.specs_json`` for the 9
+    raw categories, matched by ``sku``. Idempotent (re-running overwrites parsed
+    keys). Returns a per-category coverage report.
+    """
+    report: dict[str, dict[str, int]] = {}
+    for category_key, (code, filename) in _RAW_CATEGORIES.items():
+        config = CATEGORY_REGISTRY[code]
+        path = clean_csv_dir / filename
+        if not path.exists():
+            report[category_key] = {"rows": 0, "matched": 0, "enriched": 0}
+            continue
+        frame = read_csv(path)
+        by_sku: dict[str, dict[str, Any]] = {}
+        for record in frame.to_dict("records"):
+            sku = record.get("sku")
+            if sku is None:
+                continue
+            parsed = parsed_numeric_specs(record, config)
+            if parsed:
+                by_sku[str(sku)] = parsed
+
+        enriched = 0
+        products = db.scalars(
+            select(Product).where(Product.category_key == category_key)
+        ).all()
+        for product in products:
+            product_specs = by_sku.get(str(product.sku))
+            if not product_specs:
+                continue
+            merged = dict(product.specs_json or {})
+            merged.update(product_specs)
+            product.specs_json = merged  # reassign so SQLAlchemy detects the change
+            enriched += 1
+        db.flush()
+        report[category_key] = {"rows": len(frame), "matched": enriched, "enriched": enriched}
+    db.commit()
+    return report
+
+
+def main() -> None:
+    from src.core.config import settings
+    from src.core.database import SessionLocal
+
+    clean_dir = Path(settings.realdata_processed_path).resolve().parent / "raw" / "clean"
+    with SessionLocal() as db:
+        report = enrich_specs(db, clean_dir)
+    for category_key, stats in report.items():
+        print(f"{category_key}: {stats}")
+
+
+if __name__ == "__main__":
+    main()

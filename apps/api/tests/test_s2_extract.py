@@ -404,3 +404,27 @@ def test_extract_generic_fallback_no_category() -> None:
     assert result.category is None
     assert result.slots_moi == {}
     assert router.call_count == 1
+
+
+# --------------------------------------------------------------------------- #
+# Energy-saving phrase → inverter preference bridge (tu_lanh).                #
+# --------------------------------------------------------------------------- #
+from src.pipeline.s2_extract import _overlay_text_slots  # noqa: E402
+from src.pipeline.slots import load_slot_profile  # noqa: E402
+
+
+def _tu_lanh_slots() -> list:
+    profile = load_slot_profile("tu_lanh")
+    return [*profile.required_slots, *profile.optional_slots]
+
+
+def test_energy_phrase_sets_inverter_true_without_the_word_inverter() -> None:
+    result: dict = {}
+    _overlay_text_slots(result, _tu_lanh_slots(), "nhà 3 người cần tiết kiệm điện")
+    assert result.get("inverter") is True
+
+
+def test_negated_inverter_still_false() -> None:
+    result: dict = {}
+    _overlay_text_slots(result, _tu_lanh_slots(), "khong can inverter")
+    assert result.get("inverter") is False

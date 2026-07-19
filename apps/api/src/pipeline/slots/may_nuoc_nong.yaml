@@ -66,3 +66,9 @@ catalog_field_map:
   ap_luc_nuoc_hoat_dong: "specs_raw.Áp lực nước hoạt động"
   tinh_nang_an_toan: "specs_raw.Tính năng an toàn"
   san_xuat_tai: "specs_raw.Sản xuất tại"
+
+ranking_criteria:
+  - field: has_booster_pump
+    direction: boolean_pref
+  - field: power_watt
+    direction: higher_better

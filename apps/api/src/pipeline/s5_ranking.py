@@ -200,6 +200,33 @@ class _Scored:
         return self.breakdown.total_score
 
 
+@dataclass(frozen=True)
+class Criterion:
+    """One ranking criterion with an explicit direction (see RankingCriterion).
+
+    Replaces the old "criterion is just a field name, infer direction from the
+    name" assumption so a category can declare, e.g., that ``capacity_total_l``
+    is a ``target`` (right-sizing) not a higher-is-better field.
+    """
+
+    field: str
+    direction: str
+    target: str | None = None
+
+
+def _need_for_target(target_rule: str, profile: NeedProfile) -> float | None:
+    """Compute the target 'need' for a right-sizing criterion, or ``None``.
+
+    ``dung_tich_can`` mirrors S4's tủ lạnh sizing (``45*so_nguoi + 100``), so
+    ranking and the hard filter agree on the same number.
+    """
+    if target_rule == "dung_tich_can":
+        people = profile.slots.get("so_nguoi_dung")
+        if isinstance(people, int | float) and not isinstance(people, bool):
+            return 45.0 * float(people) + 100.0
+    return None
+
+
 # --------------------------------------------------------------------------- #
 # Field helpers                                                              #
 # --------------------------------------------------------------------------- #
@@ -272,20 +299,86 @@ def _numeric(value: Any) -> bool:
     return isinstance(value, int | float) and not isinstance(value, bool)
 
 
-def _goodness(name: str, value: Any, fmin: float, fmax: float) -> float | None:
-    """Map a raw spec value to a 0..1 'goodness'. ``None`` = missing/unrankable."""
+def _goodness_for(
+    criterion: Criterion, value: Any, bounds: tuple[float, float], need: float | None
+) -> float | None:
+    """Map a raw value to 0..1 goodness by the criterion's explicit direction.
+
+    ``None`` = missing/unrankable. ``target`` = 1.0 within the tolerance band,
+    declining as the value grows past ``need × OVERSIZE_TOLERANCE``. Booleans map
+    True→1.0 / False→0.0 regardless of the declared direction (a bool has no
+    spread to normalize).
+    """
     if value is None:
         return None
+    if criterion.direction == "target":
+        if need is None or not _numeric(value):
+            return None
+        ratio = float(value) / need
+        if ratio <= OVERSIZE_TOLERANCE:
+            return 1.0
+        return max(0.0, 1.0 - (ratio - OVERSIZE_TOLERANCE))
     if isinstance(value, bool):
         return 1.0 if value else 0.0
     if not _numeric(value):
         return None  # present but not numerically comparable (e.g. gas_type)
+    fmin, fmax = bounds
     if fmax == fmin:
         return 1.0  # no spread across the set → neutral, constant across candidates
     span = fmax - fmin
-    if _lower_is_better(name):
+    if criterion.direction == "lower_better":
         return (fmax - value) / span
     return (value - fmin) / span
+
+
+def _criteria_for(
+    slot_profile: SlotProfile, profile: NeedProfile
+) -> tuple[list[Criterion], set[str]]:
+    """Derive ranking criteria + the stated-field set, category-agnostically.
+
+    Priority: (1) declarative ``ranking_criteria``; (2) legacy ``uu_tien`` slot
+    (unchanged behavior); (3) neither → no criteria (raw categories degrade to an
+    honest empty comparison rather than a fabricated one).
+    """
+    if slot_profile.ranking_criteria:
+        criteria = [
+            Criterion(field=c.field, direction=c.direction, target=c.target)
+            for c in slot_profile.ranking_criteria
+        ]
+        return criteria, _stated_criteria_fields(slot_profile, profile, criteria)
+
+    priority = _priority_slot(slot_profile)
+    if priority is not None:
+        fields = _spec_fields(priority.catalog_field)
+        criteria = [
+            Criterion(field=f, direction="lower_better" if _lower_is_better(f) else "higher_better")
+            for f in fields
+        ]
+        return criteria, _stated_fields(fields, _stated_values(profile))
+
+    return [], set()
+
+
+def _stated_criteria_fields(
+    slot_profile: SlotProfile, profile: NeedProfile, criteria: list[Criterion]
+) -> set[str]:
+    """A criterion is 'stated' (weighted 3x) when the customer supplied it: for a
+    plain field, the slot mapping to it holds a value; for a ``target`` field, the
+    derivation input is known (so right-sizing is a real, requested concern)."""
+    field_to_slot: dict[str, str] = {}
+    for slot in [*slot_profile.required_slots, *slot_profile.optional_slots]:
+        for name in _spec_fields(slot.catalog_field):
+            field_to_slot.setdefault(name, slot.name)
+    stated: set[str] = set()
+    for criterion in criteria:
+        if criterion.direction == "target":
+            if criterion.target and _need_for_target(criterion.target, profile) is not None:
+                stated.add(criterion.field)
+        else:
+            slot_name = field_to_slot.get(criterion.field)
+            if slot_name is not None and profile.slots.get(slot_name) is not None:
+                stated.add(criterion.field)
+    return stated
 
 
 # --------------------------------------------------------------------------- #
@@ -293,14 +386,17 @@ def _goodness(name: str, value: Any, fmin: float, fmax: float) -> float | None:
 # --------------------------------------------------------------------------- #
 def _score_all(
     candidates: list[dict[str, Any]],
-    criterion_fields: list[str],
+    criteria: list[Criterion],
     stated_fields: set[str],
     budget: float | None,
-    capacity_need: float | None = None,
+    needs: dict[str, float],
+    legacy_capacity_need: float | None = None,
 ) -> list[_Scored]:
-    # Min-max bounds per numeric field, computed across the set this turn.
+    # Min-max bounds only for numeric-directional criteria (target/boolean don't
+    # normalize across the set).
+    numeric_fields = [c.field for c in criteria if c.direction in ("higher_better", "lower_better")]
     bounds: dict[str, tuple[float, float]] = {}
-    for name in criterion_fields:
+    for name in numeric_fields:
         nums = [
             c.get("specs", {}).get(name)
             for c in candidates
@@ -318,12 +414,12 @@ def _score_all(
         goodness: dict[str, float | None] = {}
         raw: dict[str, Any] = {}
 
-        for name in criterion_fields:
+        for criterion in criteria:
+            name = criterion.field
             value = specs.get(name)
             raw[name] = value
             weight = STATED_PRIORITY_WEIGHT if name in stated_fields else UNSTATED_WEIGHT
-            fmin, fmax = bounds.get(name, (0.0, 0.0))
-            good = _goodness(name, value, fmin, fmax)
+            good = _goodness_for(criterion, value, bounds.get(name, (0.0, 0.0)), needs.get(name))
             goodness[name] = good
             if value is None:
                 missing.append(name)
@@ -343,16 +439,16 @@ def _score_all(
         if budget is not None and price is not None and price > budget:
             per_criterion[_PENALTY_OVER_BUDGET_KEY] = -OVER_BUDGET_PENALTY
 
-        # Soft right-sizing penalty: capacity beyond the tolerance band is
-        # deprioritized in proportion to how oversized it is (never excluded —
-        # it stays a valid option).
+        # Legacy oversize penalty: only the uu_tien path (may_lanh) supplies
+        # legacy_capacity_need. Categories that right-size via a ``target``
+        # criterion (tu_lanh) leave it None so the effect is never double-counted.
         capacity = specs.get(_CAPACITY_FIELD)
         if (
-            capacity_need
+            legacy_capacity_need
             and isinstance(capacity, int | float)
             and not isinstance(capacity, bool)
         ):
-            ratio = capacity / capacity_need
+            ratio = capacity / legacy_capacity_need
             if ratio > OVERSIZE_TOLERANCE:
                 per_criterion[_PENALTY_OVERSIZE_KEY] = -OVERSIZE_PENALTY * (ratio - OVERSIZE_TOLERANCE)
 
@@ -387,15 +483,22 @@ def _anti_pick(scored: list[_Scored], criterion_fields: list[str]) -> tuple[_Sco
     worst = min(pool, key=lambda s: (s.total, s.sku))
 
     weak = _weakest_criterion(worst, criterion_fields)
+    weak_label = {
+        "inverter": "khả năng tiết kiệm điện",
+        "energy_efficiency": "hiệu suất tiết kiệm điện",
+        "energy_stars": "mức tiết kiệm điện",
+        "noise_db_indoor": "độ ồn",
+        "noise_db": "độ ồn",
+    }.get(weak, "thông tin phù hợp với nhu cầu")
     if priced:
         reason = (
-            f"Điểm phù hợp thấp nhất ({worst.total:.2f}) trong nhóm sản phẩm có giá — "
-            f"khách dễ chú ý vì hiển thị giá, nhưng yếu nhất ở {weak} so với nhu cầu."
+            f"Mẫu này kém phù hợp hơn các lựa chọn trên về {weak_label}. "
+            "Anh/chị nên cân nhắc mẫu khác nếu đây là ưu tiên chính."
         )
     else:
         reason = (
-            f"Không sản phẩm nào có dữ liệu giá; lấy điểm phù hợp thấp nhất toàn cục "
-            f"({worst.total:.2f}), yếu nhất ở {weak}."
+            f"Hiện chưa có dữ liệu giá để đối chiếu và mẫu này kém phù hợp hơn về "
+            f"{weak_label}. Anh/chị nên cân nhắc mẫu khác có dữ liệu đầy đủ hơn."
         )
     return worst, reason
 
@@ -453,16 +556,23 @@ def rank_candidates(
     if not candidates:
         return RankingResult(top=[], anti_pick=None, anti_pick_reason=None, trade_offs=[])
 
-    priority = _priority_slot(slot_profile)
-    criterion_fields = _spec_fields(priority.catalog_field) if priority is not None else []
-    stated_values = _stated_values(profile)
-    stated = _stated_fields(criterion_fields, stated_values)
+    criteria, stated = _criteria_for(slot_profile, profile)
+    criterion_fields = [c.field for c in criteria]
 
     budget_raw = profile.slots.get(BUDGET_SLOT_NAME)
     budget = float(budget_raw) if isinstance(budget_raw, int | float) else None
 
-    capacity_need = _capacity_need(slot_profile, profile)
-    scored = _score_all(candidates, criterion_fields, stated, budget, capacity_need)
+    needs: dict[str, float] = {}
+    for criterion in criteria:
+        if criterion.direction == "target" and criterion.target:
+            need = _need_for_target(criterion.target, profile)
+            if need is not None:
+                needs[criterion.field] = need
+
+    # Legacy oversize penalty applies only when a category (may_lanh) uses the
+    # uu_tien path; target-criterion categories right-size via their criterion.
+    legacy_capacity_need = _capacity_need(slot_profile, profile)
+    scored = _score_all(candidates, criteria, stated, budget, needs, legacy_capacity_need)
     scored.sort(key=_rank_key)
 
     top = scored[:3]

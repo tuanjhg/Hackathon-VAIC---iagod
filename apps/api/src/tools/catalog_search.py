@@ -55,6 +55,10 @@ _BUDGET_HEADROOM = 1.05
 # Slot keys consumed by category derivation formulas (not direct spec filters).
 _DERIVATION_SLOT_KEYS = frozenset({"dien_tich_m2", "nang_truc_tiep", "so_nguoi_dung"})
 
+# Quality-preference fields scored softly in S5, never hard-filtered — showing a
+# cheaper/right-sized alternative with an honest trade-off beats over-filtering.
+_SOFT_PREFERENCE_FIELDS = frozenset({"inverter"})
+
 # difflib fuzzy-match tuning for the name_query fallback.
 _NAME_MATCH_THRESHOLD = 0.6
 _NAME_CANDIDATE_CAP = 500
@@ -241,6 +245,8 @@ def _direct_conditions(
         json_key = _json_key(field_map, key)
         if json_key is None:
             continue
+        if json_key in _SOFT_PREFERENCE_FIELDS:
+            continue  # soft signal (S5 ranking), not a hard filter
         if isinstance(value, bool):
             conditions.append(Product.specs_json[json_key].as_boolean() == value)
         # Numeric / string direct filters are not required by S4 yet; skipping

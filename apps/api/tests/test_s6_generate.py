@@ -305,3 +305,19 @@ def test_generate_malformed_response_raises() -> None:
     router = BrokenRouter()
     with pytest.raises(S6GenerationError):
         asyncio.run(generate(router, _ranking(), CANDIDATES, NeedProfile(category="may_lanh")))
+
+
+@pytest.mark.parametrize("field,value,needle", [
+    ("ram_gb", 16, "RAM 16GB"),
+    ("storage_gb", 512, "512GB"),
+    ("resolution_width", 1920, "1920"),
+    ("response_time_ms", 1, "1ms"),
+    ("brightness_nit", 300, "300"),
+    ("print_speed_ppm", 20, "20 trang/phút"),
+    ("energy_consumption_kwh", 1.5, "1.5"),
+    ("drying_capacity_kg", 9, "9kg"),
+    ("distortion_percent", 0.5, "0.5%"),
+])
+def test_new_glossary_fields_render(field, value, needle) -> None:
+    rendered = render_spec(field, value)
+    assert rendered is not None and needle in rendered

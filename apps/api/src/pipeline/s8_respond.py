@@ -72,6 +72,22 @@ _FIELD_LABELS: dict[str, str] = {
     "capacity_kg": "khối lượng giặt",
     "inverter": "công nghệ inverter",
     "power_watt": "công suất điện",
+    "ram_gb": "RAM",
+    "storage_gb": "bộ nhớ lưu trữ",
+    "cpu_base_clock_ghz": "xung nhịp CPU",
+    "cpu_speed_ghz": "tốc độ CPU",
+    "battery_capacity_mah": "dung lượng pin",
+    "resolution_width": "độ phân giải",
+    "response_time_ms": "thời gian đáp ứng",
+    "brightness_nit": "độ sáng",
+    "print_resolution_dpi": "độ phân giải in",
+    "monthly_duty_cycle": "công suất in",
+    "print_speed_ppm": "tốc độ in",
+    "energy_consumption_kwh": "điện năng tiêu thụ",
+    "drying_capacity_kg": "khối lượng sấy",
+    "has_booster_pump": "bơm trợ lực",
+    "transmission_distance_meter": "khoảng cách truyền",
+    "distortion_percent": "độ méo tiếng",
 }
 
 _PHONE_RE = re.compile(r"\b(?:\+?84|0)\d(?:[ .\-]?\d){7,9}\b")
@@ -253,6 +269,9 @@ class SourceEntry(BaseModel):
 def build_source_panel(
     s7_facts: dict[str, dict[str, Any]],
     facts_by_sku: dict[str, ProductFacts | None],
+    *,
+    skus: list[str] | None = None,
+    max_fields_per_sku: int | None = None,
 ) -> list[SourceEntry]:
     """Provenance rows for every fact the turn actually had available.
 
@@ -262,11 +281,19 @@ def build_source_panel(
     fact is surfaced by the honesty layer, not cited as a source.
     """
     entries: list[SourceEntry] = []
-    for sku in sorted(s7_facts):
+    selected_skus = list(dict.fromkeys(skus)) if skus is not None else sorted(s7_facts)
+    for sku in selected_skus:
+        if sku not in s7_facts:
+            continue
         product_facts = facts_by_sku.get(sku)
-        for field, value in s7_facts[sku].items():
-            if value is None:
-                continue
+        available = [(field, value) for field, value in s7_facts[sku].items() if value is not None]
+        # Price is the most volatile/customer-relevant fact, then preserve the
+        # catalog order used by product-card strengths.  The recommendation
+        # path caps this list so a mobile panel never contains hundreds of rows.
+        available.sort(key=lambda item: item[0] != "price")
+        if max_fields_per_sku is not None:
+            available = available[:max_fields_per_sku]
+        for field, _value in available:
             if field == "price" and product_facts is not None:
                 entries.append(
                     SourceEntry(
