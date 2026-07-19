@@ -47,3 +47,58 @@ def parsed_numeric_specs(row: dict[str, Any], config: CategoryConfig) -> dict[st
         if attribute.data_type in ("number", "boolean"):
             out[key] = _json_value(parsed)
     return out
+
+
+def enrich_specs(db: Session, clean_csv_dir: Path) -> dict[str, dict[str, int]]:
+    """Merge parsed numeric/boolean specs into ``Product.specs_json`` for the 9
+    raw categories, matched by ``sku``. Idempotent (re-running overwrites parsed
+    keys). Returns a per-category coverage report.
+    """
+    report: dict[str, dict[str, int]] = {}
+    for category_key, (code, filename) in _RAW_CATEGORIES.items():
+        config = CATEGORY_REGISTRY[code]
+        path = clean_csv_dir / filename
+        if not path.exists():
+            report[category_key] = {"rows": 0, "matched": 0, "enriched": 0}
+            continue
+        frame = read_csv(path)
+        by_sku: dict[str, dict[str, Any]] = {}
+        for record in frame.to_dict("records"):
+            sku = record.get("sku")
+            if sku is None:
+                continue
+            parsed = parsed_numeric_specs(record, config)
+            if parsed:
+                by_sku[str(sku)] = parsed
+
+        enriched = 0
+        products = db.scalars(
+            select(Product).where(Product.category_key == category_key)
+        ).all()
+        for product in products:
+            parsed = by_sku.get(str(product.sku))
+            if not parsed:
+                continue
+            merged = dict(product.specs_json or {})
+            merged.update(parsed)
+            product.specs_json = merged  # reassign so SQLAlchemy detects the change
+            enriched += 1
+        db.flush()
+        report[category_key] = {"rows": len(frame), "matched": enriched, "enriched": enriched}
+    db.commit()
+    return report
+
+
+def main() -> None:
+    from src.core.config import settings
+    from src.core.database import SessionLocal
+
+    clean_dir = Path(settings.realdata_processed_path).resolve().parent / "raw" / "clean"
+    with SessionLocal() as db:
+        report = enrich_specs(db, clean_dir)
+    for category_key, stats in report.items():
+        print(f"{category_key}: {stats}")
+
+
+if __name__ == "__main__":
+    main()

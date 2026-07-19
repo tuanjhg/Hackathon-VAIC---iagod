@@ -18,6 +18,7 @@ seed:
 	docker compose run --rm api python -m src.seed.seed_products
 	docker compose run --rm api python -m src.seed.seed_realdata
 	docker compose run --rm api python -m src.seed.sync_catalog_products
+	docker compose run --rm api python -m src.seed.enrich_specs
 
 vector-build:
 	python scripts/build_policy_vector_db.py

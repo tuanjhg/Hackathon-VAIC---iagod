@@ -33,7 +33,7 @@ services:
       LLM_FALLBACK_BASE_URL: ${LLM_FALLBACK_BASE_URL:-}
       LLM_FALLBACK_API_KEY: ${LLM_FALLBACK_API_KEY:-}
       LLM_FALLBACK_MODEL: ${LLM_FALLBACK_MODEL:-}
-    command: ["sh", "-c", "alembic upgrade head && python scripts/import_catalog.py --all --mode append && python -m src.seed.sync_catalog_products && python -m src.seed.seed_realdata && python -m src.rag.cli build --source /app/data/policy && uvicorn src.main:app --host 0.0.0.0 --port 8000"]
+    command: ["sh", "-c", "alembic upgrade head && python scripts/import_catalog.py --all --mode append && python -m src.seed.sync_catalog_products && python -m src.seed.seed_realdata && python -m src.seed.enrich_specs && python -m src.rag.cli build --source /app/data/policy && uvicorn src.main:app --host 0.0.0.0 --port 8000"]
     depends_on:
       postgres:
         condition: service_healthy
