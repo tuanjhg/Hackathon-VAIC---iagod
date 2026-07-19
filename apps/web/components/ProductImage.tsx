@@ -5,12 +5,13 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Placeholder-friendly product image. Fixed aspect ratio so layout never
- * shifts; shows a shimmer while loading and a graceful fallback on error.
- * Swap `unoptimized` off once real image URLs are wired up.
+ * Product image. Currently pinned to a single static asset (`/sanpham.jpg`)
+ * for every product — the `src` prop is accepted for API compatibility but
+ * intentionally ignored. Restore `src={src}` below to wire real image URLs.
  */
+const STATIC_PRODUCT_IMAGE = "/sanpham.jpg";
+
 export function ProductImage({
-  src,
   alt,
   priority = false,
   sizes = "(max-width: 768px) 100vw, 33vw",
@@ -22,13 +23,13 @@ export function ProductImage({
   sizes?: string;
   className?: string;
 }) {
-  const [status, setStatus] = useState<"loading" | "ready" | "error">(src ? "loading" : "error");
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
   return (
     <div className={cn("relative aspect-[4/3] w-full overflow-hidden bg-muted", className)}>
-      {status !== "error" && src && (
+      {status !== "error" && (
         <Image
-          src={src}
+          src={STATIC_PRODUCT_IMAGE}
           alt={alt}
           fill
           unoptimized
