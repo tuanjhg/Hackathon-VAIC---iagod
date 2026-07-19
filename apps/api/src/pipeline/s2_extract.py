@@ -300,6 +300,8 @@ _TRANSACTION_TERMS: tuple[str, ...] = (
     "don hang",
     "ma don",
     "dat hang",
+    "dat mua",
+    "thanh toan",
     "huy don",
     "sua don",
     "doi dia chi",
@@ -424,6 +426,11 @@ _ENUM_PHRASES: dict[str, tuple[str, ...]] = {
     "side_by_side": ("side by side",),
     "multi_door": ("nhieu cua", "multi door"),
 }
+
+# Energy-saving intent phrases that imply "prefer inverter" for categories whose
+# energy lever is the boolean ``inverter`` slot (no literal "inverter" word
+# needed — "tiết kiệm điện" must still reach the preference).
+_ENERGY_SAVING_PHRASES: tuple[str, ...] = ("tiet kiem dien", "it ton dien", "it hao dien")
 
 
 def _match_enum(value: Any, allowed: list[str]) -> str | None:
@@ -564,7 +571,7 @@ def _overlay_text_slots(result: dict[str, Any], slots: list[SlotDef], text: str)
         elif slot.type == "boolean" and slot.name == "inverter":
             if re.search(r"\bkhong\s+(?:can\s+)?inverter\b", folded):
                 result[slot.name] = False
-            elif "inverter" in folded:
+            elif "inverter" in folded or any(p in folded for p in _ENERGY_SAVING_PHRASES):
                 result[slot.name] = True
 
 
