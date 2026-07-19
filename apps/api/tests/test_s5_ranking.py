@@ -361,3 +361,32 @@ def test_tu_lanh_capacity_not_stated_when_household_unknown() -> None:
     assert not any(
         k.startswith("penalty:missing:capacity_total_l") for k in result.top[0].per_criterion
     )
+
+
+# --------------------------------------------------------------------------- #
+# pc_de_ban — an enriched raw category (higher-is-better numeric criteria).   #
+# --------------------------------------------------------------------------- #
+PC_PROFILE: SlotProfile = load_slot_profile("pc_de_ban")
+
+
+def _pc_cand(sku: str, *, price: int | None = 15_000_000, **specs: Any) -> dict[str, Any]:
+    return {"sku": sku, "name": f"PC {sku}", "specs": dict(specs), "price": price, "in_stock": None}
+
+
+def test_pc_de_ban_higher_ram_ranks_first() -> None:
+    cands = [
+        _pc_cand("AAA_LOW", ram_gb=8, storage_gb=256, cpu_base_clock_ghz=2.0),
+        _pc_cand("ZZZ_HIGH", ram_gb=32, storage_gb=256, cpu_base_clock_ghz=2.0),
+    ]
+    result = rank_candidates(cands, NeedProfile(category="pc_de_ban", slots={}), PC_PROFILE)
+    assert result.top[0].sku == "ZZZ_HIGH"  # only real scoring beats the sku tie-break
+
+
+def test_pc_de_ban_ram_vs_storage_is_a_tradeoff() -> None:
+    cands = [
+        _pc_cand("A", ram_gb=32, storage_gb=256, cpu_base_clock_ghz=2.0),
+        _pc_cand("B", ram_gb=8, storage_gb=1024, cpu_base_clock_ghz=2.0),
+    ]
+    result = rank_candidates(cands, NeedProfile(category="pc_de_ban", slots={}), PC_PROFILE)
+    fields = {f for t in result.trade_offs for f in (t.a_wins_on + t.b_wins_on)}
+    assert {"ram_gb", "storage_gb"} & fields
