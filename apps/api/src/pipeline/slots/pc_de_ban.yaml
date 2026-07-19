@@ -38,3 +38,11 @@ catalog_field_map:
   ram: "specs_raw.RAM"
   o_cung: "specs_raw.Ổ cứng"
   card_do_hoa: "specs_raw.Thiết kế card"
+
+ranking_criteria:
+  - field: ram_gb
+    direction: higher_better
+  - field: storage_gb
+    direction: higher_better
+  - field: cpu_base_clock_ghz
+    direction: higher_better

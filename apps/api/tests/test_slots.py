@@ -68,6 +68,22 @@ def test_may_lanh_has_no_ranking_criteria() -> None:
     assert load_slot_profile("may_lanh").ranking_criteria == []
 
 
+RAW_CATEGORIES_WITH_CRITERIA = [
+    "pc_de_ban", "may_tinh_bang", "man_hinh", "may_in", "may_say",
+    "may_nuoc_nong", "tu_mat_dong", "micro_thu_am", "micro_karaoke",
+]
+
+
+@pytest.mark.parametrize("category_key", RAW_CATEGORIES_WITH_CRITERIA)
+def test_raw_category_declares_specs_ranking_criteria(category_key: str) -> None:
+    profile = load_slot_profile(category_key)
+    assert profile.ranking_criteria, f"{category_key} has no ranking_criteria"
+    for criterion in profile.ranking_criteria:
+        assert criterion.direction in {"higher_better", "lower_better", "boolean_pref"}
+        # criteria reference parsed specs keys, never the raw label paths
+        assert " " not in criterion.field and "." not in criterion.field
+
+
 def test_unknown_category_raises() -> None:
     with pytest.raises(FileNotFoundError):
         load_slot_profile("does_not_exist")

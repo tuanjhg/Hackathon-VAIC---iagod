@@ -38,3 +38,9 @@ catalog_field_map:
   loai_say: "specs_raw.Loại sản phẩm"
   dien_nang: "specs_raw.Điện năng tiêu thụ"
   tien_ich: "specs_raw.Tiện ích"
+
+ranking_criteria:
+  - field: energy_consumption_kwh
+    direction: lower_better
+  - field: drying_capacity_kg
+    direction: higher_better

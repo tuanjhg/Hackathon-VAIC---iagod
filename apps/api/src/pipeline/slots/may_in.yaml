@@ -39,3 +39,11 @@ catalog_field_map:
   ket_noi: "specs_raw.Kết nối"
   toc_do_in: "specs_raw.Tốc độ in"
   cong_suat_thang: "specs_raw.Công suất theo nghiệp vụ"
+
+ranking_criteria:
+  - field: print_resolution_dpi
+    direction: higher_better
+  - field: monthly_duty_cycle
+    direction: higher_better
+  - field: print_speed_ppm
+    direction: higher_better

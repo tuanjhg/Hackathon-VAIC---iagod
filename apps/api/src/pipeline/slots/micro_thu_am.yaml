@@ -39,3 +39,7 @@ catalog_field_map:
   loai_san_pham: "specs_raw.Loại sản phẩm"
   tinh_nang: "specs_raw.Tính năng cơ bản"
   ket_noi: "specs_raw.Kết nối"
+
+ranking_criteria:
+  - field: transmission_distance_meter
+    direction: higher_better

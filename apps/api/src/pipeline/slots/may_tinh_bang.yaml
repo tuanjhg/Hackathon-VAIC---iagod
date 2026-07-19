@@ -38,3 +38,13 @@ catalog_field_map:
   sim: "specs_raw.SIM"
   ram: "specs_raw.RAM"
   dung_luong_luu_tru: "specs_raw.Dung lượng lưu trữ"
+
+ranking_criteria:
+  - field: ram_gb
+    direction: higher_better
+  - field: storage_gb
+    direction: higher_better
+  - field: battery_capacity_mah
+    direction: higher_better
+  - field: cpu_speed_ghz
+    direction: higher_better

@@ -39,3 +39,11 @@ catalog_field_map:
   do_phan_giai: "specs_raw.Độ phân giải"
   tam_nen: "specs_raw.Tấm nền"
   thoi_gian_dap_ung: "specs_raw.Thời gian đáp ứng"
+
+ranking_criteria:
+  - field: resolution_width
+    direction: higher_better
+  - field: response_time_ms
+    direction: lower_better
+  - field: brightness_nit
+    direction: higher_better

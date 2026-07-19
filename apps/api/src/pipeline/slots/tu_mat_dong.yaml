@@ -69,3 +69,9 @@ catalog_field_map:
   cong_nghe_tiet_kiem_dien: "specs_raw.Công nghệ tiết kiệm điện"
   nhiet_do_ngan_dong: "specs_raw.Nhiệt độ ngăn đông (độ C)"
   san_xuat_tai: "specs_raw.Sản xuất tại"
+
+ranking_criteria:
+  - field: inverter
+    direction: boolean_pref
+  - field: energy_consumption_kwh
+    direction: lower_better
