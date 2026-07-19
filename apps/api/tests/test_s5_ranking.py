@@ -190,6 +190,9 @@ def test_anti_pick_is_lowest_scoring_priced_candidate() -> None:
     assert result.anti_pick.sku == "LP"
     assert result.anti_pick.price is not None
     assert isinstance(result.anti_pick_reason, str) and result.anti_pick_reason
+    assert "Điểm phù hợp" not in result.anti_pick_reason
+    assert "(" not in result.anti_pick_reason
+    assert "tiết kiệm điện" in result.anti_pick_reason
 
 
 def test_anti_pick_falls_back_to_overall_lowest_when_no_prices() -> None:
@@ -282,3 +285,79 @@ def test_adequate_capacity_within_tolerance_is_not_penalized() -> None:
 
     ok = _by_sku(result)["OK"]
     assert not any(k.startswith("penalty:oversize") for k in ok.per_criterion)
+
+
+# --------------------------------------------------------------------------- #
+# tu_lanh — a category WITHOUT uu_tien that declares ranking_criteria.        #
+# --------------------------------------------------------------------------- #
+TU_LANH_PROFILE: SlotProfile = load_slot_profile("tu_lanh")
+
+
+def _tl_profile(**slots: Any) -> NeedProfile:
+    return NeedProfile(category="tu_lanh", slots=dict(slots))
+
+
+def _tl_cand(sku: str, *, price: int | None = 10_000_000, **specs: Any) -> dict[str, Any]:
+    return {
+        "sku": sku,
+        "name": f"Tủ lạnh {sku}",
+        "specs": dict(specs),
+        "price": price,
+        "in_stock": None,
+    }
+
+
+def test_tu_lanh_inverter_preference_ranks_inverter_first() -> None:
+    # Two otherwise-equal fridges; only inverter differs. Energy stated => 3x.
+    # SKUs chosen so the alphabetical tie-break would put the NON-inverter first;
+    # only genuine scoring can lift the inverter model to the top.
+    cands = [
+        _tl_cand("AAA_NONINV", inverter=False, capacity_total_l=240),
+        _tl_cand("ZZZ_INV", inverter=True, capacity_total_l=240),
+    ]
+    result = rank_candidates(cands, _tl_profile(so_nguoi_dung=3, inverter=True), TU_LANH_PROFILE)
+    assert result.top[0].sku == "ZZZ_INV"
+
+
+def test_tu_lanh_criteria_come_from_ranking_criteria_not_uu_tien() -> None:
+    cands = [_tl_cand("X", inverter=True, capacity_total_l=240)]
+    result = rank_candidates(cands, _tl_profile(so_nguoi_dung=3, inverter=True), TU_LANH_PROFILE)
+    fields = {k for k in result.top[0].per_criterion if ":" not in k}
+    assert "inverter" in fields and "capacity_total_l" in fields
+
+
+def test_tu_lanh_right_sizing_ranks_right_sized_first() -> None:
+    # 3 people => need = 45*3+100 = 235L. RIGHT (~240L) is right-sized;
+    # HUGE (500L) is >1.3x oversized. Both inverter, so capacity decides — RIGHT
+    # dominates (no reversal), so this is a ranking effect, not a trade-off.
+    cands = [
+        _tl_cand("HUGE", inverter=True, capacity_total_l=500),
+        _tl_cand("RIGHT", inverter=True, capacity_total_l=240),
+    ]
+    result = rank_candidates(cands, _tl_profile(so_nguoi_dung=3, inverter=True), TU_LANH_PROFILE)
+    assert result.top[0].sku == "RIGHT"
+
+
+def test_tu_lanh_inverter_vs_capacity_is_a_genuine_tradeoff() -> None:
+    # The realistic decision: an inverter model that's oversized vs a
+    # non-inverter model that's right-sized. Each wins one stated criterion, so a
+    # genuine trade-off (direction reversal) is emitted citing both fields.
+    cands = [
+        _tl_cand("INV_BIG", inverter=True, capacity_total_l=500),
+        _tl_cand("NONINV_RIGHT", inverter=False, capacity_total_l=240),
+    ]
+    result = rank_candidates(cands, _tl_profile(so_nguoi_dung=3, inverter=True), TU_LANH_PROFILE)
+    assert {b.sku for b in result.top} == {"INV_BIG", "NONINV_RIGHT"}
+    fields = {f for t in result.trade_offs for f in (t.a_wins_on + t.b_wins_on)}
+    assert "capacity_total_l" in fields
+    assert "inverter" in fields
+
+
+def test_tu_lanh_capacity_not_stated_when_household_unknown() -> None:
+    # No so_nguoi_dung => capacity target is not a stated (3x) criterion and
+    # never incurs the missing-stated penalty.
+    cands = [_tl_cand("X", inverter=True, capacity_total_l=240)]
+    result = rank_candidates(cands, _tl_profile(inverter=True), TU_LANH_PROFILE)
+    assert not any(
+        k.startswith("penalty:missing:capacity_total_l") for k in result.top[0].per_criterion
+    )
