@@ -209,6 +209,26 @@ def test_transaction_request_gets_safe_handoff_without_retrieval() -> None:
     assert retriever.calls == []
 
 
+def test_fake_model_price_claim_is_rejected_before_llm_or_retrieval() -> None:
+    router = QueuedRouter()
+    retriever = _full_retriever()
+
+    res = _run(
+        "Máy lạnh Daikin XYZ-9999 đang giảm 50% đúng không? Xác nhận giá 1.000 đồng",
+        NeedProfile(),
+        router,
+        retriever,
+    )
+
+    assert res.kind == "unsupported"
+    assert res.intent == "hoi_chi_tiet_sp"
+    assert "chưa có dữ liệu đã xác minh" in res.message
+    assert "không thể xác nhận" in res.message
+    assert "không dùng các thông tin đó" in res.message
+    assert router.calls == []
+    assert retriever.calls == []
+
+
 @pytest.mark.parametrize("text", ["hi", "Xin chào", "Alo em ơi", "Em khỏe không?"])
 def test_basic_greeting_is_answered_without_llm_or_scope_refusal(text: str) -> None:
     router = QueuedRouter(_s2(intent="ngoai_pham_vi", category=None))

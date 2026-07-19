@@ -6,6 +6,21 @@ import { AdvisorCard } from "@/components/AdvisorCard";
 import type { ChatEntry } from "@/stores/chat-store";
 import type { GuardrailStatus, ResponseAction } from "@/types";
 
+const SOURCE_FIELD_LABELS: Record<string, string> = {
+  price: "Giá bán",
+  capacity_btu: "Công suất làm lạnh",
+  inverter: "Công nghệ inverter",
+  energy_efficiency: "Hiệu suất tiết kiệm điện",
+  energy_stars: "Số sao tiết kiệm điện",
+  noise_db_indoor: "Độ ồn",
+  noise_db: "Độ ồn",
+};
+
+const SOURCE_DATASET_LABELS: Record<string, string> = {
+  catalog_snapshot: "Danh mục sản phẩm",
+  policy: "Tài liệu chính sách",
+};
+
 const RESPONSE_LABELS: Partial<Record<NonNullable<ChatEntry["responseType"]>, string>> = {
   clarification: "Đang làm rõ nhu cầu",
   policy: "Thông tin chính sách",
@@ -24,6 +39,15 @@ export function ChatMessage({
   onQuickReply: (value: string, action?: ResponseAction) => void;
 }) {
   const assistant = message.role === "assistant";
+  const sourceGroups = Object.entries(
+    (message.sourcePanel ?? []).reduce<Record<string, NonNullable<ChatEntry["sourcePanel"]>>>(
+      (groups, source) => {
+        (groups[source.sku] ??= []).push(source);
+        return groups;
+      },
+      {},
+    ),
+  );
 
   return (
     <motion.div
@@ -136,14 +160,22 @@ export function ChatMessage({
               ) : (
                 <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
               )}
-              Nguồn dữ liệu ({message.sourcePanel.length})
+              Nguồn dữ liệu · {sourceGroups.length} sản phẩm
             </summary>
-            <div className="mt-2 grid gap-1.5 text-[11px] leading-4 text-muted-foreground">
-              {message.sourcePanel.map((source, index) => (
-                <div key={`${source.sku}-${source.field}-${source.dataset}-${index}`}>
-                  <span className="font-medium text-foreground">{source.sku}</span>
-                  {" · "}{source.field}{" · "}{source.dataset}
-                  {source.fetched_at && <span>{" · cập nhật "}{source.fetched_at}</span>}
+            <div className="mt-2 grid gap-2.5 text-[11px] leading-4 text-muted-foreground">
+              {sourceGroups.map(([sku, sources]) => (
+                <div key={sku} className="border-t border-border/70 pt-2 first:border-0 first:pt-0">
+                  <div className="font-semibold text-foreground">{sku}</div>
+                  <ul className="mt-1 grid gap-1">
+                    {sources.map((source, index) => (
+                      <li key={`${source.field}-${source.dataset}-${index}`}>
+                        {SOURCE_FIELD_LABELS[source.field] ?? source.field}
+                        {" · "}
+                        {SOURCE_DATASET_LABELS[source.dataset] ?? source.dataset}
+                        {source.fetched_at && <span>{" · cập nhật "}{source.fetched_at}</span>}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </div>
