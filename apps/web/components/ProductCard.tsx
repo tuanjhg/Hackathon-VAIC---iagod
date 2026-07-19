@@ -13,7 +13,9 @@ import type { Product } from "@/types";
 export function ProductCard({ product }: { product: Product }) {
   const addCart = useCartStore((s) => s.add);
   const addCompare = useComparisonStore((s) => s.add);
-  const isUnavailable = !["in_stock", "low_stock"].includes(product.stock_status);
+  // "unknown" = nguồn data thật chưa có tồn kho → không coi là hết hàng, ẩn dòng.
+  const hasStockData = ["in_stock", "low_stock", "out_of_stock"].includes(product.stock_status);
+  const isUnavailable = product.stock_status === "out_of_stock";
   const originalPrice = Number(product.original_price);
   const salePrice = Number(product.sale_price);
   const discount = originalPrice > 0 && salePrice > 0
@@ -53,7 +55,11 @@ export function ProductCard({ product }: { product: Product }) {
             {product.brand} · {product.category}
           </span>
           <span className="flex items-center gap-1 text-muted-foreground">
-            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+            <Star
+              className={`h-3.5 w-3.5 ${
+                product.review_count > 0 ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"
+              }`}
+            />
             {product.review_count > 0 ? `${product.rating} (${product.review_count})` : "Chưa có đánh giá"}
           </span>
         </div>
@@ -95,14 +101,16 @@ export function ProductCard({ product }: { product: Product }) {
           </dl>
         )}
 
-        <p
-          className={`mt-3 flex items-center gap-1.5 text-xs font-semibold ${
-            isUnavailable ? "text-muted-foreground" : "text-success"
-          }`}
-        >
-          <span className={`h-1.5 w-1.5 rounded-full ${isUnavailable ? "bg-muted-foreground" : "bg-success"}`} />
-          {stockLabel(product.stock_status)}
-        </p>
+        {hasStockData && (
+          <p
+            className={`mt-3 flex items-center gap-1.5 text-xs font-semibold ${
+              isUnavailable ? "text-muted-foreground" : "text-success"
+            }`}
+          >
+            <span className={`h-1.5 w-1.5 rounded-full ${isUnavailable ? "bg-muted-foreground" : "bg-success"}`} />
+            {stockLabel(product.stock_status)}
+          </p>
+        )}
 
         <div className="mt-auto grid grid-cols-2 gap-2 pt-4">
           <Button variant="outline" size="sm" asChild>

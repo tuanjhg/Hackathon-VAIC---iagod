@@ -37,20 +37,20 @@ export const sideBanners: Banner[] = [
   },
   {
     src: "/banners/side-2.jpg",
-    alt: "Giải pháp cho phòng lớn 20–30m²",
-    href: "/products?room_area=25",
+    alt: "Tuần lễ vàng Dreame — săn robot cùng CR7",
+    href: "/products",
     tone: "from-indigo-600 to-brand-700",
   },
 ];
 
 export const promoBanners: Banner[] = [
-  { src: "/banners/promo-1.jpg", alt: "Deal Daikin", href: "/products?brand=Daikin", tone: "from-sky-600 to-brand-700" },
-  { src: "/banners/promo-2.jpg", alt: "Deal Panasonic", href: "/products?brand=Panasonic", tone: "from-rose-600 to-red-700" },
-  { src: "/banners/promo-3.jpg", alt: "Deal LG", href: "/products?brand=LG", tone: "from-fuchsia-600 to-purple-700" },
-  { src: "/banners/promo-4.jpg", alt: "Super sale online", href: "/products?sort=price_asc", tone: "from-amber-500 to-orange-600" },
+  { src: "/banners/promo-1.jpg", alt: "Tủ lạnh tranh cúp — giảm đến 7 triệu", href: "/products", tone: "from-sky-600 to-brand-700" },
+  { src: "/banners/promo-2.jpg", alt: "Tháng LG — giảm đến 10 triệu", href: "/products?brand=LG", tone: "from-rose-600 to-red-700" },
+  { src: "/banners/promo-3.jpg", alt: "Super sale online — deal cực chất", href: "/products?sort=price_asc", tone: "from-fuchsia-600 to-purple-700" },
+  { src: "/banners/promo-4.jpg", alt: "Sale mạnh giải nhiệt — mát 0đ phí", href: "/products?inverter=true", tone: "from-amber-500 to-orange-600" },
 ];
 
 export const subBanners: Banner[] = [
-  { src: "/banners/sub-1.jpg", alt: "Phòng nhỏ dưới 15m²", href: "/products?room_area=12", tone: "from-brand-700 to-brand-500" },
-  { src: "/banners/sub-2.jpg", alt: "Máy lạnh cao cấp", href: "/products?sort=price_desc", tone: "from-slate-800 to-brand-800" },
+  { src: "/banners/sub-1.jpg", alt: "World Cup — bỏ nhỏ lấy tivi to", href: "/products", tone: "from-brand-700 to-brand-500" },
+  { src: "/banners/sub-2.jpg", alt: "Tháng LG — trợ giá bỏ nhỏ lấy to", href: "/products?brand=LG", tone: "from-slate-800 to-brand-800" },
 ];
